@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0}
+  a{color:#0D9488;text-decoration:none}
+  a:hover{color:#0F766E}
+  ::selection{background:#0D9488;color:#fff}
+</style>
+</helmet>
+<div style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#FAFAF9;color:#1C1917;min-height:100vh">
+
+  <!-- ============ LOGIN ============ -->
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="Login" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div style="width:100%;max-width:360px;background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:40px 36px">
+      <div style="font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#78716C;margin-bottom:6px">bemodel</div>
+      <div style="font-size:22px;font-weight:600;margin-bottom:28px">Admin sign in</div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:12px;color:#78716C">Email</label>
+          <input value="{{ loginEmail }}" onChange="{{ setLoginEmail }}" placeholder="admin@bemodel.agency" style="padding:10px 12px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;outline:none;font-family:inherit" style-focus="border-color:#0D9488">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:12px;color:#78716C">Password</label>
+          <input type="password" value="{{ loginPass }}" onChange="{{ setLoginPass }}" placeholder="••••••••" style="padding:10px 12px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;outline:none;font-family:inherit" style-focus="border-color:#0D9488">
+        </div>
+        <div onClick="{{ doLogin }}" style="margin-top:8px;text-align:center;padding:11px;background:#0D9488;color:#fff;border-radius:7px;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s" style-hover="background:#0D9488">Sign in</div>
+        <div style="text-align:center;font-size:12px;color:#A8A29E">Prototype — any details will sign you in</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ APP SHELL ============ -->
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex;min-height:100vh">
+
+    <!-- Sidebar -->
+    <div style="width:232px;flex-shrink:0;background:#FFFFFF;border-right:1px solid rgba(28,25,23,0.08);color:#78716C;display:flex;flex-direction:column;padding:22px 14px;position:sticky;top:0;height:100vh">
+      <div style="padding:6px 10px 24px;font-size:15px;font-weight:600;color:#1C1917;letter-spacing:0.01em">bemodel <span style="color:#A8A29E;font-weight:400">admin</span></div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+          <div onClick="{{ n.go }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:7px;cursor:pointer;font-size:14px;background:{{ n.bg }};color:{{ n.color }};transition:background .12s">
+            <div style="width:6px;height:6px;border-radius:2px;background:{{ n.dot }};flex-shrink:0"></div>
+            {{ n.label }}
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:1"></div>
+      <div onClick="{{ doLogout }}" style="padding:10px 12px;border-radius:7px;cursor:pointer;font-size:13px;color:#78716C;transition:color .12s" style-hover="color:#1C1917">Sign out</div>
+    </div>
+
+    <!-- Content -->
+    <div style="flex:1;min-width:0;padding:36px 44px;max-width:1180px">
+
+      <!-- Dashboard -->
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="Dashboard">
+        <div style="font-size:24px;font-weight:600;margin-bottom:4px">Dashboard</div>
+        <div style="font-size:14px;color:#78716C;margin-bottom:32px">Overview of {{ brandName }}'s site content.</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:20px">
+              <div style="font-size:12px;color:#78716C;margin-bottom:8px">{{ s.label }}</div>
+              <div style="font-size:28px;font-weight:600">{{ s.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:14px">Quick links</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+          <sc-for list="{{ quickLinks }}" as="q" hint-placeholder-count="5">
+            <div onClick="{{ q.go }}" style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:18px;cursor:pointer;transition:border-color .12s" style-hover="border-color:#0D9488">
+              <div style="font-size:14px;font-weight:500;margin-bottom:4px">{{ q.title }}</div>
+              <div style="font-size:12px;color:#78716C">{{ q.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Models list -->
+      <sc-if value="{{ isModelsList }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Models">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:24px;font-weight:600">Models</div>
+          <div onClick="{{ openNewModel }}" style="padding:9px 16px;background:#0D9488;color:#fff;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#0D9488">+ Add model</div>
+        </div>
+        <div style="font-size:14px;color:#78716C;margin-bottom:24px">{{ modelsList.length }} talents on the roster</div>
+        <div style="display:flex;gap:20px;margin-bottom:20px;font-size:13px">
+          <span onClick="{{ setFilterAll }}" style="cursor:pointer;padding-bottom:6px;color:{{ filterAllColor }};border-bottom:{{ filterAllLine }}">All</span>
+          <span onClick="{{ setFilterWomen }}" style="cursor:pointer;padding-bottom:6px;color:{{ filterWomenColor }};border-bottom:{{ filterWomenLine }}">Women</span>
+          <span onClick="{{ setFilterNew }}" style="cursor:pointer;padding-bottom:6px;color:{{ filterNewColor }};border-bottom:{{ filterNewLine }}">New Faces</span>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;overflow:hidden">
+          <sc-for list="{{ modelsList }}" as="m" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid rgba(28,25,23,0.06)">
+              <div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:#F0EEEB;flex-shrink:0">
+                <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ m.slotId }}" shape="rect" placeholder="Photo" hint-size="44px,44px"></x-import>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14px;font-weight:500">{{ m.name }}</div>
+                <div style="font-size:12px;color:#78716C">{{ m.city }} · {{ m.catLabel }}</div>
+              </div>
+              <div onClick="{{ m.onEdit }}" style="padding:7px 14px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:12px;cursor:pointer" style-hover="border-color:#0D9488;color:#0D9488">Edit</div>
+              <div onClick="{{ m.onDelete }}" style="padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer;color:#B91C1C" style-hover="background:rgba(185,28,28,0.08)">Delete</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Model editor -->
+      <sc-if value="{{ isModelEdit }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Model Editor">
+        <div onClick="{{ closeEditor }}" style="font-size:13px;color:#78716C;cursor:pointer;margin-bottom:18px">← Back to models</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
+          <div style="font-size:22px;font-weight:600">{{ editorTitle }}</div>
+          <div style="display:flex;gap:10px">
+            <div onClick="{{ closeEditor }}" style="padding:9px 16px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:13px;cursor:pointer">Cancel</div>
+            <div onClick="{{ saveModel }}" style="padding:9px 18px;background:#0D9488;color:#fff;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#0D9488">Save model</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Profile</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/3">
+                  <label style="font-size:12px;color:#78716C">Name</label>
+                  <input value="{{ draft.name }}" onChange="{{ dName }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488">
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label style="font-size:12px;color:#78716C">City</label>
+                  <input value="{{ draft.city }}" onChange="{{ dCity }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488">
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <label style="font-size:12px;color:#78716C">Category</label>
+                  <select value="{{ draft.cat }}" onChange="{{ dCat }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;background:#fff">
+                    <option value="women">Women</option>
+                    <option value="newfaces">New Faces</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Measurements</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Height (cm)</label><input value="{{ draft.height }}" onChange="{{ dHeight }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Bust (cm)</label><input value="{{ draft.bust }}" onChange="{{ dBust }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Waist (cm)</label><input value="{{ draft.waist }}" onChange="{{ dWaist }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Hips (cm)</label><input value="{{ draft.hips }}" onChange="{{ dHips }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Shoes (EU)</label><input value="{{ draft.shoes }}" onChange="{{ dShoes }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Hair</label><input value="{{ draft.hair }}" onChange="{{ dHair }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Eyes</label><input value="{{ draft.eyes }}" onChange="{{ dEyes }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit" style-focus="border-color:#0D9488"></div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Bio / notes</div>
+              <textarea value="{{ draft.bio }}" onChange="{{ dBio }}" rows="4" placeholder="Internal notes about this model…" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical" style-focus="border-color:#0D9488"></textarea>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Card photo</div>
+              <div style="width:160px;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#F0EEEB">
+                <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ cardSlotId }}" shape="rect" placeholder="Drop card photo" hint-size="100%,100%"></x-import>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Portfolio (3 photos)</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <sc-for list="{{ gallerySlots }}" as="g" hint-placeholder-count="3">
+                  <div style="aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#F0EEEB">
+                    <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ g.id }}" shape="rect" placeholder="{{ g.label }}" hint-size="100%,100%"></x-import>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Polaroids / digitals (4 photos)</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+                <sc-for list="{{ polaroidSlots }}" as="pp" hint-placeholder-count="4">
+                  <div style="aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#F0EEEB">
+                    <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ pp.id }}" shape="rect" placeholder="{{ pp.label }}" hint-size="100%,100%"></x-import>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Homepage -->
+      <sc-if value="{{ isHomepage }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Homepage">
+        <div style="font-size:24px;font-weight:600;margin-bottom:4px">Homepage</div>
+        <div style="font-size:14px;color:#78716C;margin-bottom:28px">Hero video, hero copy and the "Latest" grid.</div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Hero video</div>
+          <div style="display:flex;gap:20px;align-items:flex-start">
+            <video src="{{ heroVideoSrc }}" muted="" style="width:220px;aspect-ratio:16/9;border-radius:8px;background:#000;object-fit:cover"></video>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <label style="display:inline-block;padding:9px 16px;background:#0D9488;color:#fff;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;width:fit-content">
+                Upload new video
+                <input type="file" accept="video/mp4,video/webm" onChange="{{ onVideoUpload }}" style="display:none">
+              </label>
+              <div onClick="{{ resetVideo }}" style="font-size:12px;color:#78716C;cursor:pointer;width:fit-content">Reset to default</div>
+              <div style="font-size:11px;color:#A8A29E;max-width:260px">MP4/WebM, kept under ~8MB (stored locally in the browser for this prototype).</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Hero copy</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Headline (part 1)</label><input value="{{ home.heroPre }}" onChange="{{ hHeroPre }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Headline (emphasis)</label><input value="{{ home.heroEm }}" onChange="{{ hHeroEm }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Headline (part 2)</label><input value="{{ home.heroPost }}" onChange="{{ hHeroPost }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:12px;color:#78716C">Body paragraph</label>
+            <textarea value="{{ home.heroBody }}" onChange="{{ hHeroBody }}" rows="2" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Manifesto section</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Title</label><input value="{{ home.manifestoTitle }}" onChange="{{ hManifestoTitle }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Paragraph 1</label><textarea value="{{ home.manifestoBody1 }}" onChange="{{ hManifestoBody1 }}" rows="2" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Paragraph 2 (use {city} for the city name)</label><textarea value="{{ home.manifestoBody2 }}" onChange="{{ hManifestoBody2 }}" rows="2" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Latest shoots (4 featured slots)</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+            <sc-for list="{{ featuredSlots }}" as="ft" hint-placeholder-count="4">
+              <div style="border:1px solid rgba(28,25,23,0.07);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px">
+                <div style="width:100%;aspect-ratio:3/4;border-radius:6px;overflow:hidden;background:#F0EEEB">
+                  <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ ft.slotId }}" shape="rect" placeholder="Photo" hint-size="100%,100%"></x-import>
+                </div>
+                <select value="{{ ft.slug }}" onChange="{{ ft.onModelChange }}" style="padding:7px 9px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:12px;font-family:inherit;background:#fff">
+                  <sc-for list="{{ modelOptions }}" as="mo" hint-placeholder-count="9">
+                    <option value="{{ mo.slug }}">{{ mo.name }}</option>
+                  </sc-for>
+                </select>
+                <input value="{{ ft.credit }}" onChange="{{ ft.onCreditChange }}" placeholder="Credit line" style="padding:7px 9px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:12px;font-family:inherit">
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Academy -->
+      <sc-if value="{{ isAcademy }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Academy">
+        <div style="font-size:24px;font-weight:600;margin-bottom:4px">Academy</div>
+        <div style="font-size:14px;color:#78716C;margin-bottom:28px">Hero, curriculum and FAQ content.</div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Hero</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Title</label><input value="{{ academy.heroTitle }}" onChange="{{ aHeroTitle }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Body (use {city} for city)</label><textarea value="{{ academy.heroBody }}" onChange="{{ aHeroBody }}" rows="2" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">About the academy</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Title</label><input value="{{ academy.aboutTitle }}" onChange="{{ aAboutTitle }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Paragraph 1 (use {name} for agency name)</label><textarea value="{{ academy.aboutBody1 }}" onChange="{{ aAboutBody1 }}" rows="2" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Paragraph 2</label><textarea value="{{ academy.aboutBody2 }}" onChange="{{ aAboutBody2 }}" rows="2" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Weeks</label><input value="{{ academy.stats.weeks }}" onChange="{{ aStatsWeeks }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Sessions</label><input value="{{ academy.stats.sessions }}" onChange="{{ aStatsSessions }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Per cohort</label><input value="{{ academy.stats.cohort }}" onChange="{{ aStatsCohort }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-size:13px;font-weight:600;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Curriculum lessons</div>
+            <div onClick="{{ addLesson }}" style="padding:6px 12px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:12px;cursor:pointer">+ Add lesson</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ lessonRows }}" as="l" hint-placeholder-count="6">
+              <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(28,25,23,0.07);border-radius:8px;padding:12px">
+                <div style="width:70px;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:#F0EEEB;flex-shrink:0">
+                  <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ l.slotId }}" shape="rect" placeholder="Photo" hint-size="100%,100%"></x-import>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                  <input value="{{ l.title }}" onChange="{{ l.onTitle }}" placeholder="Lesson title" style="padding:8px 10px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:13px;font-family:inherit">
+                  <input value="{{ l.note }}" onChange="{{ l.onNote }}" placeholder="Description" style="padding:8px 10px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:13px;font-family:inherit">
+                </div>
+                <div onClick="{{ l.onRemove }}" style="padding:7px 12px;border-radius:6px;font-size:12px;cursor:pointer;color:#B91C1C;flex-shrink:0" style-hover="background:rgba(185,28,28,0.08)">Remove</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-size:13px;font-weight:600;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">FAQs</div>
+            <div onClick="{{ addFaq }}" style="padding:6px 12px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:12px;cursor:pointer">+ Add FAQ</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ faqRows }}" as="f" hint-placeholder-count="6">
+              <div style="display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(28,25,23,0.07);border-radius:8px;padding:12px">
+                <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                  <input value="{{ f.q }}" onChange="{{ f.onQ }}" placeholder="Question" style="padding:8px 10px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:13px;font-family:inherit;font-weight:500">
+                  <textarea value="{{ f.a }}" onChange="{{ f.onA }}" rows="2" placeholder="Answer" style="padding:8px 10px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:13px;font-family:inherit;resize:vertical"></textarea>
+                </div>
+                <div onClick="{{ f.onRemove }}" style="padding:7px 12px;border-radius:6px;font-size:12px;cursor:pointer;color:#B91C1C;flex-shrink:0" style-hover="background:rgba(185,28,28,0.08)">Remove</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- About -->
+      <sc-if value="{{ isAboutPage }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="About">
+        <div style="font-size:24px;font-weight:600;margin-bottom:4px">About page</div>
+        <div style="font-size:14px;color:#78716C;margin-bottom:28px">The agency story and process steps.</div>
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px;margin-bottom:20px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Heading</label><input value="{{ about.heading }}" onChange="{{ abHeading }}" style="padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Paragraph 1 (use {name}/{city})</label><textarea value="{{ about.body1 }}" onChange="{{ abBody1 }}" rows="3" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;color:#78716C">Paragraph 2</label><textarea value="{{ about.body2 }}" onChange="{{ abBody2 }}" rows="3" style="width:100%;padding:9px 11px;border:1px solid rgba(28,25,23,0.16);border-radius:7px;font-size:14px;font-family:inherit;resize:vertical"></textarea></div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:22px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:16px;color:#78716C;text-transform:uppercase;letter-spacing:0.06em">Process steps</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+            <sc-for list="{{ stepRows }}" as="st" hint-placeholder-count="3">
+              <div style="border:1px solid rgba(28,25,23,0.07);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px">
+                <input value="{{ st.title }}" onChange="{{ st.onTitle }}" placeholder="Step title" style="padding:8px 10px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:13px;font-family:inherit;font-weight:500">
+                <textarea value="{{ st.body }}" onChange="{{ st.onBody }}" rows="3" placeholder="Description" style="padding:8px 10px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:13px;font-family:inherit;resize:vertical"></textarea>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- Applications -->
+      <sc-if value="{{ isApplications }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Applications">
+        <div style="font-size:24px;font-weight:600;margin-bottom:4px">Applications</div>
+        <div style="font-size:14px;color:#78716C;margin-bottom:28px">Submissions from the "Become a Model" form.</div>
+        <sc-if value="{{ hasApplications }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ applicationRows }}" as="app" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid rgba(28,25,23,0.08);border-radius:10px;padding:20px">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+                <div>
+                  <div style="font-size:16px;font-weight:600">{{ app.name }}</div>
+                  <div style="font-size:12px;color:#78716C;margin-top:2px">{{ app.dateLabel }}</div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <div style="font-size:11px;padding:4px 10px;border-radius:20px;background:{{ app.statusBg }};color:{{ app.statusColor }}">{{ app.statusLabel }}</div>
+                  <div onClick="{{ app.onToggleStatus }}" style="padding:6px 12px;border:1px solid rgba(28,25,23,0.16);border-radius:6px;font-size:12px;cursor:pointer">{{ app.toggleLabel }}</div>
+                  <div onClick="{{ app.onDelete }}" style="padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;color:#B91C1C" style-hover="background:rgba(185,28,28,0.08)">Delete</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font-size:13px;margin-bottom:10px">
+                <div><span style="color:#78716C">Email</span><br>{{ app.email }}</div>
+                <div><span style="color:#78716C">Phone</span><br>{{ app.phone }}</div>
+                <div><span style="color:#78716C">Instagram</span><br>{{ app.instagram }}</div>
+                <div><span style="color:#78716C">City</span><br>{{ app.city }}</div>
+                <div><span style="color:#78716C">DOB</span><br>{{ app.dob }}</div>
+                <div><span style="color:#78716C">Height</span><br>{{ app.height }}</div>
+              </div>
+              <sc-if value="{{ app.hasMessage }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:13px;color:#374151;background:#F5F5F4;border-radius:7px;padding:12px">{{ app.message }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+        <sc-if value="{{ hasNoApplications }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#fff;border:1px dashed rgba(28,25,23,0.16);border-radius:10px;padding:48px;text-align:center;color:#78716C;font-size:14px">No applications yet — they'll appear here as candidates submit the "Become a Model" form.</div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    loggedIn: false, loginEmail: '', loginPass: '',
+    page: 'dashboard', data: null, modelFilter: 'all',
+    editingSlug: null, draft: null
+  };
+
+  componentDidMount(){
+    import('./assets/store.js').then((mod)=>{
+      this.Store = mod;
+      this.setState({ data: mod.load() });
+      this.unsub = mod.subscribe((d)=> this.setState({ data: d }));
+    });
+  }
+  componentWillUnmount(){ if (this.unsub) this.unsub(); }
+
+  setPath(obj, path, value){
+    const parts = path.split('.');
+    let cur = obj;
+    for (let i=0;i<parts.length-1;i++) cur = cur[parts[i]];
+    cur[parts[parts.length-1]] = value;
+  }
+
+  updateData(mutator){
+    this.setState((s)=>{
+      const next = JSON.parse(JSON.stringify(s.data));
+      mutator(next);
+      if (this.Store) this.Store.save(next);
+      return { data: next };
+    });
+  }
+
+  bindText(path){
+    return (e) => {
+      const v = e && e.target ? e.target.value : e;
+      this.updateData((d)=> this.setPath(d, path, v));
+    };
+  }
+
+  updateDraft(mutator){
+    this.setState((s)=>{
+      const next = JSON.parse(JSON.stringify(s.draft));
+      mutator(next);
+      return { draft: next };
+    });
+  }
+  bindDraft(path){
+    return (e) => {
+      const v = e && e.target ? e.target.value : e;
+      this.updateDraft((d)=> this.setPath(d, path, v));
+    };
+  }
+
+  go(page){ this.setState({ page }); }
+
+  openNewModel(data){
+    const slug = this.Store.newSlug('New Model', data);
+    const draft = Object.assign(this.Store.blankModel(), { slug, name: 'New Model' });
+    this.setState({ editingSlug: '__new__', draft });
+  }
+  openEditModel(m){
+    this.setState({ editingSlug: m.slug, draft: JSON.parse(JSON.stringify(m)) });
+  }
+  closeEditor(){ this.setState({ editingSlug: null, draft: null }); }
+
+  saveModel(){
+    const draft = this.state.draft;
+    const isNew = this.state.editingSlug === '__new__';
+    this.updateData((d)=>{
+      // remove from both lists first (covers category change on edit)
+      d.women = d.women.filter(m=>m.slug!==draft.slug);
+      d.newfaces = d.newfaces.filter(m=>m.slug!==draft.slug);
+      const arr = draft.cat === 'newfaces' ? d.newfaces : d.women;
+      arr.push(draft);
+    });
+    this.closeEditor();
+  }
+
+  deleteModel(slug){
+    this.updateData((d)=>{
+      d.women = d.women.filter(m=>m.slug!==slug);
+      d.newfaces = d.newfaces.filter(m=>m.slug!==slug);
+      d.featured = (d.featured||[]).map(f=> f.slug===slug ? Object.assign({}, f, {slug:''}) : f);
+    });
+  }
+
+  addLesson(){ this.updateData((d)=> d.academy.lessons.push({ title:'New lesson', note:'' })); }
+  removeLesson(i){ this.updateData((d)=> d.academy.lessons.splice(i,1)); }
+  addFaq(){ this.updateData((d)=> d.academy.faqs.push({ q:'New question', a:'' })); }
+  removeFaq(i){ this.updateData((d)=> d.academy.faqs.splice(i,1)); }
+
+  onVideoUpload(e){
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    if (f.size > 8*1024*1024){ alert('That video is too large for this prototype — please use a clip under 8MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = () => this.updateData((d)=>{ d.heroVideo = reader.result; });
+    reader.readAsDataURL(f);
+  }
+  resetVideo(){ this.updateData((d)=>{ d.heroVideo = ''; }); }
+
+  toggleAppStatus(id){
+    this.updateData((d)=>{
+      const app = d.applications.find(a=>a.id===id);
+      if (app) app.status = app.status === 'reviewed' ? 'new' : 'reviewed';
+    });
+  }
+  deleteApp(id){
+    this.updateData((d)=>{ d.applications = d.applications.filter(a=>a.id!==id); });
+  }
+
+  renderVals(){
+    const data = this.state.data;
+    const loggedIn = this.state.loggedIn;
+    const page = this.state.page;
+    const editing = this.state.editingSlug !== null;
+
+    const nav = [
+      ['dashboard','Dashboard'], ['models','Models'], ['homepage','Homepage'],
+      ['academy','Academy'], ['about','About'], ['applications','Applications']
+    ];
+    const navItems = nav.map(([id,label])=>{
+      const active = page===id || (id==='models' && editing);
+      return {
+        label, go: ()=>{ this.closeEditor(); this.go(id); },
+        bg: active ? 'rgba(13,148,136,0.10)' : 'transparent',
+        color: active ? '#0D9488' : '#78716C',
+        dot: active ? '#0D9488' : '#D6D3D1'
+      };
+    });
+
+    if (!data){
+      return {
+        isLogin: !loggedIn, isApp: loggedIn,
+        loginEmail:this.state.loginEmail, loginPass:this.state.loginPass,
+        setLoginEmail:(e)=>this.setState({loginEmail:e.target.value}),
+        setLoginPass:(e)=>this.setState({loginPass:e.target.value}),
+        doLogin:()=>this.setState({loggedIn:true}), doLogout:()=>this.setState({loggedIn:false}),
+        navItems, brandName:'bemodel'
+      };
+    }
+
+    const brand = data.brand || {};
+    const brandName = brand.name || 'bemodel';
+    const allModels = data.women.concat(data.newfaces);
+
+    const stats = [
+      { label:'Total models', value: String(allModels.length) },
+      { label:'Women', value: String(data.women.length) },
+      { label:'New faces', value: String(data.newfaces.length) },
+      { label:'New applications', value: String((data.applications||[]).filter(a=>a.status!=='reviewed').length) }
+    ];
+    const quickLinks = [
+      { title:'Add a model', sub:'Create a new roster profile', go:()=>{ this.go('models'); this.openNewModel(data); } },
+      { title:'Edit homepage', sub:'Hero video, headline & featured', go:()=>this.go('homepage') },
+      { title:'Edit academy', sub:'Curriculum & FAQs', go:()=>this.go('academy') },
+      { title:'Review applications', sub:(data.applications||[]).length+' total', go:()=>this.go('applications') },
+      { title:'Edit about page', sub:'Agency story & process', go:()=>this.go('about') }
+    ];
+
+    const mf = this.state.modelFilter;
+    const filtered = mf==='women' ? data.women : mf==='newfaces' ? data.newfaces : allModels;
+    const modelsList = filtered.map((m)=>({
+      slug:m.slug, name:m.name, city:m.city, catLabel: m.cat==='newfaces'?'New Faces':'Women',
+      slotId:'card-'+m.slug,
+      onEdit:()=>this.openEditModel(m), onDelete:()=>{ this.deleteModel(m.slug); }
+    }));
+
+    const draft = this.state.draft || {};
+    const gallerySlots = ['Portrait','Full length','Editorial'].map((label,i)=>({ id:'gal-'+draft.slug+'-'+i, label }));
+    const polaroidSlots = ['Front','Profile','Full length','Smile'].map((label,i)=>({ id:'pol-'+draft.slug+'-'+i, label }));
+
+    const home = data.home;
+    const academy = data.academy;
+    const about = data.about;
+    const modelOptions = allModels.map(m=>({ slug:m.slug, name:m.name }));
+    const featuredSlots = (data.featured||[]).map((f,i)=>{
+      const mm = allModels.find(x=>x.slug===f.slug);
+      return {
+        slotId: mm ? 'card-'+mm.slug : 'latest-empty-'+i,
+        slug: f.slug, credit: f.credit,
+        onModelChange:(e)=>this.updateData((d)=>{ d.featured[i].slug = e.target.value; }),
+        onCreditChange:(e)=>this.updateData((d)=>{ d.featured[i].credit = e.target.value; })
+      };
+    });
+
+    const lessonRows = (academy.lessons||[]).map((l,i)=>({
+      slotId:'academy-l'+(i+1), title:l.title, note:l.note,
+      onTitle:(e)=>this.updateData((d)=>{ d.academy.lessons[i].title = e.target.value; }),
+      onNote:(e)=>this.updateData((d)=>{ d.academy.lessons[i].note = e.target.value; }),
+      onRemove:()=>this.removeLesson(i)
+    }));
+    const faqRows = (academy.faqs||[]).map((f,i)=>({
+      q:f.q, a:f.a,
+      onQ:(e)=>this.updateData((d)=>{ d.academy.faqs[i].q = e.target.value; }),
+      onA:(e)=>this.updateData((d)=>{ d.academy.faqs[i].a = e.target.value; }),
+      onRemove:()=>this.removeFaq(i)
+    }));
+    const stepRows = (about.steps||[]).map((st,i)=>({
+      title:st.title, body:st.body,
+      onTitle:(e)=>this.updateData((d)=>{ d.about.steps[i].title = e.target.value; }),
+      onBody:(e)=>this.updateData((d)=>{ d.about.steps[i].body = e.target.value; })
+    }));
+
+    const apps = data.applications||[];
+    const applicationRows = apps.map((a)=>{
+      const reviewed = a.status==='reviewed';
+      return Object.assign({}, a, {
+        dateLabel: new Date(a.ts).toLocaleString(),
+        statusLabel: reviewed?'Reviewed':'New',
+        statusBg: reviewed? 'rgba(31,138,91,0.12)':'rgba(59,111,224,0.12)',
+        statusColor: reviewed? '#1F8A5B':'#0D9488',
+        toggleLabel: reviewed?'Mark new':'Mark reviewed',
+        hasMessage: !!a.message,
+        onToggleStatus:()=>this.toggleAppStatus(a.id),
+        onDelete:()=>this.deleteApp(a.id)
+      });
+    });
+
+    return {
+      isLogin: !loggedIn, isApp: loggedIn, brandName,
+      navItems,
+      isDashboard: page==='dashboard' && !editing,
+      isModelsList: page==='models' && !editing,
+      isModelEdit: page==='models' && editing,
+      isHomepage: page==='homepage' && !editing,
+      isAcademy: page==='academy' && !editing,
+      isAboutPage: page==='about' && !editing,
+      isApplications: page==='applications' && !editing,
+      stats, quickLinks, modelsList,
+      openNewModel:()=>this.openNewModel(data),
+      setFilterAll:()=>this.setState({modelFilter:'all'}),
+      setFilterWomen:()=>this.setState({modelFilter:'women'}),
+      setFilterNew:()=>this.setState({modelFilter:'newfaces'}),
+      filterAllColor: mf==='all' ? '#1C1917' : '#A8A29E',
+      filterWomenColor: mf==='women' ? '#1C1917' : '#A8A29E',
+      filterNewColor: mf==='newfaces' ? '#1C1917' : '#A8A29E',
+      filterAllLine: mf==='all' ? '2px solid #1C1917' : '2px solid transparent',
+      filterWomenLine: mf==='women' ? '2px solid #1C1917' : '2px solid transparent',
+      filterNewLine: mf==='newfaces' ? '2px solid #1C1917' : '2px solid transparent',
+      editorTitle: this.state.editingSlug==='__new__' ? 'New model' : (draft.name||''),
+      draft,
+      cardSlotId: 'card-'+(draft.slug||''),
+      gallerySlots, polaroidSlots,
+      closeEditor:()=>this.closeEditor(), saveModel:()=>this.saveModel(),
+      dName:this.bindDraft('name'), dCity:this.bindDraft('city'), dCat:this.bindDraft('cat'),
+      dHeight:this.bindDraft('height'), dBust:this.bindDraft('bust'), dWaist:this.bindDraft('waist'),
+      dHips:this.bindDraft('hips'), dShoes:this.bindDraft('shoes'), dHair:this.bindDraft('hair'),
+      dEyes:this.bindDraft('eyes'), dBio:this.bindDraft('bio'),
+      heroVideoSrc: data.heroVideo || 'assets/madina.mp4',
+      onVideoUpload:(e)=>this.onVideoUpload(e), resetVideo:()=>this.resetVideo(),
+      home,
+      hHeroPre:this.bindText('home.heroPre'), hHeroEm:this.bindText('home.heroEm'), hHeroPost:this.bindText('home.heroPost'),
+      hHeroBody:this.bindText('home.heroBody'),
+      hManifestoTitle:this.bindText('home.manifestoTitle'), hManifestoBody1:this.bindText('home.manifestoBody1'), hManifestoBody2:this.bindText('home.manifestoBody2'),
+      modelOptions, featuredSlots,
+      academy,
+      aHeroTitle:this.bindText('academy.heroTitle'), aHeroBody:this.bindText('academy.heroBody'),
+      aAboutTitle:this.bindText('academy.aboutTitle'), aAboutBody1:this.bindText('academy.aboutBody1'), aAboutBody2:this.bindText('academy.aboutBody2'),
+      aStatsWeeks:this.bindText('academy.stats.weeks'), aStatsSessions:this.bindText('academy.stats.sessions'), aStatsCohort:this.bindText('academy.stats.cohort'),
+      lessonRows, faqRows, addLesson:()=>this.addLesson(), addFaq:()=>this.addFaq(),
+      about,
+      abHeading:this.bindText('about.heading'), abBody1:this.bindText('about.body1'), abBody2:this.bindText('about.body2'),
+      stepRows,
+      hasApplications: apps.length>0, hasNoApplications: apps.length===0,
+      applicationRows,
+      loginEmail:this.state.loginEmail, loginPass:this.state.loginPass,
+      setLoginEmail:(e)=>this.setState({loginEmail:e.target.value}),
+      setLoginPass:(e)=>this.setState({loginPass:e.target.value}),
+      doLogin:()=>this.setState({loggedIn:true}), doLogout:()=>this.setState({loggedIn:false})
+    };
+  }
+}
+
+</script>
+</body>
+</html>

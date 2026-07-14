@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0}
+  a{color:#A96B52;text-decoration:none}
+  a:hover{color:#211D18}
+  ::selection{background:#211D18;color:#F3EDE3}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="font-family:'Jost',sans-serif;background:#F3EDE3;color:#211D18;min-height:100vh;overflow-x:hidden">
+
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:rgba(243,237,227,0.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(33,29,24,0.10)">
+    <div onClick="{{ goHome }}" style="font-family: 'Cormorant Garamond',serif; font-size: 30px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; line-height: 1; width: 105px; height: 27px">{{ name }}</div>
+    <nav style="display:flex;gap:36px;font-size:11px;letter-spacing:0.22em;text-transform:uppercase">
+      <span onClick="{{ goWomen }}" style="cursor:pointer;transition:color .3s" style-hover="color:#A96B52">MODELS</span>
+      <span onClick="{{ goNew }}" style="cursor:pointer;transition:color .3s" style-hover="color:#A96B52">New Faces</span>
+      <span onClick="{{ goAcademy }}" style="cursor:pointer;transition:color .3s" style-hover="color:#A96B52">ACADEMY</span>
+      <span onClick="{{ goContact }}" style="cursor:pointer;transition:color .3s" style-hover="color:#A96B52">Contact</span>
+    </nav>
+    <div onClick="{{ goContact }}" style="border:1px solid #211D18;padding:11px 20px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all .3s" style-hover="background:#211D18;color:#F3EDE3">Become a Model</div>
+  </header>
+
+  <main>
+    <!-- ============ HOME ============ -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Home">
+      <section style="position:relative;min-height:calc(100vh - 73px);overflow:hidden;display:flex;align-items:flex-end;border-bottom:1px solid rgba(33,29,24,0.10)">
+        <video ref="{{ videoRef }}" onTimeUpdate="{{ videoSave }}" src="{{ heroVideoSrc }}" autoplay="" muted="" loop="" playsinline="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"></video>
+        <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to top, rgba(24,20,16,0.72), rgba(24,20,16,0.22) 45%, rgba(24,20,16,0.30))"></div>
+        <div style="position:relative;z-index:2;width:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(40px,6vw,96px);animation:fadeUp .8s ease both">
+          <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#E4C7B8;margin-bottom:26px">{{ city }} — Worldwide · Est. 2014</div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(52px,8vw,120px);line-height:0.94;letter-spacing:-0.015em;margin:0;color:#F6F1E9;text-shadow:0 2px 40px rgba(0,0,0,0.25)">{{ home.heroPre }}<br><em style="font-weight:500">{{ home.heroEm }}</em> {{ home.heroPost }}</h1>
+          <p style="font-family:'Jost',sans-serif;font-weight:300;font-size:16px;line-height:1.75;color:rgba(246,241,233,0.86);max-width:460px;margin:30px 0 38px">{{ home.heroBody }}</p>
+          <div style="display:flex;gap:16px;flex-wrap:wrap">
+            <div onClick="{{ goWomen }}" style="display:inline-flex;align-items:center;gap:10px;padding:15px 28px;background:#F6F1E9;color:#211D18;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all .3s" style-hover="background:#A96B52;color:#F6F1E9">VIEW THE MODELS →</div>
+            <div onClick="{{ goMadina }}" style="display:inline-flex;align-items:center;padding:14px 26px;border:1px solid rgba(246,241,233,0.7);color:#F6F1E9;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all .3s" style-hover="background:#F6F1E9;color:#211D18;border-color:#F6F1E9">Meet MADINA<br></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured -->
+      <section style="padding:clamp(64px,8vw,110px) clamp(40px,6vw,96px);background:#FAF6EF">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:48px">
+          <div>
+            <div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:{{ accent }};margin-bottom:14px">Newest work</div>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4.5vw,60px);line-height:1;margin:0">Latest</h2>
+          </div>
+          <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;max-width:30ch">Recent photoshoots, campaigns &amp; runway</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.15fr 2fr;gap:26px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="position:relative;aspect-ratio:3/4.4;overflow:hidden;background:#EAE1D2">
+              <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ latestFeature.slotId }}" src="{{ latestFeature.slotSrc }}" shape="rect" placeholder="Drop latest hero shoot" hint-size="100%,100%"></x-import>
+            </div>
+            <div>
+              <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500">{{ latestFeature.model }}</div>
+              <div style="margin-top:3px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8A7F70">{{ latestFeature.credit }}</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start">
+            <sc-for list="{{ latestSmall }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:{{ c.offset }}px">
+                <div style="position:relative;aspect-ratio:3/3.9;overflow:hidden;background:#EAE1D2">
+                  <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ c.slotId }}" src="{{ c.slotSrc }}" shape="rect" placeholder="Drop photo" hint-size="100%,100%"></x-import>
+                </div>
+                <div>
+                  <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500">{{ c.model }}</div>
+                  <div style="margin-top:3px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8A7F70">{{ c.credit }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div onClick="{{ goWomen }}" style="margin-top:56px;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;display:inline-block;border-bottom:1px solid #211D18;padding-bottom:4px">View all models →</div>
+      </section>
+
+      <!-- Manifesto -->
+      <section style="display:grid;grid-template-columns:0.9fr 1.1fr;align-items:stretch;border-top:1px solid rgba(33,29,24,0.10)">
+        <div style="position:relative;min-height:56vh;background:#EAE1D2">
+          <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="manifesto-bts" shape="rect" placeholder="Drop a BTS / agency image" hint-size="100%,100%"></x-import>
+        </div>
+        <div style="display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,96px)">
+          <div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:{{ accent }};margin-bottom:22px">The agency</div>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(32px,3.6vw,50px);line-height:1.06;margin:0 0 24px">{{ home.manifestoTitle }}</h2>
+          <p style="font-weight:300;font-size:16px;line-height:1.8;color:#6B6157;max-width:520px;margin:0 0 18px">{{ home.manifestoBody1 }}</p>
+          <p style="font-weight:300;font-size:16px;line-height:1.8;color:#6B6157;max-width:520px;margin:0 0 34px">{{ home.manifestoBody2 }}</p>
+          <div onClick="{{ goAbout }}" style="font-size:12px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;display:inline-block;border-bottom:1px solid #211D18;padding-bottom:4px;width:fit-content">Our story →</div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section style="background:#211D18;color:#F3EDE3;text-align:center;padding:clamp(72px,9vw,130px) 40px">
+        <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#C29A87;margin-bottom:26px">Open call</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(40px,6vw,84px);line-height:1;margin:0 auto 34px;max-width:14ch">Think you have it?</h2>
+        <div onClick="{{ goContact }}" style="display:inline-flex;align-items:center;gap:10px;padding:16px 34px;background:#F3EDE3;color:#211D18;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all .3s" style-hover="background:#A96B52;color:#F3EDE3">Become a Model →</div>
+      </section>
+    </div>
+    </sc-if>
+
+    <!-- ============ ROSTER ============ -->
+    <sc-if value="{{ isRoster }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Roster" style="padding:clamp(48px,6vw,84px) clamp(40px,6vw,96px)">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:44px;border-bottom:1px solid rgba(33,29,24,0.12);padding-bottom:30px">
+        <div>
+          <div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:{{ accent }};margin-bottom:14px">Roster · {{ rosterCount }} talents</div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(46px,6vw,84px);line-height:1;margin:0">{{ rosterTitle }}</h1>
+        </div>
+        <div style="display:flex;gap:28px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase">
+          <span onClick="{{ setWomen }}" style="cursor:pointer;padding-bottom:6px;color:{{ womenColor }};border-bottom:{{ womenLine }}">Women</span>
+          <span onClick="{{ setNew }}" style="cursor:pointer;padding-bottom:6px;color:{{ newColor }};border-bottom:{{ newLine }}">New Faces</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:38px 26px">
+        <sc-for list="{{ roster }}" as="c" hint-placeholder-count="8">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div onMouseEnter="{{ c.onEnter }}" onMouseLeave="{{ c.onLeave }}" style="position:relative;aspect-ratio:3/4;perspective:1400px">
+              <div style="position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;transform:{{ c.flipT }}">
+                <!-- front: uploadable photo -->
+                <div style="position:absolute;inset:0;overflow:hidden;background:#EAE1D2;backface-visibility:hidden;-webkit-backface-visibility:hidden">
+                  <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ c.slotId }}" src="{{ c.slotSrc }}" shape="rect" placeholder="Drop a photo" hint-size="100%,100%"></x-import>
+                </div>
+                <!-- back: measurements, click to open profile -->
+                <div onClick="{{ c.onOpen }}" style="position:absolute;inset:0;background:#211D18;color:#CDC3B4;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;padding:26px 24px;cursor:pointer">
+                  <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#F6F1E9;line-height:1;margin-bottom:18px">{{ c.name }}</div>
+                  <sc-for list="{{ c.stats }}" as="s" hint-placeholder-count="7">
+                    <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(243,237,227,0.14);font-size:12px">
+                      <span style="letter-spacing:0.12em;text-transform:uppercase;color:#8A7F70;font-size:10px">{{ s.k }}</span>
+                      <span style="color:#F6F1E9">{{ s.v }}</span>
+                    </div>
+                  </sc-for>
+                  <div style="margin-top:20px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#C29A87">View portfolio →</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <div>
+                <div onClick="{{ c.onOpen }}" style="font-family:'Cormorant Garamond',serif;font-size:20px;cursor:pointer;line-height:1.1">{{ c.name }}</div>
+                <div style="margin-top:2px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.12em;color:#A99B86;text-transform:uppercase">{{ c.city }}</div>
+              </div>
+              <div onClick="{{ c.onOpen }}" style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#211D18;cursor:pointer;border-bottom:1px solid #211D18;padding-bottom:2px;white-space:nowrap">View →</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ PROFILE ============ -->
+    <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Model Profile" style="padding:clamp(36px,4vw,60px) clamp(40px,6vw,96px)">
+      <div onClick="{{ goWomen }}" style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6157;cursor:pointer;margin-bottom:40px">← Back to roster</div>
+      <div style="display:grid;grid-template-columns:340px 1fr;gap:clamp(40px,5vw,80px);align-items:start">
+        <div style="position:sticky;top:110px">
+          <div style="font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ accent }};margin-bottom:16px">{{ model.city }}</div>
+          
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(48px,5vw,74px);line-height:0.98;margin:0 0 34px">{{ model.name }}</h1><div style="border-top:1px solid rgba(33,29,24,0.14)">
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Height</span><span>{{ model.height }} cm</span></div>
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Bust</span><span>{{ model.bust }} cm</span></div>
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Waist</span><span>{{ model.waist }} cm</span></div>
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Hips</span><span>{{ model.hips }} cm</span></div>
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Shoes</span><span>{{ model.shoes }} EU</span></div>
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Hair</span><span>{{ model.hair }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(33,29,24,0.1);font-size:13px"><span style="letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70;font-size:11px">Eyes</span><span>{{ model.eyes }}</span></div>
+          </div>
+          <div onClick="{{ goContact }}" style="margin-top:32px;display:inline-flex;align-items:center;gap:10px;padding:15px 28px;background:#211D18;color:#F3EDE3;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:background .3s" style-hover="background:#A96B52">Book this model →</div>
+        </div>
+        <div>
+          <div style="font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ accent }};margin-bottom:20px">Portfolio</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+              <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#EAE1D2">
+                <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ g.slotId }}" src="{{ g.slotSrc }}" shape="rect" placeholder="{{ g.plabel }}" hint-size="100%,100%"></x-import>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:{{ accent }};margin:56px 0 8px">Polaroids · Digitals</div>
+          <div style="font-size:13px;font-weight:300;color:#8A7F70;margin-bottom:22px">Unretouched, natural light — measurements confirmed on the day.</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+            <sc-for list="{{ polaroids }}" as="p" hint-placeholder-count="4">
+              <div style="background:#FFFDF9;padding:10px 10px 34px;box-shadow:0 8px 22px rgba(33,29,24,0.10);border:1px solid rgba(33,29,24,0.06)">
+                <div style="position:relative;aspect-ratio:3/4;overflow:hidden;background:#EAE1D2">
+                  <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ p.slotId }}" src="{{ p.slotSrc }}" shape="rect" placeholder="Digital" hint-size="100%,100%"></x-import>
+                </div>
+                <div style="text-align:center;margin-top:12px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#8A7F70">{{ p.plabel }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ ABOUT ============ -->
+    <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="About">
+      <section style="padding:clamp(64px,8vw,120px) clamp(40px,6vw,96px);max-width:900px">
+        <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:{{ accent }};margin-bottom:26px">About {{ name }}</div>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(40px,5.5vw,80px);line-height:1.02;margin:0 0 40px">{{ about.heading }}</h1>
+        <p style="font-weight:300;font-size:18px;line-height:1.85;color:#4A4238;margin:0 0 22px">{{ about.body1 }}</p>
+        <p style="font-weight:300;font-size:18px;line-height:1.85;color:#4A4238;margin:0">{{ about.body2 }}</p>
+      </section>
+      <section style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid rgba(33,29,24,0.12)">
+        <sc-for list="{{ about.steps }}" as="st" hint-placeholder-count="3">
+          <div style="padding:clamp(40px,5vw,72px) clamp(28px,3vw,48px);border-right:1px solid rgba(33,29,24,0.12)">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:56px;color:{{ accent }};line-height:1">{{ st.num }}</div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;margin:18px 0 12px">{{ st.title }}</h3>
+            <p style="font-weight:300;font-size:15px;line-height:1.75;color:#6B6157;margin:0">{{ st.body }}</p>
+          </div>
+        </sc-for>
+      </section>
+    </div>
+    </sc-if>
+
+    <!-- ============ ACADEMY ============ -->
+    <sc-if value="{{ isAcademy }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Academy">
+      <!-- Video hero -->
+      <section style="position:relative;min-height:78vh;overflow:hidden;display:flex;align-items:flex-end;border-bottom:1px solid rgba(33,29,24,0.10)">
+        <video ref="{{ videoRef }}" onTimeUpdate="{{ videoSave }}" src="{{ heroVideoSrc }}" autoplay="" muted="" loop="" playsinline="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"></video>
+        <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to top, rgba(24,20,16,0.78), rgba(24,20,16,0.25) 50%, rgba(24,20,16,0.35))"></div>
+        <div style="position:relative;z-index:2;width:100%;padding:clamp(40px,6vw,96px);animation:fadeUp .8s ease both">
+          
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(48px,7.5vw,110px);line-height:0.94;margin:0;color:#F6F1E9;max-width:16ch">{{ academy.heroTitle }}<br></h1>
+          <p style="font-weight:300;font-size:16px;line-height:1.75;color:rgba(246,241,233,0.86);max-width:480px;margin:28px 0 36px">{{ academy.heroBody }}</p>
+          <div onClick="{{ goContact }}" style="display:inline-flex;align-items:center;gap:10px;padding:15px 28px;background:#F6F1E9;color:#211D18;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all .3s;width:fit-content" style-hover="background:#A96B52;color:#F6F1E9">Apply to the Academy →</div>
+        </div>
+      </section>
+
+      <!-- About the academy -->
+      <section style="display:grid;grid-template-columns:1.05fr 0.95fr;align-items:stretch;background:#FAF6EF;border-bottom:1px solid rgba(33,29,24,0.10)">
+        <div style="display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,96px)">
+          <div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:{{ accent }};margin-bottom:22px">About the Academy</div>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(32px,3.8vw,52px);line-height:1.06;margin:0 0 24px">{{ academy.aboutTitle }}</h2>
+          <p style="font-weight:300;font-size:16px;line-height:1.8;color:#6B6157;max-width:520px;margin:0 0 18px">{{ academy.aboutBody1 }}</p>
+          <p style="font-weight:300;font-size:16px;line-height:1.8;color:#6B6157;max-width:520px;margin:0">{{ academy.aboutBody2 }}</p>
+          <div style="display:flex;gap:44px;margin-top:38px;flex-wrap:wrap">
+            <div><div style="font-family:'Cormorant Garamond',serif;font-size:44px;color:{{ accent }};line-height:1">{{ academy.stats.weeks }}</div><div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7F70;margin-top:6px">Weeks</div></div>
+            <div><div style="font-family:'Cormorant Garamond',serif;font-size:44px;color:{{ accent }};line-height:1">{{ academy.stats.sessions }}</div><div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7F70;margin-top:6px">Sessions</div></div>
+            <div><div style="font-family:'Cormorant Garamond',serif;font-size:44px;color:{{ accent }};line-height:1">{{ academy.stats.cohort }}</div><div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7F70;margin-top:6px">Per cohort</div></div>
+          </div>
+        </div>
+        <div style="position:relative;min-height:54vh;background:#EAE1D2">
+          <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="academy-about" shape="rect" placeholder="Drop an academy / studio image" hint-size="100%,100%"></x-import>
+        </div>
+      </section>
+
+      <!-- Lessons / curriculum -->
+      <section style="padding:clamp(64px,8vw,110px) clamp(40px,6vw,96px)">
+        <div style="margin-bottom:48px">
+          <div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:{{ accent }};margin-bottom:14px">The curriculum</div>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,4.2vw,58px);line-height:1;margin:0">Inside the lessons</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:34px 26px">
+          <sc-for list="{{ academy.lessons }}" as="l" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#EAE1D2">
+                <x-import component-from-global-scope="image-slot" from="./assets/image-slot.js" id="{{ l.slotId }}" shape="rect" placeholder="Drop a lesson shot" hint-size="100%,100%"></x-import>
+              </div>
+              <div>
+                <h3 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:23px;margin:0 0 6px">{{ l.title }}</h3>
+                <p style="font-weight:300;font-size:14px;line-height:1.65;color:#6B6157;margin:0">{{ l.note }}</p>
+              </div>
+
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section style="background:#211D18;color:#CDC3B4;padding:clamp(64px,8vw,110px) clamp(40px,6vw,96px)">
+        <div style="display:grid;grid-template-columns:0.7fr 1.3fr;gap:clamp(32px,5vw,80px);align-items:start">
+          <div>
+            <div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#C29A87;margin-bottom:16px">Good to know</div>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,4vw,56px);line-height:1.02;color:#F6F1E9;margin:0 0 26px">Questions,<br>answered.</h2>
+            <p style="font-weight:300;font-size:15px;line-height:1.75;max-width:34ch;margin:0 0 30px">Still unsure? Send us a note and we'll walk you through it.</p>
+            <div onClick="{{ goContact }}" style="display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border:1px solid rgba(246,241,233,0.6);color:#F6F1E9;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all .3s;width:fit-content" style-hover="background:#F6F1E9;color:#211D18">Get in touch →</div>
+          </div>
+          <div>
+            <sc-for list="{{ academy.faqs }}" as="f" hint-placeholder-count="6">
+              <div style="border-top:1px solid rgba(243,237,227,0.16);padding:26px 0">
+                <h3 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;color:#F6F1E9;margin:0 0 10px">{{ f.q }}</h3>
+                <p style="font-weight:300;font-size:15px;line-height:1.75;margin:0;max-width:60ch">{{ f.a }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </div>
+    </sc-if>
+
+    <!-- ============ CONTACT ============ -->
+    <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Contact / Become a Model" style="display:grid;grid-template-columns:0.85fr 1.15fr;min-height:80vh">
+      <div style="background:#211D18;color:#CDC3B4;padding:clamp(48px,6vw,90px)">
+        <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#C29A87;margin-bottom:26px">Get in touch</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(36px,4vw,58px);line-height:1.02;color:#F3EDE3;margin:0 0 40px">Become a Model</h2>
+        <p style="font-weight:300;font-size:16px;line-height:1.8;margin:0 0 44px;max-width:38ch">Send us your details and a few unretouched photos — full length, portrait and profile. If there's a fit, we'll be in touch within two weeks.</p>
+        <div style="border-top:1px solid rgba(243,237,227,0.16);padding-top:26px">
+          <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7F70;margin-bottom:8px">Studio</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#F3EDE3;margin-bottom:26px">{{ city }}, KZ</div>
+          <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7F70;margin-bottom:8px">Email</div>
+          <div style="font-size:16px;color:#F3EDE3;margin-bottom:26px">scout@bemodel.agency</div>
+          <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A7F70;margin-bottom:8px">Instagram</div>
+          <div style="font-size:16px;color:#F3EDE3">@bemodel.agency</div>
+        </div>
+      </div>
+
+      <div style="padding:clamp(48px,6vw,90px);background:#FAF6EF">
+        <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px 40px">
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Full name</label><input value="{{ form.name }}" onChange="{{ fName }}" placeholder="Anastasiya K." style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Email</label><input value="{{ form.email }}" onChange="{{ fEmail }}" placeholder="you@email.com" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Phone</label><input value="{{ form.phone }}" onChange="{{ fPhone }}" placeholder="+7 ___ ___ __ __" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Instagram</label><input value="{{ form.instagram }}" onChange="{{ fInsta }}" placeholder="@handle" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">City / Country</label><input value="{{ form.city }}" onChange="{{ fCity }}" placeholder="Almaty, KZ" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+            <div style="display:flex;gap:24px">
+              <div style="display:flex;flex-direction:column;gap:8px;flex:1"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Date of birth</label><input value="{{ form.dob }}" onChange="{{ fDob }}" placeholder="DD / MM / YYYY" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+              <div style="display:flex;flex-direction:column;gap:8px;width:110px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Height</label><input value="{{ form.height }}" onChange="{{ fHeight }}" placeholder="cm" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none" style-focus="border-bottom:1px solid #A96B52"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:30px"><label style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70">Tell us about yourself</label><textarea value="{{ form.message }}" onChange="{{ fMsg }}" rows="3" placeholder="Experience, availability, anything we should know…" style="width:100%;padding:12px 0;border:none;border-bottom:1px solid rgba(33,29,24,0.28);background:transparent;font-family:'Jost',sans-serif;font-size:15px;color:#211D18;outline:none;resize:vertical" style-focus="border-bottom:1px solid #A96B52"></textarea></div>
+          <div style="margin-top:30px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+            <div style="border:1px dashed rgba(33,29,24,0.3);padding:22px 14px;text-align:center;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.14em;color:#8A7F70;cursor:pointer">+ PORTRAIT</div>
+            <div style="border:1px dashed rgba(33,29,24,0.3);padding:22px 14px;text-align:center;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.14em;color:#8A7F70;cursor:pointer">+ FULL LENGTH</div>
+            <div style="border:1px dashed rgba(33,29,24,0.3);padding:22px 14px;text-align:center;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.14em;color:#8A7F70;cursor:pointer">+ PROFILE</div>
+          </div>
+          <div onClick="{{ submit }}" style="margin-top:40px;display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:#211D18;color:#F3EDE3;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:background .3s" style-hover="background:#A96B52">Submit application →</div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="min-height:50vh;display:flex;flex-direction:column;justify-content:center;animation:fadeUp .6s ease both">
+          <div style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:{{ accent }};margin-bottom:22px">Received</div>
+          <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(36px,4vw,58px);line-height:1.05;margin:0 0 20px">Thank you.<br>We'll be in touch.</h2>
+          <p style="font-weight:300;font-size:16px;line-height:1.8;color:#6B6157;max-width:44ch;margin:0 0 34px">Your application is with our scouting team. If there's a fit, you'll hear from us within two weeks.</p>
+          <div onClick="{{ goHome }}" style="font-size:12px;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-bottom:1px solid #211D18;padding-bottom:4px;width:fit-content">Back to home →</div>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+  </main>
+
+  <footer style="background:#211D18;color:#B7AC9C;padding:clamp(56px,7vw,90px) clamp(40px,6vw,96px) 40px">
+    <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding-bottom:56px;border-bottom:1px solid rgba(243,237,227,0.14)">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;color:#F3EDE3;line-height:1;margin-bottom:18px">{{ name }}</div>
+        <p style="font-weight:300;font-size:14px;line-height:1.75;max-width:34ch;margin:0">A boutique modeling agency representing women and new faces, based in {{ city }} and placed worldwide.</p>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70;margin-bottom:18px">Explore</div>
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:14px">
+          <span onClick="{{ goWomen }}" style="cursor:pointer;color:#CDC3B4;transition:color .3s" style-hover="color:#F3EDE3">Women</span>
+          <span onClick="{{ goNew }}" style="cursor:pointer;color:#CDC3B4;transition:color .3s" style-hover="color:#F3EDE3">New Faces</span>
+          <span onClick="{{ goAbout }}" style="cursor:pointer;color:#CDC3B4;transition:color .3s" style-hover="color:#F3EDE3">About</span>
+          <span onClick="{{ goAcademy }}" style="cursor:pointer;color:#CDC3B4;transition:color .3s" style-hover="color:#F3EDE3">Academy</span>
+          <span onClick="{{ goContact }}" style="cursor:pointer;color:#CDC3B4;transition:color .3s" style-hover="color:#F3EDE3">Become a Model</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70;margin-bottom:18px">Contact</div>
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;color:#CDC3B4">
+          <span>scout@bemodel.agency</span>
+          <span>+7 727 000 00 00</span>
+          <span>{{ city }}, Kazakhstan</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8A7F70;margin-bottom:18px">Social</div>
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;color:#CDC3B4">
+          <span>Instagram</span>
+          <span>TikTok</span>
+          <span>LinkedIn</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:26px;font-size:11px;letter-spacing:0.1em;color:#8A7F70">
+      <span>© 2026 {{ name }} — All rights reserved</span>
+      <span>Terms · Privacy · Model Rights</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;agencyName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;bemodel&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Brand&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#7C6A57&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#A96B52&quot;,&quot;#7C6A57&quot;,&quot;#9C6B6B&quot;,&quot;#6E7A6A&quot;],&quot;section&quot;:&quot;Brand&quot;},&quot;city&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Almaty&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Brand&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.tones = [
+      ['#EAE1D2','#E1D5C0'],
+      ['#ECE4D6','#E3D7C4'],
+      ['#E6DAC7','#DCCFB8'],
+      ['#EEE7DA','#E5D9C7']
+    ];
+  }
+
+  state = { page:'home', cat:'women', model:null, hovered:null, submitted:false, data:null,
+    form:{ name:'',email:'',phone:'',instagram:'',city:'',dob:'',height:'',message:'' } };
+
+  componentDidMount(){
+    import('./assets/store.js').then((mod)=>{
+      this.Store = mod;
+      this.setState({ data: mod.load() });
+      this.unsub = mod.subscribe((d)=>{
+        // Re-resolve the selected model (if any) against fresh data so an
+        // admin edit shows up immediately on an open profile page.
+        this.setState((s)=>({ data:d, model: s.model ? (d.women.concat(d.newfaces).find(m=>m.slug===s.model.slug) || s.model) : s.model }));
+      });
+    });
+  }
+
+  componentWillUnmount(){
+    if (this.unsub) this.unsub();
+  }
+
+  bg(i){
+    const t = this.tones[((i%this.tones.length)+this.tones.length)%this.tones.length];
+    return 'repeating-linear-gradient(135deg, '+t[0]+', '+t[0]+' 18px, '+t[1]+' 18px, '+t[1]+' 36px)';
+  }
+
+  go(page, opts){
+    this.setState(Object.assign({page}, opts||{}));
+    if (typeof window !== 'undefined') { try { window.scrollTo({top:0}); } catch(e){ window.scrollTo(0,0); } }
+  }
+
+  open(m){ this.go('profile', {model:m}); }
+
+  card(m, i){
+    const photo = (m.photos && m.photos.length) ? m.photos[0] : '';
+    const flipped = this.state.hovered === m.slug;
+    return Object.assign({}, m, {
+      slotId: 'card-'+m.slug,
+      slotSrc: photo,
+      flipT: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+      stats: [
+        {k:'Height', v:m.height + ' cm'},
+        {k:'Bust', v:m.bust + ' cm'},
+        {k:'Waist', v:m.waist + ' cm'},
+        {k:'Hips', v:m.hips + ' cm'},
+        {k:'Shoes', v:m.shoes + ' EU'},
+        {k:'Hair', v:m.hair},
+        {k:'Eyes', v:m.eyes}
+      ],
+      onEnter: () => this.setState({hovered:m.slug}),
+      onLeave: () => this.setState({hovered:null}),
+      onOpen: () => this.open(m)
+    });
+  }
+
+  field(k){
+    return (e) => {
+      const v = e && e.target ? e.target.value : '';
+      this.setState(s => ({ form: Object.assign({}, s.form, {[k]: v}) }));
+    };
+  }
+
+  renderVals(){
+    const p = this.state.page;
+    const data = this.state.data;
+    const brand = (data && data.brand) || {};
+    const accent = brand.accent || this.props.accent || '#A96B52';
+    const name = brand.name || this.props.agencyName || 'bemodel';
+    const city = brand.city || this.props.city || 'Almaty';
+    const home = (data && data.home) || { heroPre:'', heroEm:'', heroPost:'', heroBody:'', manifestoTitle:'', manifestoBody1:'', manifestoBody2:'' };
+    const homeText = Object.assign({}, home, {
+      manifestoBody2: (home.manifestoBody2||'').split('{city}').join(city)
+    });
+    const aboutRaw = (data && data.about) || { heading:'', body1:'', body2:'', steps:[] };
+    const about = Object.assign({}, aboutRaw, {
+      body1: (aboutRaw.body1||'').split('{name}').join(name).split('{city}').join(city),
+      steps: (aboutRaw.steps||[]).map((s,i)=>Object.assign({num:String(i+1).padStart(2,'0')}, s))
+    });
+    const academyRaw = (data && data.academy) || { heroTitle:'', heroBody:'', aboutTitle:'', aboutBody1:'', aboutBody2:'', stats:{}, lessons:[], faqs:[] };
+    const academy = Object.assign({}, academyRaw, {
+      heroBody: (academyRaw.heroBody||'').split('{city}').join(city),
+      aboutBody1: (academyRaw.aboutBody1||'').split('{name}').join(name),
+      lessons: (academyRaw.lessons||[]).map((l,i)=>Object.assign({slotId:'academy-l'+(i+1)}, l))
+    });
+    const heroVideoSrc = (data && data.heroVideo) || 'assets/madina.mp4';
+    const isNew = this.state.cat === 'newfaces';
+    const women = (data && data.women) || [];
+    const newfaces = (data && data.newfaces) || [];
+    const list = isNew ? newfaces : women;
+    const roster = list.map((m,i) => this.card(m,i));
+    const allModels = women.concat(newfaces);
+    const m = this.state.model || {};
+    const glabels = ['Portrait','Full length','Editorial','Close-up'];
+    const slug = m.slug || 'x';
+    const gsrc = (m.photos && m.photos.length) ? m.photos : ['','',''];
+    const gallery = gsrc.map((src,i) => ({
+      slotId: 'gal-'+slug+'-'+i,
+      slotSrc: src,
+      plabel: glabels[i] || ('Look '+(i+1))
+    }));
+    const plabels = ['Front','Profile','Full length','Smile'];
+    const polaroids = plabels.map((lab,i) => ({
+      slotId: 'pol-'+slug+'-'+i,
+      slotSrc: (m.photos && m.photos[i]) ? m.photos[i] : '',
+      plabel: lab
+    }));
+    const measures = [
+      ['Height', (m.height||'—') + ' cm'],
+      ['Bust', (m.bust||'—') + ' cm'],
+      ['Waist', (m.waist||'—') + ' cm'],
+      ['Hips', (m.hips||'—') + ' cm'],
+      ['Shoes', (m.shoes||'—') + ' EU'],
+      ['Hair', m.hair||'—'],
+      ['Eyes', m.eyes||'—']
+    ];
+    const madina = allModels.find(mm=>mm.slug==='shakhin') || allModels[0] || {};
+    const latest = ((data && data.featured) || []).map((f,i)=>{
+      const mm = allModels.find(x=>x.slug===f.slug) || {};
+      const photo = (mm.photos && mm.photos[0]) || '';
+      return { slotId:'latest-'+(i+1), model:mm.name||'—', credit:f.credit||'', offset: i===0?0:(i===2?64:(i===3?24:0)), feature:i===0, slotSrc: i===0?photo:'' };
+    });
+    const latestFeature = latest[0] || {};
+    const latestSmall = latest.slice(1);
+    const dk = '#211D18', mute = '#A99B86';
+    return {
+      accent, name, city, home:homeText, about, academy,
+      isHome:p==='home', isRoster:p==='roster', isProfile:p==='profile', isAbout:p==='about', isContact:p==='contact', isAcademy:p==='academy',
+      goHome:()=>this.go('home'),
+      goWomen:()=>this.go('roster',{cat:'women'}),
+      goNew:()=>this.go('roster',{cat:'newfaces'}),
+      goAbout:()=>this.go('about'),
+      goAcademy:()=>this.go('academy'),
+      goContact:()=>this.go('contact'),
+      setWomen:()=>this.setState({cat:'women'}),
+      setNew:()=>this.setState({cat:'newfaces'}),
+      womenColor: isNew ? mute : dk,
+      newColor:   isNew ? dk : mute,
+      womenLine:  isNew ? '2px solid transparent' : '2px solid '+dk,
+      newLine:    isNew ? '2px solid '+dk : '2px solid transparent',
+      rosterTitle: isNew ? 'New Faces' : 'Models\n',
+      rosterCount: list.length,
+      roster, latestFeature, latestSmall, heroVideoSrc,
+      heroBg:this.bg(1), manifestoBg:this.bg(3),
+      model:m, gallery, polaroids, measures,
+      form:this.state.form, submitted:this.state.submitted, formOpen:!this.state.submitted,
+      fName:this.field('name'), fEmail:this.field('email'), fPhone:this.field('phone'),
+      fInsta:this.field('instagram'), fCity:this.field('city'), fDob:this.field('dob'),
+      fHeight:this.field('height'), fMsg:this.field('message'),
+      submit:()=>{
+        if (this.Store && data){
+          const app = Object.assign({}, this.state.form, { id:'app-'+Date.now(), ts:Date.now(), status:'new' });
+          const next = Object.assign({}, data, { applications:[app].concat(data.applications||[]) });
+          this.Store.save(next);
+        }
+        this.go('contact',{submitted:true});
+      },
+      goMadina:()=>this.open(madina),
+      videoRef:(el)=>{
+        this.video = el;
+        if (!el) return;
+        el.muted = true;
+        el.defaultMuted = true;
+        el.setAttribute('muted','');
+        try {
+          const t = parseFloat(window.localStorage.getItem('bemodel_madina_t'));
+          if (!isNaN(t)) el.currentTime = t;
+        } catch(e){}
+        const tryPlay = () => { const p = el.play(); if (p && p.catch) p.catch(()=>{}); };
+        tryPlay();
+        el.addEventListener('canplay', tryPlay, { once:true });
+      },
+      videoSave:(e)=>{
+        try { window.localStorage.setItem('bemodel_madina_t', String(e.target.currentTime)); } catch(err){}
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
