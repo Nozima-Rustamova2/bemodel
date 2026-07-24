@@ -93,6 +93,7 @@ export default function AdminEditorialAlbums({
         <div className="border rounded-[8px] p-4" style={{ borderColor: colors.hairline }}>
           <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <input
+              key={selected.id}
               defaultValue={selected.title ?? ""}
               onBlur={(e) => handleTitleBlur(selected, e.target.value)}
               placeholder="Название альбома (необязательно)"

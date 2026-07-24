@@ -196,7 +196,7 @@ const en: Dict = {
     smile: "Smile",
   },
   home: {
-    heroEyebrowDefault: "Tashkent — Worldwide · Est. 2014",
+    heroEyebrowDefault: "Tashkent — Worldwide · Est. 2022",
     heroPreDefault: "Faces that",
     heroEmDefault: "define",
     heroPostDefault: "the moment.",
@@ -362,7 +362,7 @@ const ru: Dict = {
     smile: "Улыбка",
   },
   home: {
-    heroEyebrowDefault: "Ташкент — по всему миру · С 2014 года",
+    heroEyebrowDefault: "Ташкент — по всему миру · С 2022 года",
     heroPreDefault: "Лица, которые",
     heroEmDefault: "определяют",
     heroPostDefault: "момент.",
