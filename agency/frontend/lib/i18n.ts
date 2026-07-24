@@ -102,6 +102,8 @@ export interface Dict {
     studioLocation: string;
     email: string;
     instagram: string;
+    phone: string;
+    telegram: string;
     received: string;
     backToHome: string;
     fullName: string;
@@ -167,12 +169,12 @@ const en: Dict = {
   },
   footer: {
     tagline:
-      "A boutique modeling agency representing women and new faces, based in Almaty and placed worldwide.",
+      "A boutique modeling agency representing women and new faces, based in Tashkent and placed worldwide.",
     explore: "Explore",
     aboutLink: "About",
     contactHeader: "Contact",
     social: "Social",
-    location: "Almaty, Kazakhstan",
+    location: "Tashkent, Uzbekistan",
     terms: "Terms · Privacy · Model Rights",
     staffLogin: "Staff Login",
     copyright: (year) => `© ${year} bemodel — All rights reserved`,
@@ -194,7 +196,7 @@ const en: Dict = {
     smile: "Smile",
   },
   home: {
-    heroEyebrowDefault: "Almaty — Worldwide · Est. 2014",
+    heroEyebrowDefault: "Tashkent — Worldwide · Est. 2014",
     heroPreDefault: "Faces that",
     heroEmDefault: "define",
     heroPostDefault: "the moment.",
@@ -237,7 +239,7 @@ const en: Dict = {
     eyebrow: "bemodel Academy",
     headlineDefault: "Learn the craft before the camera finds you.",
     bodyDefault:
-      "An 8-week foundation in runway, posing, styling and the business of modeling — taught by working professionals in Almaty.",
+      "An 8-week foundation in runway, posing, styling and the business of modeling — taught by working professionals in Tashkent.",
     applyToAcademy: "Apply to the Academy →",
     aboutTitleEyebrow: "About the Academy",
     aboutHeadingDefault: "A real education, not a photoshoot.",
@@ -260,9 +262,11 @@ const en: Dict = {
   contactShared: {
     getInTouchEyebrow: "Get in touch",
     studio: "Studio",
-    studioLocation: "Almaty, KZ",
+    studioLocation: "Tashkent, UZ",
     email: "Email",
     instagram: "Instagram",
+    phone: "Phone",
+    telegram: "Telegram",
     received: "Received",
     backToHome: "Back to home →",
     fullName: "Full name",
@@ -331,12 +335,12 @@ const ru: Dict = {
   },
   footer: {
     tagline:
-      "Бутик-агентство моделей, представляющее женщин и новые лица, базирующееся в Алматы и работающее по всему миру.",
+      "Бутик-агентство моделей, представляющее женщин и новые лица, базирующееся в Ташкенте и работающее по всему миру.",
     explore: "Навигация",
     aboutLink: "О нас",
     contactHeader: "Контакты",
     social: "Соцсети",
-    location: "Алматы, Казахстан",
+    location: "Ташкент, Узбекистан",
     terms: "Условия · Конфиденциальность · Права моделей",
     staffLogin: "Вход для персонала",
     copyright: (year) => `© ${year} bemodel — Все права защищены`,
@@ -358,7 +362,7 @@ const ru: Dict = {
     smile: "Улыбка",
   },
   home: {
-    heroEyebrowDefault: "Алматы — по всему миру · С 2014 года",
+    heroEyebrowDefault: "Ташкент — по всему миру · С 2014 года",
     heroPreDefault: "Лица, которые",
     heroEmDefault: "определяют",
     heroPostDefault: "момент.",
@@ -401,7 +405,7 @@ const ru: Dict = {
     eyebrow: "Академия bemodel",
     headlineDefault: "Освойте мастерство ещё до того, как вас найдёт камера.",
     bodyDefault:
-      "8-недельный базовый курс по подиуму, позированию, стилю и бизнесу в модельной индустрии — от практикующих профессионалов в Алматы.",
+      "8-недельный базовый курс по подиуму, позированию, стилю и бизнесу в модельной индустрии — от практикующих профессионалов в Ташкенте.",
     applyToAcademy: "Подать заявку в академию →",
     aboutTitleEyebrow: "Об академии",
     aboutHeadingDefault: "Настоящее образование, а не просто фотосессия.",
@@ -424,9 +428,11 @@ const ru: Dict = {
   contactShared: {
     getInTouchEyebrow: "Свяжитесь с нами",
     studio: "Студия",
-    studioLocation: "Алматы, Казахстан",
+    studioLocation: "Ташкент, Узбекистан",
     email: "Email",
     instagram: "Instagram",
+    phone: "Телефон",
+    telegram: "Telegram",
     received: "Получено",
     backToHome: "На главную →",
     fullName: "Полное имя",

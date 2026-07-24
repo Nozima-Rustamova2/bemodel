@@ -12,7 +12,7 @@ export default async function HomePage() {
     getEditorialAlbums().catch(() => []),
   ]);
 
-  const city = settings?.brand_city || "Almaty";
+  const city = settings?.brand_city || "Tashkent";
 
   const heroPreEn = settings?.hero_pre || dict.en.home.heroPreDefault;
   const heroEmEn = settings?.hero_em || dict.en.home.heroEmDefault;

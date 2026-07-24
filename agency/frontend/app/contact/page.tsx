@@ -46,11 +46,37 @@ export default function ContactPage() {
           </div>
           <div>
             <p className="eyebrow text-taupe mb-2">{t.contactShared.email}</p>
-            <p className="text-base text-paper">scout@bemodel.agency</p>
+            <a href="mailto:bemodelagencyuz@gmail.com" className="text-base text-paper hover:text-accentDeep transition-colors">
+              bemodelagencyuz@gmail.com
+            </a>
+          </div>
+          <div>
+            <p className="eyebrow text-taupe mb-2">{t.contactShared.phone}</p>
+            <a href="tel:+998998748653" className="text-base text-paper hover:text-accentDeep transition-colors">
+              +998 99 874 86 53
+            </a>
           </div>
           <div>
             <p className="eyebrow text-taupe mb-2">{t.contactShared.instagram}</p>
-            <p className="text-base text-paper">@bemodel.agency</p>
+            <a
+              href="https://www.instagram.com/bemodelagency/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-base text-paper hover:text-accentDeep transition-colors"
+            >
+              @bemodelagency
+            </a>
+          </div>
+          <div>
+            <p className="eyebrow text-taupe mb-2">{t.contactShared.telegram}</p>
+            <a
+              href="https://t.me/bemodelagencyuz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-base text-paper hover:text-accentDeep transition-colors"
+            >
+              @bemodelagencyuz
+            </a>
           </div>
         </div>
         <p className="font-light text-sm leading-[1.8] mt-11 max-w-[38ch]">

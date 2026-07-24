@@ -82,6 +82,7 @@ export default function AdminEditorialAlbums({
                 url={cover?.url ?? null}
                 label="Перетащите фото или выберите файл"
                 onUpload={(file) => handleCoverUpload(album, file)}
+                clickToUpload={false}
               />
             </div>
           );

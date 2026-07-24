@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@bemodel.agency"
+              placeholder="admin@bemodel.uz"
               className={input}
               style={inputStyle}
             />

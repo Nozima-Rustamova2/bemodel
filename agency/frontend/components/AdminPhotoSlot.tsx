@@ -10,11 +10,15 @@ export default function AdminPhotoSlot({
   label,
   onUpload,
   onRemove,
+  clickToUpload = true,
+  aspectClass = "aspect-[3/4]",
 }: {
   url?: string | null;
   label: string;
   onUpload: (file: File) => Promise<void>;
   onRemove?: () => Promise<void>;
+  clickToUpload?: boolean;
+  aspectClass?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -32,9 +36,9 @@ export default function AdminPhotoSlot({
 
   return (
     <div
-      className="relative aspect-[3/4] rounded-[8px] overflow-hidden cursor-pointer group"
+      className={`relative ${aspectClass} rounded-[8px] overflow-hidden cursor-pointer group`}
       style={{ background: colors.placeholder, outline: dragOver ? `2px solid ${colors.accent}` : "none" }}
-      onClick={() => inputRef.current?.click()}
+      onClick={() => clickToUpload && inputRef.current?.click()}
       onDragOver={(e) => {
         e.preventDefault();
         setDragOver(true);

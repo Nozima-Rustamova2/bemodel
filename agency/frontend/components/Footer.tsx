@@ -12,8 +12,8 @@ export default function Footer() {
           </div>
           <p className="text-sm leading-relaxed max-w-xs font-light">
             <Localized
-              en="A boutique modeling agency representing women and new faces, based in Almaty and placed worldwide."
-              ru="Бутик-агентство моделей, представляющее женщин и новые лица, базирующееся в Алматы и работающее по всему миру."
+              en="A boutique modeling agency representing women and new faces, based in Tashkent and placed worldwide."
+              ru="Бутик-агентство моделей, представляющее женщин и новые лица, базирующееся в Ташкенте и работающее по всему миру."
             />
           </p>
         </div>
@@ -47,10 +47,14 @@ export default function Footer() {
             <Localized en="Contact" ru="Контакты" />
           </div>
           <div className="flex flex-col gap-3 text-sm">
-            <span>scout@bemodel.agency</span>
-            <span>+7 727 000 00 00</span>
+            <a href="mailto:bemodelagencyuz@gmail.com" className="hover:text-paperText transition-colors">
+              bemodelagencyuz@gmail.com
+            </a>
+            <a href="tel:+998998748653" className="hover:text-paperText transition-colors">
+              +998 99 874 86 53
+            </a>
             <span>
-              <Localized en="Almaty, Kazakhstan" ru="Алматы, Казахстан" />
+              <Localized en="Tashkent, Uzbekistan" ru="Ташкент, Узбекистан" />
             </span>
           </div>
         </div>
@@ -59,9 +63,22 @@ export default function Footer() {
             <Localized en="Social" ru="Соцсети" />
           </div>
           <div className="flex flex-col gap-3 text-sm">
-            <span>Instagram</span>
-            <span>TikTok</span>
-            <span>LinkedIn</span>
+            <a
+              href="https://www.instagram.com/bemodelagency/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-paperText transition-colors"
+            >
+              Instagram
+            </a>
+            <a
+              href="https://t.me/bemodelagencyuz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-paperText transition-colors"
+            >
+              Telegram
+            </a>
           </div>
         </div>
       </div>

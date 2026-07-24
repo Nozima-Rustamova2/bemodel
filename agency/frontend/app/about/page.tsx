@@ -17,7 +17,7 @@ const RU_STEPS = [
 export default async function AboutPage() {
   const settings = await getSiteSettings().catch(() => null);
   const name = settings?.brand_name || "bemodel";
-  const city = settings?.brand_city || "Almaty";
+  const city = settings?.brand_city || "Tashkent";
 
   const headingEn = settings?.about_heading || dict.en.about.headingDefault;
   const body1En = (

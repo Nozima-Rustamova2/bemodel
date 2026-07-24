@@ -211,12 +211,16 @@ export default function AdminHomepagePage() {
             <label className={label} style={labelStyle}>
               Изображение раздела
             </label>
-            <div className="w-48">
+            <p className="text-xs" style={{ color: colors.text }}>
+              На сайте отображается широким блоком (не 3:4, как карточки моделей) — превью ниже показывает примерные пропорции.
+            </p>
+            <div className="w-72">
               <AdminPhotoSlot
                 url={settings.manifesto_image_url}
                 label="Перетащите изображение"
                 onUpload={handleManifestoImage}
                 onRemove={settings.manifesto_image_url ? handleManifestoImageRemove : undefined}
+                aspectClass="aspect-[4/3]"
               />
             </div>
           </div>
