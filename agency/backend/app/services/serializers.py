@@ -9,7 +9,6 @@ from app.models.model import (
     EditorialAlbum,
 )
 from app.schemas.model import ModelOut, ModelListOut, PhotoOut
-from app.schemas.video import VideoOut
 from app.schemas.press import PressPostOut
 from app.schemas.scouting import ScoutingSubmissionOut
 from app.schemas.settings import SiteSettingsOut
@@ -21,9 +20,9 @@ from app.services.storage import storage
 
 def model_to_out(model: Model) -> ModelOut:
     """
-    Convert a SQLAlchemy Model (with its photos/videos relationships) into the
+    Convert a SQLAlchemy Model (with its photos relationship) into the
     ModelOut API schema. Built field-by-field rather than via
-    ModelOut.model_validate(model) directly, because the ORM's Photo/Video
+    ModelOut.model_validate(model) directly, because the ORM's Photo
     objects don't have a `url` attribute (it's a computed field), which
     breaks automatic nested validation.
     """
@@ -36,18 +35,6 @@ def model_to_out(model: Model) -> ModelOut:
             sort_order=p.sort_order,
         )
         for p in sorted(model.photos, key=lambda p: p.sort_order)
-    ]
-
-    videos = [
-        VideoOut(
-            id=v.id,
-            caption=v.caption,
-            url=storage.get_url(v.object_key),
-            poster_url=storage.get_url(v.poster_key) if v.poster_key else None,
-            is_published=v.is_published,
-            sort_order=v.sort_order,
-        )
-        for v in sorted(model.videos, key=lambda v: v.sort_order)
     ]
 
     return ModelOut(
@@ -69,7 +56,6 @@ def model_to_out(model: Model) -> ModelOut:
         sort_order=model.sort_order,
         created_at=model.created_at,
         photos=photos,
-        videos=videos,
     )
 
 

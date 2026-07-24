@@ -39,9 +39,6 @@ class Model(Base):
     photos = relationship(
         "Photo", back_populates="model", cascade="all, delete-orphan", order_by="Photo.sort_order"
     )
-    videos = relationship(
-        "Video", back_populates="model", cascade="all, delete-orphan", order_by="Video.sort_order"
-    )
 
 
 class Photo(Base):
@@ -55,21 +52,6 @@ class Photo(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     model = relationship("Model", back_populates="photos")
-
-
-class Video(Base):
-    __tablename__ = "videos"
-
-    id = Column(Integer, primary_key=True, index=True)
-    model_id = Column(Integer, ForeignKey("models.id"), nullable=False)
-    object_key = Column(String, nullable=False)
-    poster_key = Column(String, nullable=True)
-    caption = Column(String, nullable=True)
-    is_published = Column(Boolean, default=True)
-    sort_order = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    model = relationship("Model", back_populates="videos")
 
 
 class PressPost(Base):

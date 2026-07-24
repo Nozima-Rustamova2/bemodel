@@ -1,8 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.video import VideoOut
-
 
 class PhotoOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -58,7 +56,6 @@ class ModelOut(ModelBase):
     sort_order: int
     created_at: datetime
     photos: list[PhotoOut] = []
-    videos: list[VideoOut] = []
 
 
 class ModelListOut(BaseModel):

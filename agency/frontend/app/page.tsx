@@ -1,24 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getFeaturedModels, getSiteSettings, getEditorialAlbums, assetUrl } from "@/lib/api";
+import { getSiteSettings, getEditorialAlbums, assetUrl } from "@/lib/api";
 import HeroVideo from "@/components/HeroVideo";
 import EditorialLightbox from "@/components/EditorialLightbox";
 import Localized from "@/components/Localized";
 import { dict } from "@/lib/i18n";
 
-const primaryBtn =
-  "inline-flex items-center gap-2.5 px-7 py-[15px] bg-paperText text-ink text-[11px] eyebrow hover:bg-accent hover:text-paperText transition-colors";
-const outlineBtnOnMedia =
-  "inline-flex items-center px-[26px] py-[14px] border border-paperText/70 text-paperText text-[11px] eyebrow hover:bg-paperText hover:text-ink transition-colors";
-
 export default async function HomePage() {
-  const [featured, settings, albums] = await Promise.all([
-    getFeaturedModels().catch(() => []),
+  const [settings, albums] = await Promise.all([
     getSiteSettings().catch(() => null),
     getEditorialAlbums().catch(() => []),
   ]);
 
-  const heroModel = featured[0];
   const city = settings?.brand_city || "Almaty";
 
   const heroPreEn = settings?.hero_pre || dict.en.home.heroPreDefault;
@@ -66,19 +59,7 @@ export default async function HomePage() {
           />
         }
         body={<Localized en={heroBodyEn} ru={heroBodyRu} />}
-      >
-        <Link href="/models" className={primaryBtn}>
-          <Localized en={dict.en.home.viewModels} ru={dict.ru.home.viewModels} />
-        </Link>
-        {heroModel && (
-          <Link href={`/models/${heroModel.slug}`} className={outlineBtnOnMedia}>
-            <Localized
-              en={dict.en.home.meet(heroModel.name.split(" ")[0])}
-              ru={dict.ru.home.meet(heroModel.name.split(" ")[0])}
-            />
-          </Link>
-        )}
-      </HeroVideo>
+      />
 
       {/* Editorial Stories */}
       <section className="px-6 md:px-24 py-[clamp(64px,8vw,110px)] bg-bgAlt">

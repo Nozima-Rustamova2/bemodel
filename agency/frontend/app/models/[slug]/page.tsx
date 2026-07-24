@@ -5,6 +5,9 @@ import { getModelBySlug, assetUrl } from "@/lib/api";
 import Localized from "@/components/Localized";
 import { dict } from "@/lib/i18n";
 
+const PORTFOLIO_SLOTS = 8;
+const POLAROID_SLOTS = 4;
+
 const POLAROID_LABELS_EN = ["Front", "Profile", "Full length", "Smile"];
 const POLAROID_LABELS_RU = [
   dict.ru.photoLabels.front,
@@ -41,11 +44,14 @@ export default async function ModelDetailPage({
     .map((key, i) => ({ key, value: statValues[i] }))
     .filter((s): s is { key: keyof typeof dict.en.stats; value: string } => !!s.value);
 
-  const photos = model.photos;
-  const gallery = photos.slice(0, 3);
-  const polaroids = POLAROID_LABELS_EN.map((_, i) => photos[i % Math.max(photos.length, 1)] ?? null).map(
-    (photo, i) => ({ photo, labelEn: POLAROID_LABELS_EN[i], labelRu: POLAROID_LABELS_RU[i] })
-  );
+  const cover = model.photos.find((p) => p.is_cover) || model.photos[0];
+  const rest = model.photos.filter((p) => p.id !== cover?.id);
+  const gallery = rest.slice(0, PORTFOLIO_SLOTS);
+  const polaroids = rest.slice(PORTFOLIO_SLOTS, PORTFOLIO_SLOTS + POLAROID_SLOTS).map((photo, i) => ({
+    photo,
+    labelEn: POLAROID_LABELS_EN[i],
+    labelRu: POLAROID_LABELS_RU[i],
+  }));
 
   return (
     <div className="px-6 md:px-24 py-[clamp(36px,4vw,60px)]">
@@ -107,7 +113,7 @@ export default async function ModelDetailPage({
             </div>
           )}
 
-          {photos.length > 0 && (
+          {polaroids.length > 0 && (
             <>
               <p className="eyebrow text-accent mt-14 mb-2">
                 <Localized en={dict.en.modelDetail.polaroidsDigitals} ru={dict.ru.modelDetail.polaroidsDigitals} />
@@ -116,18 +122,16 @@ export default async function ModelDetailPage({
                 <Localized en={dict.en.modelDetail.polaroidNote} ru={dict.ru.modelDetail.polaroidNote} />
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {polaroids.map(({ photo, labelEn, labelRu }, i) =>
-                  photo ? (
-                    <div key={i} className="bg-polaroid p-[10px_10px_34px] shadow-[0_8px_22px_rgba(33,29,24,0.10)] border border-ink/[0.06]">
-                      <div className="relative aspect-[3/4] bg-placeholder overflow-hidden">
-                        <Image src={assetUrl(photo.url)} alt={labelEn} fill sizes="200px" className="object-cover" />
-                      </div>
-                      <p className="mono-caption text-center mt-3">
-                        <Localized en={labelEn} ru={labelRu} />
-                      </p>
+                {polaroids.map(({ photo, labelEn, labelRu }, i) => (
+                  <div key={i} className="bg-polaroid p-[10px_10px_34px] shadow-[0_8px_22px_rgba(33,29,24,0.10)] border border-ink/[0.06]">
+                    <div className="relative aspect-[3/4] bg-placeholder overflow-hidden">
+                      <Image src={assetUrl(photo.url)} alt={labelEn} fill sizes="200px" className="object-cover" />
                     </div>
-                  ) : null
-                )}
+                    <p className="mono-caption text-center mt-3">
+                      <Localized en={labelEn} ru={labelRu} />
+                    </p>
+                  </div>
+                ))}
               </div>
             </>
           )}

@@ -9,9 +9,6 @@ import {
   uploadPhotos,
   deletePhoto,
   setCoverPhoto,
-  uploadVideos,
-  deleteVideo,
-  assetUrl,
   ModelDetail,
 } from "@/lib/api";
 import AdminModelFormFields, { ModelDraft } from "@/components/AdminModelFormFields";
@@ -28,6 +25,9 @@ import {
   secondaryBtnStyle,
 } from "@/lib/adminTheme";
 
+const PORTFOLIO_SLOTS = 8;
+const POLAROID_SLOTS = 4;
+
 function draftFromModel(m: ModelDetail): ModelDraft {
   return {
     name: m.name,
@@ -42,6 +42,7 @@ function draftFromModel(m: ModelDetail): ModelDraft {
     eyes: m.eyes || "",
     bio: m.bio || "",
     is_featured: m.is_featured,
+    is_published: m.is_published,
   };
 }
 
@@ -89,9 +90,18 @@ export default function EditModelPage() {
 
   const cover = model.photos.find((p) => p.is_cover) || model.photos[0];
   const rest = model.photos.filter((p) => p.id !== cover?.id);
-  const portfolio = rest.slice(0, 3);
-  const polaroids = rest.slice(3, 7);
-  const portfolioLabels = ["Портрет", "В полный рост", "Редакционное"];
+  const portfolio = rest.slice(0, PORTFOLIO_SLOTS);
+  const polaroids = rest.slice(PORTFOLIO_SLOTS, PORTFOLIO_SLOTS + POLAROID_SLOTS);
+  const portfolioLabels = [
+    "Портрет",
+    "В полный рост",
+    "Редакционное",
+    "Крупный план",
+    "Образ 5",
+    "Образ 6",
+    "Образ 7",
+    "Образ 8",
+  ];
   const polaroidLabels = ["Анфас", "Профиль", "В полный рост", "Улыбка"];
 
   async function uploadAndRefresh(file: File) {
@@ -117,18 +127,6 @@ export default function EditModelPage() {
   async function removePhoto(photoId: number) {
     if (!token) return;
     await deletePhoto(token, modelId, photoId);
-    await refresh();
-  }
-
-  async function handleVideoUpload(file: File) {
-    if (!token) return;
-    await uploadVideos(token, modelId, [file]);
-    await refresh();
-  }
-
-  async function handleVideoRemove(videoId: number) {
-    if (!token) return;
-    await deleteVideo(token, modelId, videoId);
     await refresh();
   }
 
@@ -178,10 +176,10 @@ export default function EditModelPage() {
 
           <div className={`${card} p-[22px]`} style={cardStyle}>
             <div className={sectionLabel} style={sectionLabelStyle}>
-              Портфолио (3 фото)
+              Портфолио ({PORTFOLIO_SLOTS} фото)
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              {[0, 1, 2].map((i) => (
+            <div className="grid grid-cols-4 gap-3">
+              {Array.from({ length: PORTFOLIO_SLOTS }, (_, i) => (
                 <AdminPhotoSlot
                   key={i}
                   url={portfolio[i]?.url}
@@ -195,10 +193,10 @@ export default function EditModelPage() {
 
           <div className={`${card} p-[22px]`} style={cardStyle}>
             <div className={sectionLabel} style={sectionLabelStyle}>
-              Полароиды / дигиталы (4 фото)
+              Полароиды / дигиталы ({POLAROID_SLOTS} фото)
             </div>
             <div className="grid grid-cols-4 gap-2.5">
-              {[0, 1, 2, 3].map((i) => (
+              {Array.from({ length: POLAROID_SLOTS }, (_, i) => (
                 <AdminPhotoSlot
                   key={i}
                   url={polaroids[i]?.url}
@@ -208,40 +206,6 @@ export default function EditModelPage() {
                 />
               ))}
             </div>
-          </div>
-
-          <div className={`${card} p-[22px]`} style={cardStyle}>
-            <div className={sectionLabel} style={sectionLabelStyle}>
-              Видео портфолио
-            </div>
-            {model.videos.length > 0 && (
-              <div className="flex flex-col gap-2.5 mb-3.5">
-                {model.videos.map((v) => (
-                  <div key={v.id} className="flex items-center gap-3">
-                    <video src={assetUrl(v.url)} muted className="w-28 aspect-video rounded-[6px] object-cover bg-black" />
-                    <button
-                      onClick={() => handleVideoRemove(v.id)}
-                      className="text-xs"
-                      style={{ color: colors.danger }}
-                    >
-                      Удалить
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <label
-              className={`${primaryBtn} w-fit cursor-pointer`}
-              style={primaryBtnStyle}
-            >
-              Загрузить видео
-              <input
-                type="file"
-                accept="video/mp4,video/webm,video/quicktime"
-                className="hidden"
-                onChange={(e) => e.target.files?.[0] && handleVideoUpload(e.target.files[0])}
-              />
-            </label>
           </div>
         </div>
       </div>

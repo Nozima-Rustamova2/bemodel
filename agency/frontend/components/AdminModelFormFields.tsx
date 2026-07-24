@@ -15,6 +15,7 @@ export interface ModelDraft {
   eyes: string;
   bio: string;
   is_featured: boolean;
+  is_published: boolean;
 }
 
 export function emptyDraft(): ModelDraft {
@@ -31,6 +32,7 @@ export function emptyDraft(): ModelDraft {
     eyes: "",
     bio: "",
     is_featured: false,
+    is_published: true,
   };
 }
 
@@ -89,6 +91,14 @@ export default function AdminModelFormFields({
             </select>
           </div>
           <div className="col-span-2 flex flex-col gap-1.5 pb-2">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="checkbox"
+                checked={draft.is_published}
+                onChange={(e) => set("is_published", e.target.checked)}
+              />
+              Опубликовано (видно на сайте)
+            </label>
             <label className="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"

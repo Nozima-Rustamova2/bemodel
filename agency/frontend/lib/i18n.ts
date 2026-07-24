@@ -49,8 +49,6 @@ export interface Dict {
     heroEmDefault: string;
     heroPostDefault: string;
     heroBodyDefault: string;
-    viewModels: string;
-    meet: (firstName: string) => string;
     newestWork: string;
     editorialStories: string;
     recentShoots: string;
@@ -202,8 +200,6 @@ const en: Dict = {
     heroPostDefault: "the moment.",
     heroBodyDefault:
       "A boutique agency representing women and new faces across editorial, runway and campaign. Scouted with intention, developed with care.",
-    viewModels: "View the Models →",
-    meet: (firstName) => `Meet ${firstName}`,
     newestWork: "Newest work",
     editorialStories: "Editorial Stories",
     recentShoots: "Recent photoshoots, campaigns & runway",
@@ -368,8 +364,6 @@ const ru: Dict = {
     heroPostDefault: "момент.",
     heroBodyDefault:
       "Бутик-агентство, представляющее женщин и новые лица в editorial-съёмках, на подиуме и в рекламных кампаниях. Ищем таланты осознанно, развиваем — с заботой.",
-    viewModels: "Смотреть моделей →",
-    meet: (firstName) => `Знакомьтесь: ${firstName}`,
     newestWork: "Новые работы",
     editorialStories: "Редакционные истории",
     recentShoots: "Последние съёмки, кампании и показы",

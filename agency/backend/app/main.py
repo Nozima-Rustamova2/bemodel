@@ -9,7 +9,6 @@ from app.api.routes import (
     public,
     admin_models,
     admin_photos,
-    admin_videos,
     admin_press,
     admin_scouting,
     admin_settings,
@@ -73,7 +72,6 @@ app.include_router(auth.router)
 app.include_router(public.router)
 app.include_router(admin_models.router)
 app.include_router(admin_photos.router)
-app.include_router(admin_videos.router)
 app.include_router(admin_press.router)
 app.include_router(admin_scouting.router)
 app.include_router(admin_settings.router)

@@ -17,15 +17,6 @@ export interface Photo {
   sort_order: number;
 }
 
-export interface Video {
-  id: number;
-  caption: string | null;
-  url: string;
-  poster_url: string | null;
-  is_published: boolean;
-  sort_order: number;
-}
-
 export interface PressPost {
   id: number;
   title: string;
@@ -201,7 +192,6 @@ export interface ModelDetail {
   is_featured: boolean;
   sort_order: number;
   photos: Photo[];
-  videos: Video[];
 }
 
 // ---------- Public (no auth) ----------
@@ -400,38 +390,6 @@ export async function reorderPhotos(token: string, modelId: number, photoIdsInOr
     body: JSON.stringify({ photo_ids_in_order: photoIdsInOrder }),
   });
   if (!res.ok) throw new Error("Failed to reorder photos");
-}
-
-// ---------- Admin: videos ----------
-
-export async function uploadVideos(token: string, modelId: number, files: File[]): Promise<Video[]> {
-  const form = new FormData();
-  files.forEach((f) => form.append("files", f));
-
-  const res = await adminFetch(`${API_URL}/api/admin/models/${modelId}/videos`, {
-    method: "POST",
-    headers: authHeaders(token),
-    body: form,
-  });
-  if (!res.ok) throw new Error("Failed to upload videos");
-  return res.json();
-}
-
-export async function deleteVideo(token: string, modelId: number, videoId: number): Promise<void> {
-  const res = await adminFetch(`${API_URL}/api/admin/models/${modelId}/videos/${videoId}`, {
-    method: "DELETE",
-    headers: authHeaders(token),
-  });
-  if (!res.ok) throw new Error("Failed to delete video");
-}
-
-export async function reorderVideos(token: string, modelId: number, videoIdsInOrder: number[]): Promise<void> {
-  const res = await adminFetch(`${API_URL}/api/admin/models/${modelId}/videos/reorder`, {
-    method: "POST",
-    headers: { ...authHeaders(token), "Content-Type": "application/json" },
-    body: JSON.stringify({ video_ids_in_order: videoIdsInOrder }),
-  });
-  if (!res.ok) throw new Error("Failed to reorder videos");
 }
 
 // ---------- Admin: press ----------
