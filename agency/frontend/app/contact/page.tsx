@@ -22,7 +22,7 @@ export default function ContactPage() {
     setError(null);
     setSubmitting(true);
     try {
-      await submitScouting({ name, email, message }, []);
+      await submitScouting({ name, email, message, source: "contact" }, []);
       setSubmitted(true);
     } catch {
       setError(t.contactShared.somethingWrong);

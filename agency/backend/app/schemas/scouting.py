@@ -14,6 +14,7 @@ class ScoutingSubmissionOut(BaseModel):
     height: str | None = None
     instagram: str | None = None
     message: str | None = None
+    source: str = "apply"
     status: str
     photo_urls: list[str] = []
     created_at: datetime

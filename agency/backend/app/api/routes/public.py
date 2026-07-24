@@ -131,6 +131,7 @@ def submit_scouting(
     height: str | None = Form(None),
     instagram: str | None = Form(None),
     message: str | None = Form(None),
+    source: str = Form("apply"),  # "apply" (Become a Model) or "contact" (Contact page)
     website: str | None = Form(None),  # honeypot: real users never fill this in
     photos: list[UploadFile] = File(default=[]),
     db: Session = Depends(get_db),
@@ -161,6 +162,7 @@ def submit_scouting(
         instagram=instagram,
         message=message,
         submitted_photo_keys=photo_keys,
+        source=source,
     )
     db.add(submission)
     db.commit()
@@ -176,6 +178,7 @@ def submit_scouting(
         "height": height,
         "instagram": instagram,
         "message": message,
+        "source": source,
     }
     background_tasks.add_task(notify_new_scouting_submission, fields, photo_urls, admin_url)
 

@@ -43,7 +43,7 @@ export default function AdminScoutingPage() {
     <div>
       <div className="text-2xl font-semibold mb-1">Заявки</div>
       <div className="text-sm mb-7" style={{ color: colors.text }}>
-        Заявки с формы «Стать моделью».
+        Заявки с формы «Стать моделью» и сообщения со страницы «Контакты».
       </div>
 
       {submissions.length === 0 ? (
@@ -51,7 +51,7 @@ export default function AdminScoutingPage() {
           className="border border-dashed rounded-[10px] p-12 text-center text-sm"
           style={{ borderColor: colors.inputBorder, color: colors.text }}
         >
-          Заявок пока нет — они появятся здесь, когда кандидаты отправят форму «Стать моделью».
+          Пока ничего нет — заявки и сообщения появятся здесь.
         </div>
       ) : (
         <div className="flex flex-col gap-3.5">
@@ -67,6 +67,12 @@ export default function AdminScoutingPage() {
                     </div>
                   </div>
                   <div className="flex gap-2 items-center">
+                    <span
+                      className="text-[11px] px-2.5 py-1 rounded-full"
+                      style={{ background: colors.placeholder, color: colors.text }}
+                    >
+                      {s.source === "contact" ? "Контакты" : "Стать моделью"}
+                    </span>
                     <span
                       className="text-[11px] px-2.5 py-1 rounded-full"
                       style={{

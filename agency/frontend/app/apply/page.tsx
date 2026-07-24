@@ -16,6 +16,7 @@ const emptyForm: ScoutingFormValues = {
   birthdate: "",
   height: "",
   message: "",
+  source: "apply",
 };
 
 const inputClass =

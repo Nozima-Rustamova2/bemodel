@@ -65,6 +65,7 @@ COLUMNS_TO_ADD = [
     ("academy_lessons", "note_ru", "TEXT"),
     ("academy_faqs", "question_ru", "VARCHAR"),
     ("academy_faqs", "answer_ru", "TEXT"),
+    ("scouting_submissions", "source", "VARCHAR"),
 ]
 
 

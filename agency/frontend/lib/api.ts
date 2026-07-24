@@ -151,6 +151,7 @@ export interface ScoutingSubmission {
   height: string | null;
   instagram: string | null;
   message: string | null;
+  source: "apply" | "contact";
   status: "new" | "reviewed" | "archived";
   photo_urls: string[];
   created_at: string;
@@ -261,6 +262,7 @@ export interface ScoutingFormValues {
   height?: string;
   instagram?: string;
   message?: string;
+  source?: "apply" | "contact";
 }
 
 export async function submitScouting(values: ScoutingFormValues, photos: File[]): Promise<void> {

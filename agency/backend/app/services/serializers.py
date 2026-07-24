@@ -220,6 +220,7 @@ def scouting_to_out(submission: ScoutingSubmission) -> ScoutingSubmissionOut:
         height=submission.height,
         instagram=submission.instagram,
         message=submission.message,
+        source=submission.source or "apply",
         status=submission.status,
         photo_urls=[storage.get_url(key) for key in (submission.submitted_photo_keys or [])],
         created_at=submission.created_at,

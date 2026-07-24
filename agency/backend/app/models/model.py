@@ -227,5 +227,6 @@ class ScoutingSubmission(Base):
     instagram = Column(String, nullable=True)
     message = Column(Text, nullable=True)
     submitted_photo_keys = Column(JSON, default=list)
+    source = Column(String, default="apply")  # apply | contact
     status = Column(String, default="new")  # new | reviewed | archived
     created_at = Column(DateTime, default=datetime.utcnow)
