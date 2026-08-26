@@ -13,7 +13,8 @@ const cormorant = Cormorant_Garamond({
 const jost = Jost({
   subsets: ["latin"],
   variable: "--font-jost",
-  weight: ["300", "400", "500"],
+  // 200 is here to match the thin weight of the BEMODEL wordmark artwork.
+  weight: ["200", "300", "400", "500"],
 });
 
 export const metadata: Metadata = {

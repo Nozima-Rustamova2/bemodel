@@ -4,11 +4,11 @@ import Localized from "@/components/Localized";
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-mutedLight">
-      <div className="grid md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 px-6 md:px-12 pt-14 md:pt-20 pb-14 border-b border-paperText/[0.14]">
+    <footer className="bg-panel text-inkSoft">
+      <div className="grid md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 px-6 md:px-12 pt-14 md:pt-20 pb-14 border-b border-ink/[0.14]">
         <div>
           <div className="relative h-8 md:h-9 w-[150px] md:w-[170px] mb-4">
-            <Image src="/logo-wordmark-light.png" alt="bemodel" fill className="object-contain object-left" />
+            <Image src="/logo-wordmark.png" alt="bemodel" fill className="object-contain object-left" />
           </div>
           <p className="text-sm leading-relaxed max-w-xs font-light">
             <Localized
@@ -22,22 +22,22 @@ export default function Footer() {
             <Localized en="Explore" ru="Навигация" />
           </div>
           <div className="flex flex-col gap-3 text-sm">
-            <Link href="/models?category=Model" className="hover:text-paperText transition-colors">
+            <Link href="/models?category=Model" className="hover:text-ink transition-colors">
               <Localized en="Models" ru="Модели" />
             </Link>
-            <Link href="/models?category=New+Faces" className="hover:text-paperText transition-colors">
+            <Link href="/models?category=New+Faces" className="hover:text-ink transition-colors">
               <Localized en="New Faces" ru="Новые лица" />
             </Link>
-            <Link href="/about" className="hover:text-paperText transition-colors">
+            <Link href="/about" className="hover:text-ink transition-colors">
               <Localized en="About" ru="О нас" />
             </Link>
-            <Link href="/academy" className="hover:text-paperText transition-colors">
-              <Localized en="Academy" ru="Академия" />
+            <Link href="/academy" className="hover:text-ink transition-colors">
+              <Localized en="Bemodel Academy" ru="Академия Bemodel" />
             </Link>
-            <Link href="/contact" className="hover:text-paperText transition-colors">
+            <Link href="/contact" className="hover:text-ink transition-colors">
               <Localized en="Contact" ru="Контакты" />
             </Link>
-            <Link href="/apply" className="hover:text-paperText transition-colors">
+            <Link href="/apply" className="hover:text-ink transition-colors">
               <Localized en="Become a Model" ru="Стать моделью" />
             </Link>
           </div>
@@ -47,10 +47,10 @@ export default function Footer() {
             <Localized en="Contact" ru="Контакты" />
           </div>
           <div className="flex flex-col gap-3 text-sm">
-            <a href="mailto:bemodelagencyuz@gmail.com" className="hover:text-paperText transition-colors">
+            <a href="mailto:bemodelagencyuz@gmail.com" className="hover:text-ink transition-colors">
               bemodelagencyuz@gmail.com
             </a>
-            <a href="tel:+998998748653" className="hover:text-paperText transition-colors">
+            <a href="tel:+998998748653" className="hover:text-ink transition-colors">
               +998 99 874 86 53
             </a>
             <span>
@@ -67,7 +67,7 @@ export default function Footer() {
               href="https://www.instagram.com/bemodelagency/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-paperText transition-colors"
+              className="hover:text-ink transition-colors"
             >
               Instagram
             </a>
@@ -75,7 +75,7 @@ export default function Footer() {
               href="https://t.me/bemodelagencyuz"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-paperText transition-colors"
+              className="hover:text-ink transition-colors"
             >
               Telegram
             </a>
@@ -93,7 +93,7 @@ export default function Footer() {
           <span>
             <Localized en="Terms · Privacy · Model Rights" ru="Условия · Конфиденциальность · Права моделей" />
           </span>
-          <a href="/admin/login" className="hover:text-paperText transition-colors">
+          <a href="/admin/login" className="hover:text-ink transition-colors">
             <Localized en="Staff Login" ru="Вход для персонала" />
           </a>
         </div>

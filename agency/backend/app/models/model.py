@@ -31,7 +31,6 @@ class Model(Base):
     eyes = Column(String, nullable=True)
     hair = Column(String, nullable=True)
     is_published = Column(Boolean, default=False)
-    is_featured = Column(Boolean, default=False)
     sort_order = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -81,33 +80,13 @@ class SiteSettings(Base):
     id = Column(Integer, primary_key=True, index=True)
     hero_video_key = Column(String, nullable=True)
     hero_poster_key = Column(String, nullable=True)
-    hero_headline = Column(String, nullable=True)
-    hero_subheadline = Column(String, nullable=True)
-    academy_headline = Column(String, nullable=True)
-    academy_subheadline = Column(String, nullable=True)
     academy_hero_video_key = Column(String, nullable=True)
     academy_hero_poster_key = Column(String, nullable=True)
 
     brand_name = Column(String, nullable=True)
     brand_city = Column(String, nullable=True)
 
-    hero_pre = Column(String, nullable=True)
-    hero_em = Column(String, nullable=True)
-    hero_post = Column(String, nullable=True)
-    hero_body = Column(Text, nullable=True)
-    hero_subheadline_ru = Column(String, nullable=True)
-    hero_pre_ru = Column(String, nullable=True)
-    hero_em_ru = Column(String, nullable=True)
-    hero_post_ru = Column(String, nullable=True)
-    hero_body_ru = Column(Text, nullable=True)
 
-    manifesto_title = Column(String, nullable=True)
-    manifesto_body1 = Column(Text, nullable=True)
-    manifesto_body2 = Column(Text, nullable=True)
-    manifesto_image_key = Column(String, nullable=True)
-    manifesto_title_ru = Column(String, nullable=True)
-    manifesto_body1_ru = Column(Text, nullable=True)
-    manifesto_body2_ru = Column(Text, nullable=True)
 
     about_heading = Column(String, nullable=True)
     about_body1 = Column(Text, nullable=True)
@@ -135,8 +114,6 @@ class SiteSettings(Base):
     academy_sessions = Column(String, nullable=True)
     academy_cohort = Column(String, nullable=True)
     academy_about_image_key = Column(String, nullable=True)
-    academy_headline_ru = Column(String, nullable=True)
-    academy_subheadline_ru = Column(String, nullable=True)
     academy_about_title_ru = Column(String, nullable=True)
     academy_about_body1_ru = Column(Text, nullable=True)
     academy_about_body2_ru = Column(Text, nullable=True)
@@ -202,16 +179,20 @@ class AcademyLesson(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
-class AcademyFaq(Base):
-    __tablename__ = "academy_faqs"
+class AcademyBrand(Base):
+    """Logos for the academy "where our graduates work" strip. Uploads are
+    normalised to a common height, each keeping its own natural width."""
+
+    __tablename__ = "academy_brands"
 
     id = Column(Integer, primary_key=True, index=True)
-    question = Column(String, nullable=False)
-    answer = Column(Text, nullable=True)
-    question_ru = Column(String, nullable=True)
-    answer_ru = Column(Text, nullable=True)
+    name = Column(String, nullable=True)
+    image_key = Column(String, nullable=False)
+    # Stored so the front end can reserve each logo's natural width without
+    # measuring the image at runtime.
+    width = Column(Integer, nullable=True)
+    height = Column(Integer, nullable=True)
     sort_order = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class ScoutingSubmission(Base):

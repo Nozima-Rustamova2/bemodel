@@ -1,20 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getModelBySlug, assetUrl } from "@/lib/api";
+import { getModelBySlug } from "@/lib/api";
 import Localized from "@/components/Localized";
+import ModelPortfolio from "@/components/ModelPortfolio";
 import { dict } from "@/lib/i18n";
 
 const PORTFOLIO_SLOTS = 8;
 const POLAROID_SLOTS = 4;
-
-const POLAROID_LABELS_EN = ["Front", "Profile", "Full length", "Smile"];
-const POLAROID_LABELS_RU = [
-  dict.ru.photoLabels.front,
-  dict.ru.photoLabels.profile,
-  dict.ru.photoLabels.fullLength,
-  dict.ru.photoLabels.smile,
-];
 
 export default async function ModelDetailPage({
   params,
@@ -47,11 +39,7 @@ export default async function ModelDetailPage({
   const cover = model.photos.find((p) => p.is_cover) || model.photos[0];
   const rest = model.photos.filter((p) => p.id !== cover?.id);
   const gallery = rest.slice(0, PORTFOLIO_SLOTS);
-  const polaroids = rest.slice(PORTFOLIO_SLOTS, PORTFOLIO_SLOTS + POLAROID_SLOTS).map((photo, i) => ({
-    photo,
-    labelEn: POLAROID_LABELS_EN[i],
-    labelRu: POLAROID_LABELS_RU[i],
-  }));
+  const polaroids = rest.slice(PORTFOLIO_SLOTS, PORTFOLIO_SLOTS + POLAROID_SLOTS);
 
   return (
     <div className="px-6 md:px-24 py-[clamp(36px,4vw,60px)]">
@@ -79,13 +67,6 @@ export default async function ModelDetailPage({
           )}
 
           {model.bio && <p className="text-sm leading-relaxed text-inkSoft mt-8 whitespace-pre-line">{model.bio}</p>}
-
-          <Link
-            href="/contact"
-            className="mt-8 inline-flex items-center gap-2.5 px-7 py-[15px] bg-ink text-paper text-[11px] eyebrow hover:bg-accent transition-colors"
-          >
-            <Localized en={dict.en.modelDetail.bookModel} ru={dict.ru.modelDetail.bookModel} />
-          </Link>
         </div>
 
         {/* Right: portfolio + polaroids */}
@@ -93,48 +74,11 @@ export default async function ModelDetailPage({
           <p className="eyebrow text-accent mb-5">
             <Localized en={dict.en.modelDetail.portfolio} ru={dict.ru.modelDetail.portfolio} />
           </p>
-          {gallery.length === 0 ? (
-            <p className="text-inkSoft text-sm">
-              <Localized en={dict.en.modelDetail.noPhotosYet} ru={dict.ru.modelDetail.noPhotosYet} />
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {gallery.map((photo) => (
-                <div key={photo.id} className="relative aspect-[3/4] bg-placeholder overflow-hidden">
-                  <Image
-                    src={assetUrl(photo.url)}
-                    alt={model.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
-          {polaroids.length > 0 && (
-            <>
-              <p className="eyebrow text-accent mt-14 mb-2">
-                <Localized en={dict.en.modelDetail.polaroidsDigitals} ru={dict.ru.modelDetail.polaroidsDigitals} />
-              </p>
-              <p className="text-[13px] font-light text-taupe mb-5">
-                <Localized en={dict.en.modelDetail.polaroidNote} ru={dict.ru.modelDetail.polaroidNote} />
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {polaroids.map(({ photo, labelEn, labelRu }, i) => (
-                  <div key={i} className="bg-polaroid p-[10px_10px_34px] shadow-[0_8px_22px_rgba(33,29,24,0.10)] border border-ink/[0.06]">
-                    <div className="relative aspect-[3/4] bg-placeholder overflow-hidden">
-                      <Image src={assetUrl(photo.url)} alt={labelEn} fill sizes="200px" className="object-cover" />
-                    </div>
-                    <p className="mono-caption text-center mt-3">
-                      <Localized en={labelEn} ru={labelRu} />
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
+          <ModelPortfolio
+            gallery={gallery.map((p) => ({ id: p.id, url: p.url }))}
+            polaroids={polaroids.map((p) => ({ id: p.id, url: p.url }))}
+            modelName={model.name}
+          />
         </div>
       </div>
     </div>

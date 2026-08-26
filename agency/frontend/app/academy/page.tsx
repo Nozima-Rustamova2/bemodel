@@ -2,13 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { getSiteSettings, getAcademy, assetUrl, SiteSettings } from "@/lib/api";
 import HeroVideo from "@/components/HeroVideo";
+import BrandMarquee from "@/components/BrandMarquee";
 import Localized from "@/components/Localized";
 import { dict } from "@/lib/i18n";
 
 export default async function AcademyPage() {
   const [settings, academy] = await Promise.all([
     getSiteSettings().catch(() => null as SiteSettings | null),
-    getAcademy().catch(() => ({ lessons: [], faqs: [] })),
+    getAcademy().catch(() => ({ lessons: [], brands: [] })),
   ]);
 
   const name = settings?.brand_name || "bemodel";
@@ -36,19 +37,11 @@ export default async function AcademyPage() {
     { value: settings?.academy_cohort || "12", label: dict.ru.academy.perCohort },
   ];
 
-  const headlineEn = settings?.academy_headline || dict.en.academy.headlineDefault;
-  const bodyEn = settings?.academy_subheadline || dict.en.academy.bodyDefault;
-  const headlineRu = settings?.academy_headline_ru || dict.ru.academy.headlineDefault;
-  const bodyRu = settings?.academy_subheadline_ru || dict.ru.academy.bodyDefault;
-
   return (
     <div>
       <HeroVideo
         videoUrl={settings?.academy_hero_video_url ?? settings?.hero_video_url ?? null}
         posterUrl={settings?.academy_hero_poster_url ?? settings?.hero_poster_url}
-        eyebrow={<Localized en={dict.en.academy.eyebrow} ru={dict.ru.academy.eyebrow} />}
-        headline={<Localized en={headlineEn} ru={headlineRu} />}
-        body={<Localized en={bodyEn} ru={bodyRu} />}
         minHeightClass="min-h-[78vh]"
         overlay="bg-[linear-gradient(to_top,rgba(24,20,16,0.78),rgba(24,20,16,0.25)_50%,rgba(24,20,16,0.35))]"
       >
@@ -59,6 +52,16 @@ export default async function AcademyPage() {
           <Localized en={dict.en.academy.applyToAcademy} ru={dict.ru.academy.applyToAcademy} />
         </Link>
       </HeroVideo>
+
+      {/* Where our graduates work */}
+      {academy.brands.length > 0 && (
+        <section className="bg-bgAlt border-b border-hairline py-[clamp(40px,5vw,68px)]">
+          <h2 className="text-center font-display font-medium text-[clamp(22px,2.4vw,32px)] leading-none mb-[clamp(26px,3vw,42px)] px-6">
+            <Localized en={dict.en.academy.brandsHeading} ru={dict.ru.academy.brandsHeading} />
+          </h2>
+          <BrandMarquee brands={academy.brands} />
+        </section>
+      )}
 
       {/* About the academy */}
       <section className="grid md:grid-cols-[1.05fr_0.95fr] bg-bgAlt border-b border-hairline">
@@ -135,48 +138,6 @@ export default async function AcademyPage() {
         )}
       </section>
 
-      {/* FAQ */}
-      <section className="bg-ink text-mutedLight px-6 md:px-24 py-[clamp(64px,8vw,110px)]">
-        <div className="grid md:grid-cols-[0.7fr_1.3fr] gap-[clamp(32px,5vw,80px)] items-start">
-          <div>
-            <p className="text-[11px] tracking-[0.26em] uppercase text-accentDeep mb-4">
-              <Localized en={dict.en.academy.goodToKnow} ru={dict.ru.academy.goodToKnow} />
-            </p>
-            <h2 className="font-display font-medium text-[clamp(34px,4vw,56px)] leading-[1.02] text-paperText mb-6">
-              <Localized en={dict.en.academy.questionsAnswered} ru={dict.ru.academy.questionsAnswered} />
-            </h2>
-            <p className="font-light text-[15px] leading-[1.75] max-w-[34ch] mb-8">
-              <Localized en={dict.en.academy.stillUnsure} ru={dict.ru.academy.stillUnsure} />
-            </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2.5 px-[26px] py-3.5 border border-paperText/60 text-paperText text-[11px] eyebrow hover:bg-paperText hover:text-ink transition-colors w-fit"
-            >
-              <Localized en={dict.en.academy.getInTouch} ru={dict.ru.academy.getInTouch} />
-            </Link>
-          </div>
-          <div>
-            {academy.faqs.length === 0 ? (
-              <p className="text-sm">
-                <Localized en={dict.en.academy.faqComingSoon} ru={dict.ru.academy.faqComingSoon} />
-              </p>
-            ) : (
-              academy.faqs.map((faq) => (
-                <div key={faq.id} className="border-t border-paperText/[0.16] py-6">
-                  <h3 className="font-display font-medium text-2xl text-paperText mb-2.5">
-                    <Localized en={faq.question} ru={faq.question_ru || faq.question} />
-                  </h3>
-                  {faq.answer && (
-                    <p className="font-light text-[15px] leading-[1.75] max-w-[60ch]">
-                      <Localized en={faq.answer} ru={faq.answer_ru || faq.answer} />
-                    </p>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

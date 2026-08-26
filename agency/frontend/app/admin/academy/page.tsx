@@ -9,10 +9,11 @@ import {
   updateLesson,
   deleteLesson,
   uploadLessonImage,
-  getAdminFaqs,
-  createFaq,
-  updateFaq,
-  deleteFaq,
+  getAdminBrands,
+  uploadBrand,
+  updateBrand,
+  deleteBrand,
+  reorderBrands,
   getAdminSettings,
   updateAdminSettings,
   uploadSettingsVideo,
@@ -21,7 +22,7 @@ import {
   deleteSettingsImage,
   assetUrl,
   AcademyLesson,
-  AcademyFaq,
+  AcademyBrand,
   SiteSettings,
 } from "@/lib/api";
 import AdminPhotoSlot from "@/components/AdminPhotoSlot";
@@ -37,6 +38,8 @@ import {
   inputStyle,
   primaryBtn,
   primaryBtnStyle,
+  dangerBtn,
+  dangerBtnStyle,
   colors,
 } from "@/lib/adminTheme";
 
@@ -100,69 +103,69 @@ function LessonRow({
   );
 }
 
-function FaqRow({
-  faq,
-  onChange,
-  onDelete,
-}: {
-  faq: AcademyFaq;
-  onChange: (faq: AcademyFaq) => void;
-  onDelete: () => void;
-}) {
-  const { token } = useAuth();
-
-  async function save(patch: { question?: string; answer?: string; question_ru?: string; answer_ru?: string }) {
-    if (!token) return;
-    const updated = await updateFaq(token, faq.id, patch);
-    onChange(updated);
-  }
-
-  return (
-    <div className="flex gap-3 items-start border rounded-[8px] p-3" style={{ borderColor: colors.hairline }}>
-      <div className="flex-1 flex flex-col gap-2.5">
-        <AdminBilingualField
-          labelText="Вопрос"
-          enValue={faq.question}
-          ruValue={faq.question_ru ?? ""}
-          onSaveEn={(v) => save({ question: v })}
-          onSaveRu={(v) => save({ question_ru: v })}
-        />
-        <AdminBilingualField
-          labelText="Ответ"
-          enValue={faq.answer ?? ""}
-          ruValue={faq.answer_ru ?? ""}
-          onSaveEn={(v) => save({ answer: v })}
-          onSaveRu={(v) => save({ answer_ru: v })}
-          multiline
-        />
-      </div>
-      <button onClick={onDelete} className="text-xs shrink-0 px-3 py-[7px]" style={{ color: colors.danger }}>
-        Удалить
-      </button>
-    </div>
-  );
-}
-
 export default function AdminAcademyPage() {
   const { token } = useAuth();
   const [lessons, setLessons] = useState<AcademyLesson[]>([]);
-  const [faqs, setFaqs] = useState<AcademyFaq[]>([]);
+  const [brands, setBrands] = useState<AcademyBrand[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const brandInputRef = useRef<HTMLInputElement>(null);
+  const [brandError, setBrandError] = useState<string | null>(null);
+  const [uploadingBrand, setUploadingBrand] = useState(false);
 
   useEffect(() => {
     if (!token) return;
-    Promise.all([getAdminLessons(token), getAdminFaqs(token), getAdminSettings(token)])
-      .then(([l, f, s]) => {
+    Promise.all([getAdminLessons(token), getAdminBrands(token), getAdminSettings(token)])
+      .then(([l, b, s]) => {
         setLessons(l);
-        setFaqs(f);
+        setBrands(b);
         setSettings(s);
       })
       .finally(() => setLoading(false));
   }, [token]);
+
+  async function handleBrandUpload(fileList: FileList | null) {
+    if (!fileList || !token) return;
+    setBrandError(null);
+    setUploadingBrand(true);
+    try {
+      // Sequential rather than parallel: sort_order is derived from the current
+      // row count on the server, so concurrent uploads would collide on it.
+      for (const file of Array.from(fileList)) {
+        const created = await uploadBrand(token, file);
+        setBrands((prev) => [...prev, created]);
+      }
+    } catch (e) {
+      setBrandError(e instanceof Error ? e.message : "Не удалось загрузить логотип.");
+    } finally {
+      setUploadingBrand(false);
+      if (brandInputRef.current) brandInputRef.current.value = "";
+    }
+  }
+
+  async function handleBrandDelete(id: number) {
+    if (!token) return;
+    await deleteBrand(token, id);
+    setBrands((prev) => prev.filter((b) => b.id !== id));
+  }
+
+  async function handleBrandRename(id: number, name: string) {
+    if (!token) return;
+    const updated = await updateBrand(token, id, { name });
+    setBrands((prev) => prev.map((b) => (b.id === updated.id ? updated : b)));
+  }
+
+  async function handleBrandMove(index: number, delta: number) {
+    const next = [...brands];
+    const target = index + delta;
+    if (target < 0 || target >= next.length) return;
+    [next[index], next[target]] = [next[target], next[index]];
+    setBrands(next);
+    if (token) await reorderBrands(token, next.map((b) => b.id));
+  }
 
   async function saveSettings(patch: Partial<SiteSettings>) {
     if (!token) return;
@@ -213,18 +216,6 @@ export default function AdminAcademyPage() {
     if (!token) return;
     await deleteLesson(token, id);
     setLessons((prev) => prev.filter((l) => l.id !== id));
-  }
-
-  async function handleAddFaq() {
-    if (!token) return;
-    const faq = await createFaq(token, { question: "Новый вопрос", answer: "" });
-    setFaqs((prev) => [...prev, faq]);
-  }
-
-  async function handleDeleteFaq(id: number) {
-    if (!token) return;
-    await deleteFaq(token, id);
-    setFaqs((prev) => prev.filter((f) => f.id !== id));
   }
 
   if (loading || !settings)
@@ -279,29 +270,6 @@ export default function AdminAcademyPage() {
               </p>
             )}
           </div>
-        </div>
-      </div>
-
-      <div className={`${card} p-[22px] mb-5`} style={cardStyle}>
-        <div className={sectionLabel} style={sectionLabelStyle}>
-          Шапка
-        </div>
-        <div className="flex flex-col gap-3">
-          <AdminBilingualField
-            labelText="Заголовок"
-            enValue={settings.academy_headline ?? ""}
-            ruValue={settings.academy_headline_ru ?? ""}
-            onSaveEn={(v) => saveSettings({ academy_headline: v })}
-            onSaveRu={(v) => saveSettings({ academy_headline_ru: v })}
-          />
-          <AdminBilingualField
-            labelText="Текст (используйте {city} для города)"
-            enValue={settings.academy_subheadline ?? ""}
-            ruValue={settings.academy_subheadline_ru ?? ""}
-            onSaveEn={(v) => saveSettings({ academy_subheadline: v })}
-            onSaveRu={(v) => saveSettings({ academy_subheadline_ru: v })}
-            multiline
-          />
         </div>
       </div>
 
@@ -415,35 +383,98 @@ export default function AdminAcademyPage() {
         </div>
       </div>
 
-      <div className={`${card} p-[22px]`} style={cardStyle}>
-        <div className="flex items-center justify-between mb-4">
-          <div className={sectionLabel} style={{ ...sectionLabelStyle, marginBottom: 0 }}>
-            Вопросы и ответы
+      <div className={`${card} p-[22px] mb-5`} style={cardStyle}>
+        <div className="flex items-center justify-between flex-wrap gap-3 mb-1">
+          <div className={sectionLabel} style={sectionLabelStyle}>
+            Бренды («С кем работают наши выпускники»)
           </div>
-          <button
-            onClick={handleAddFaq}
-            className="px-3 py-1.5 border rounded-[6px] text-xs cursor-pointer"
-            style={{ borderColor: colors.inputBorder }}
-          >
-            + Добавить вопрос
-          </button>
+          <label className={`${primaryBtn} w-fit cursor-pointer`} style={primaryBtnStyle}>
+            {uploadingBrand ? "Загрузка…" : "+ Добавить логотипы"}
+            <input
+              ref={brandInputRef}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              multiple
+              className="hidden"
+              disabled={uploadingBrand}
+              onChange={(e) => handleBrandUpload(e.target.files)}
+            />
+          </label>
         </div>
-        <div className="flex flex-col gap-3.5">
-          {faqs.length === 0 ? (
-            <p className="text-sm" style={{ color: colors.text }}>
-              Вопросов пока нет.
-            </p>
-          ) : (
-            faqs.map((faq) => (
-              <FaqRow
-                key={faq.id}
-                faq={faq}
-                onChange={(updated) => setFaqs((prev) => prev.map((f) => (f.id === updated.id ? updated : f)))}
-                onDelete={() => handleDeleteFaq(faq.id)}
-              />
-            ))
-          )}
-        </div>
+        <p className="text-xs mb-4" style={{ color: colors.text }}>
+          Логотип приводится к единой высоте, пропорции сохраняются — квадратные и
+          широкие логотипы выглядят одинаково правильно. Прозрачные поля обрезаются
+          автоматически. Лучше всего подходит PNG с прозрачным фоном; до 15 МБ.
+        </p>
+        {brandError && (
+          <p className="text-xs mb-3" style={{ color: colors.danger }}>
+            {brandError}
+          </p>
+        )}
+        {brands.length === 0 ? (
+          <p className="text-sm" style={{ color: colors.text }}>
+            Логотипов пока нет — блок на сайте не показывается.
+          </p>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {brands.map((brand, i) => (
+              <div
+                key={brand.id}
+                className="border rounded-[8px] p-3 flex flex-col gap-2.5"
+                style={{ borderColor: colors.inputBorder }}
+              >
+                <div className="flex h-[86px] items-center justify-center bg-[#F6F4FB] rounded-[6px] overflow-hidden px-3">
+                  <Image
+                    src={assetUrl(brand.image_url)}
+                    alt={brand.name || ""}
+                    width={brand.width ?? 1}
+                    height={brand.height ?? 1}
+                    className="max-h-[58px] w-auto object-contain"
+                  />
+                </div>
+                <input
+                  className={input}
+                  style={inputStyle}
+                  defaultValue={brand.name ?? ""}
+                  placeholder="Название бренда"
+                  onBlur={(e) => {
+                    if (e.target.value !== (brand.name ?? "")) handleBrandRename(brand.id, e.target.value);
+                  }}
+                />
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-1.5">
+                    <button
+                      type="button"
+                      className="text-xs px-2 py-1 border rounded-[6px] disabled:opacity-40"
+                      style={{ borderColor: colors.inputBorder }}
+                      disabled={i === 0}
+                      onClick={() => handleBrandMove(i, -1)}
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs px-2 py-1 border rounded-[6px] disabled:opacity-40"
+                      style={{ borderColor: colors.inputBorder }}
+                      disabled={i === brands.length - 1}
+                      onClick={() => handleBrandMove(i, 1)}
+                    >
+                      →
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    className={dangerBtn}
+                    style={dangerBtnStyle}
+                    onClick={() => handleBrandDelete(brand.id)}
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

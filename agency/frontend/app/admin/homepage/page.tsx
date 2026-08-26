@@ -7,23 +7,14 @@ import {
   updateAdminSettings,
   uploadHeroVideo,
   deleteHeroVideo,
-  getAdminEditorialAlbums,
-  uploadSettingsImage,
-  deleteSettingsImage,
   assetUrl,
   SiteSettings,
-  EditorialAlbum,
 } from "@/lib/api";
-import AdminPhotoSlot from "@/components/AdminPhotoSlot";
-import AdminEditorialAlbums from "@/components/AdminEditorialAlbums";
-import AdminBilingualField from "@/components/AdminBilingualField";
 import {
   card,
   cardStyle,
   sectionLabel,
   sectionLabelStyle,
-  label,
-  labelStyle,
   primaryBtn,
   primaryBtnStyle,
   colors,
@@ -32,7 +23,6 @@ import {
 export default function AdminHomepagePage() {
   const { token } = useAuth();
   const [settings, setSettings] = useState<SiteSettings | null>(null);
-  const [albums, setAlbums] = useState<EditorialAlbum[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null);
@@ -40,11 +30,8 @@ export default function AdminHomepagePage() {
 
   useEffect(() => {
     if (!token) return;
-    Promise.all([getAdminSettings(token), getAdminEditorialAlbums(token)])
-      .then(([s, a]) => {
-        setSettings(s);
-        setAlbums(a);
-      })
+    getAdminSettings(token)
+      .then(setSettings)
       .finally(() => setLoading(false));
   }, [token]);
 
@@ -75,18 +62,6 @@ export default function AdminHomepagePage() {
     setSettings(updated);
   }
 
-  async function handleManifestoImage(file: File) {
-    if (!token) return;
-    const updated = await uploadSettingsImage(token, "manifesto", file);
-    setSettings(updated);
-  }
-
-  async function handleManifestoImageRemove() {
-    if (!token) return;
-    const updated = await deleteSettingsImage(token, "manifesto");
-    setSettings(updated);
-  }
-
   if (loading || !settings)
     return (
       <p className="text-sm" style={{ color: colors.text }}>
@@ -98,7 +73,7 @@ export default function AdminHomepagePage() {
     <div>
       <div className="text-2xl font-semibold mb-1">Главная страница</div>
       <div className="text-sm mb-7" style={{ color: colors.text }}>
-        Видео, текст и редакционные истории на главной странице.
+        Видео на главной странице.
       </div>
 
       <div className={`${card} p-[22px] mb-5`} style={cardStyle}>
@@ -140,95 +115,6 @@ export default function AdminHomepagePage() {
             )}
           </div>
         </div>
-      </div>
-
-      <div className={`${card} p-[22px] mb-5`} style={cardStyle}>
-        <div className={sectionLabel} style={sectionLabelStyle}>
-          Текст на главной
-        </div>
-        <div className="flex flex-col gap-3.5 mb-3.5">
-          <AdminBilingualField
-            labelText="Заголовок (часть 1)"
-            enValue={settings.hero_pre ?? ""}
-            ruValue={settings.hero_pre_ru ?? ""}
-            onSaveEn={(v) => saveField({ hero_pre: v })}
-            onSaveRu={(v) => saveField({ hero_pre_ru: v })}
-          />
-          <AdminBilingualField
-            labelText="Заголовок (акцент)"
-            enValue={settings.hero_em ?? ""}
-            ruValue={settings.hero_em_ru ?? ""}
-            onSaveEn={(v) => saveField({ hero_em: v })}
-            onSaveRu={(v) => saveField({ hero_em_ru: v })}
-          />
-          <AdminBilingualField
-            labelText="Заголовок (часть 2)"
-            enValue={settings.hero_post ?? ""}
-            ruValue={settings.hero_post_ru ?? ""}
-            onSaveEn={(v) => saveField({ hero_post: v })}
-            onSaveRu={(v) => saveField({ hero_post_ru: v })}
-          />
-        </div>
-        <AdminBilingualField
-          labelText="Текст абзаца"
-          enValue={settings.hero_body ?? ""}
-          ruValue={settings.hero_body_ru ?? ""}
-          onSaveEn={(v) => saveField({ hero_body: v })}
-          onSaveRu={(v) => saveField({ hero_body_ru: v })}
-          multiline
-        />
-      </div>
-
-      <div className={`${card} p-[22px] mb-5`} style={cardStyle}>
-        <div className={sectionLabel} style={sectionLabelStyle}>
-          Раздел манифеста
-        </div>
-        <div className="flex flex-col gap-3">
-          <AdminBilingualField
-            labelText="Заголовок"
-            enValue={settings.manifesto_title ?? ""}
-            ruValue={settings.manifesto_title_ru ?? ""}
-            onSaveEn={(v) => saveField({ manifesto_title: v })}
-            onSaveRu={(v) => saveField({ manifesto_title_ru: v })}
-          />
-          <AdminBilingualField
-            labelText="Абзац 1"
-            enValue={settings.manifesto_body1 ?? ""}
-            ruValue={settings.manifesto_body1_ru ?? ""}
-            onSaveEn={(v) => saveField({ manifesto_body1: v })}
-            onSaveRu={(v) => saveField({ manifesto_body1_ru: v })}
-            multiline
-          />
-          <AdminBilingualField
-            labelText="Абзац 2 (используйте {city} для названия города)"
-            enValue={settings.manifesto_body2 ?? ""}
-            ruValue={settings.manifesto_body2_ru ?? ""}
-            onSaveEn={(v) => saveField({ manifesto_body2: v })}
-            onSaveRu={(v) => saveField({ manifesto_body2_ru: v })}
-            multiline
-          />
-          <div className="flex flex-col gap-1.5">
-            <label className={label} style={labelStyle}>
-              Изображение раздела
-            </label>
-            <p className="text-xs" style={{ color: colors.text }}>
-              На сайте отображается широким блоком (не 3:4, как карточки моделей) — превью ниже показывает примерные пропорции.
-            </p>
-            <div className="w-72">
-              <AdminPhotoSlot
-                url={settings.manifesto_image_url}
-                label="Перетащите изображение"
-                onUpload={handleManifestoImage}
-                onRemove={settings.manifesto_image_url ? handleManifestoImageRemove : undefined}
-                aspectClass="aspect-[4/3]"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={`${card} p-[22px]`} style={cardStyle}>
-        <AdminEditorialAlbums albums={albums} setAlbums={setAlbums} />
       </div>
     </div>
   );

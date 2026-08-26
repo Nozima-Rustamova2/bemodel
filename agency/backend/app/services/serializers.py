@@ -4,17 +4,15 @@ from app.models.model import (
     ScoutingSubmission,
     SiteSettings,
     AcademyLesson,
-    AcademyFaq,
+    AcademyBrand,
     FeaturedShoot,
-    EditorialAlbum,
 )
 from app.schemas.model import ModelOut, ModelListOut, PhotoOut
 from app.schemas.press import PressPostOut
 from app.schemas.scouting import ScoutingSubmissionOut
 from app.schemas.settings import SiteSettingsOut
-from app.schemas.academy import AcademyLessonOut, AcademyFaqOut
+from app.schemas.academy import AcademyLessonOut, AcademyBrandOut
 from app.schemas.featured_shoot import FeaturedShootOut
-from app.schemas.editorial import EditorialAlbumOut, EditorialPhotoOut
 from app.services.storage import storage
 
 
@@ -52,7 +50,6 @@ def model_to_out(model: Model) -> ModelOut:
         eyes=model.eyes,
         hair=model.hair,
         is_published=model.is_published,
-        is_featured=model.is_featured,
         sort_order=model.sort_order,
         created_at=model.created_at,
         photos=photos,
@@ -81,7 +78,6 @@ def model_to_list_out(model: Model) -> ModelListOut:
         hair=model.hair,
         eyes=model.eyes,
         is_published=model.is_published,
-        is_featured=model.is_featured,
         cover_photo_url=model_cover_url(model),
     )
 
@@ -94,18 +90,6 @@ def featured_shoot_to_out(shoot: FeaturedShoot) -> FeaturedShootOut:
         credit=shoot.credit,
         image_url=storage.get_url(shoot.image_key) if shoot.image_key else None,
         model=model_to_list_out(shoot.model) if shoot.model else None,
-    )
-
-
-def editorial_album_to_out(album: EditorialAlbum) -> EditorialAlbumOut:
-    return EditorialAlbumOut(
-        id=album.id,
-        sort_order=album.sort_order,
-        title=album.title,
-        photos=[
-            EditorialPhotoOut(id=p.id, url=storage.get_url(p.image_key), sort_order=p.sort_order)
-            for p in sorted(album.photos, key=lambda p: p.sort_order)
-        ],
     )
 
 
@@ -129,31 +113,11 @@ def settings_to_out(settings_row: SiteSettings) -> SiteSettingsOut:
     return SiteSettingsOut(
         hero_video_url=storage.get_url(settings_row.hero_video_key) if settings_row.hero_video_key else None,
         hero_poster_url=storage.get_url(settings_row.hero_poster_key) if settings_row.hero_poster_key else None,
-        hero_headline=settings_row.hero_headline,
-        hero_subheadline=settings_row.hero_subheadline,
-        academy_headline=settings_row.academy_headline,
-        academy_subheadline=settings_row.academy_subheadline,
         academy_hero_video_url=storage.get_url(settings_row.academy_hero_video_key) if settings_row.academy_hero_video_key else None,
         academy_hero_poster_url=storage.get_url(settings_row.academy_hero_poster_key) if settings_row.academy_hero_poster_key else None,
-        manifesto_image_url=storage.get_url(settings_row.manifesto_image_key) if settings_row.manifesto_image_key else None,
         academy_about_image_url=storage.get_url(settings_row.academy_about_image_key) if settings_row.academy_about_image_key else None,
         brand_name=settings_row.brand_name,
         brand_city=settings_row.brand_city,
-        hero_pre=settings_row.hero_pre,
-        hero_em=settings_row.hero_em,
-        hero_post=settings_row.hero_post,
-        hero_body=settings_row.hero_body,
-        hero_subheadline_ru=settings_row.hero_subheadline_ru,
-        hero_pre_ru=settings_row.hero_pre_ru,
-        hero_em_ru=settings_row.hero_em_ru,
-        hero_post_ru=settings_row.hero_post_ru,
-        hero_body_ru=settings_row.hero_body_ru,
-        manifesto_title=settings_row.manifesto_title,
-        manifesto_body1=settings_row.manifesto_body1,
-        manifesto_body2=settings_row.manifesto_body2,
-        manifesto_title_ru=settings_row.manifesto_title_ru,
-        manifesto_body1_ru=settings_row.manifesto_body1_ru,
-        manifesto_body2_ru=settings_row.manifesto_body2_ru,
         about_heading=settings_row.about_heading,
         about_body1=settings_row.about_body1,
         about_body2=settings_row.about_body2,
@@ -178,8 +142,6 @@ def settings_to_out(settings_row: SiteSettings) -> SiteSettingsOut:
         academy_weeks=settings_row.academy_weeks,
         academy_sessions=settings_row.academy_sessions,
         academy_cohort=settings_row.academy_cohort,
-        academy_headline_ru=settings_row.academy_headline_ru,
-        academy_subheadline_ru=settings_row.academy_subheadline_ru,
         academy_about_title_ru=settings_row.academy_about_title_ru,
         academy_about_body1_ru=settings_row.academy_about_body1_ru,
         academy_about_body2_ru=settings_row.academy_about_body2_ru,
@@ -198,14 +160,14 @@ def academy_lesson_to_out(lesson: AcademyLesson) -> AcademyLessonOut:
     )
 
 
-def academy_faq_to_out(faq: AcademyFaq) -> AcademyFaqOut:
-    return AcademyFaqOut(
-        id=faq.id,
-        question=faq.question,
-        answer=faq.answer,
-        question_ru=faq.question_ru,
-        answer_ru=faq.answer_ru,
-        sort_order=faq.sort_order,
+def academy_brand_to_out(brand: AcademyBrand) -> AcademyBrandOut:
+    return AcademyBrandOut(
+        id=brand.id,
+        name=brand.name,
+        image_url=storage.get_url(brand.image_key),
+        width=brand.width,
+        height=brand.height,
+        sort_order=brand.sort_order,
     )
 
 

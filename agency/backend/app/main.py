@@ -14,7 +14,6 @@ from app.api.routes import (
     admin_settings,
     admin_academy,
     admin_featured_shoots,
-    admin_editorial,
 )
 from app.core.config import settings
 from app.core.limiter import limiter
@@ -77,7 +76,6 @@ app.include_router(admin_scouting.router)
 app.include_router(admin_settings.router)
 app.include_router(admin_academy.router)
 app.include_router(admin_featured_shoots.router)
-app.include_router(admin_editorial.router)
 
 
 @app.get("/api/health")

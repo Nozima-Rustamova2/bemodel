@@ -7,56 +7,47 @@ import { useLanguage } from "@/lib/language";
 
 export default function ModelCard({ model }: { model: ModelListItem }) {
   const { t } = useLanguage();
-  const statKeys: (keyof typeof t.stats)[] = ["height", "bust", "waist", "hips", "shoes", "hair", "eyes"];
-  const statValues: (string | null)[] = [
-    model.height && `${model.height} cm`,
-    model.bust && `${model.bust} cm`,
-    model.waist && `${model.waist} cm`,
-    model.hips && `${model.hips} cm`,
-    model.shoes && `${model.shoes} EU`,
-    model.hair,
-    model.eyes,
-  ];
-  const stats = statKeys
-    .map((key, i) => ({ key, value: statValues[i] }))
-    .filter((s): s is { key: keyof typeof t.stats; value: string } => !!s.value);
 
   return (
     <div className="flex flex-col gap-3">
-      <Link href={`/models/${model.slug}`} className="flip-card block relative aspect-[3/4]">
-        <div className="flip-inner absolute inset-0 w-full h-full">
-          <div className="flip-front absolute inset-0 overflow-hidden bg-placeholder">
-            {model.cover_photo_url ? (
-              <Image
-                src={assetUrl(model.cover_photo_url)}
-                alt={model.name}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-taupe text-sm">{t.modelCard.noPhoto}</div>
-            )}
+      <Link href={`/models/${model.slug}`} className="group block relative aspect-[3/4] overflow-hidden bg-placeholder">
+        {model.cover_photo_url ? (
+          <Image
+            src={assetUrl(model.cover_photo_url)}
+            alt={model.name}
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            quality={90}
+            className="object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-taupe text-sm">
+            {t.modelCard.noPhoto}
           </div>
-          <div className="flip-back absolute inset-0 bg-ink text-mutedLight flex flex-col justify-center px-6 py-6">
-            <div className="font-display text-2xl text-paperText leading-none mb-4">{model.name}</div>
-            {stats.map(({ key, value }) => (
-              <div key={key} className="flex justify-between py-1.5 border-b border-paperText/[0.14] text-xs">
-                <span className="text-[10px] tracking-[0.12em] uppercase text-taupe">{t.stats[key]}</span>
-                <span className="text-paperText">{value}</span>
-              </div>
-            ))}
-            <div className="mt-5 text-[10px] tracking-[0.2em] uppercase text-accentDeep">{t.modelCard.viewPortfolio}</div>
-          </div>
-        </div>
+        )}
+
+        {/* Dim on hover. Sits above the photo but below the name so the name
+            stays at full strength rather than dimming with the image. */}
+        <div className="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/25" />
+
+        {model.cover_photo_url && (
+          <>
+            {/* A gradient only along the bottom edge: enough to hold the name
+                against a light photo without greying out the whole frame. */}
+            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[linear-gradient(to_top,rgba(20,16,26,0.55),transparent)]" />
+            {/* Inset rule, as in the reference, rather than a full box border. */}
+            <div className="absolute inset-x-[7%] bottom-[13%] border-b border-paperText/45" />
+            <p
+              className="absolute inset-x-[7%] bottom-[16%] text-center uppercase text-paperText tracking-[0.16em] text-[clamp(13px,1.15vw,17px)] leading-none"
+              style={{ textShadow: "0 1px 16px rgba(0,0,0,0.55)" }}
+            >
+              {model.name}
+            </p>
+          </>
+        )}
       </Link>
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="font-display text-xl leading-[1.1]">{model.name}</p>
-          {model.city && <p className="mono-caption mt-0.5">{model.city}</p>}
-        </div>
-        <span className="text-[10px] eyebrow border-b border-ink pb-0.5 whitespace-nowrap">{t.modelCard.view}</span>
-      </div>
+
+      {model.city && <p className="mono-caption">{model.city}</p>}
     </div>
   );
 }

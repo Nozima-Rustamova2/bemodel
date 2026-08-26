@@ -5,8 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#EAE4F8", // lavender background (from brand logo)
-        bgAlt: "#E1D8F5", // deeper lavender panel / section background
+        paper: "#FFFFFF", // page background (also the light text colour on dark surfaces)
+        bgAlt: "#FFFFFF", // alternating section background
+        panel: "#E1D8F5", // soft lavender panel - replaces the old dark-velvet sections
         ink: "#17121F", // primary text / dark sections (near-black from logo wordmark)
         inkSoft: "#655C78", // body text on light
         inkSofter: "#3D3550", // muted body (more legible/darker)

@@ -2,6 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    // Next 16 rejects any quality value not listed here with a 400, so every
+    // `quality={n}` used in the app has to appear in this list.
+    qualities: [75, 90, 92, 95],
+    // AVIF first: noticeably smaller than WebP at the same visual quality, which
+    // buys back the bytes the higher quality settings cost. Browsers that don't
+    // support it fall through to WebP.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "http",

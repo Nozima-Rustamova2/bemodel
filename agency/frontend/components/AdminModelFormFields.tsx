@@ -14,7 +14,6 @@ export interface ModelDraft {
   hair: string;
   eyes: string;
   bio: string;
-  is_featured: boolean;
   is_published: boolean;
 }
 
@@ -31,7 +30,6 @@ export function emptyDraft(): ModelDraft {
     hair: "",
     eyes: "",
     bio: "",
-    is_featured: false,
     is_published: true,
   };
 }
@@ -98,14 +96,6 @@ export default function AdminModelFormFields({
                 onChange={(e) => set("is_published", e.target.checked)}
               />
               Опубликовано (видно на сайте)
-            </label>
-            <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input
-                type="checkbox"
-                checked={draft.is_featured}
-                onChange={(e) => set("is_featured", e.target.checked)}
-              />
-              Показывать в баннере на главной
             </label>
           </div>
         </div>

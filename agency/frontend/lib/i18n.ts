@@ -44,21 +44,9 @@ export interface Dict {
     smile: string;
   };
   home: {
-    heroEyebrowDefault: string;
-    heroPreDefault: string;
-    heroEmDefault: string;
-    heroPostDefault: string;
-    heroBodyDefault: string;
-    newestWork: string;
-    editorialStories: string;
-    recentShoots: string;
-    noStories: string;
-    viewAllModels: string;
-    theAgency: string;
-    manifestoTitleDefault: string;
-    manifestoBody1Default: string;
-    manifestoBody2Default: (city: string) => string;
-    ourStory: string;
+    heroModels: string;
+    heroNewFaces: string;
+    heroAcademy: string;
     openCall: string;
     thinkYouHaveIt: string;
     becomeModelCta: string;
@@ -76,10 +64,8 @@ export interface Dict {
     step3BodyDefault: string;
   };
   academy: {
-    eyebrow: string;
-    headlineDefault: string;
-    bodyDefault: string;
     applyToAcademy: string;
+    brandsHeading: string;
     aboutTitleEyebrow: string;
     aboutHeadingDefault: string;
     aboutBody1Default: (name: string) => string;
@@ -90,11 +76,6 @@ export interface Dict {
     curriculumEyebrow: string;
     insideLessons: string;
     curriculumComingSoon: string;
-    goodToKnow: string;
-    questionsAnswered: string;
-    stillUnsure: string;
-    getInTouch: string;
-    faqComingSoon: string;
   };
   contactShared: {
     getInTouchEyebrow: string;
@@ -141,7 +122,6 @@ export interface Dict {
   };
   modelDetail: {
     backToRoster: string;
-    bookModel: string;
     portfolio: string;
     noPhotosYet: string;
     polaroidsDigitals: string;
@@ -149,8 +129,6 @@ export interface Dict {
   };
   modelCard: {
     noPhoto: string;
-    viewPortfolio: string;
-    view: string;
   };
   lightbox: {
     close: string;
@@ -163,7 +141,7 @@ const en: Dict = {
   nav: {
     models: "Models",
     newFaces: "New Faces",
-    academy: "Academy",
+    academy: "Bemodel Academy",
     contact: "Contact",
     becomeModel: "Become a Model",
   },
@@ -196,24 +174,9 @@ const en: Dict = {
     smile: "Smile",
   },
   home: {
-    heroEyebrowDefault: "Tashkent — Worldwide · Est. 2022",
-    heroPreDefault: "Faces that",
-    heroEmDefault: "define",
-    heroPostDefault: "the moment.",
-    heroBodyDefault:
-      "A boutique agency representing women and new faces across editorial, runway and campaign. Scouted with intention, developed with care.",
-    newestWork: "Newest work",
-    editorialStories: "Editorial Stories",
-    recentShoots: "Recent photoshoots, campaigns & runway",
-    noStories: "No stories yet — add some from the admin dashboard.",
-    viewAllModels: "View all models →",
-    theAgency: "The agency",
-    manifestoTitleDefault: "We build careers, not just portfolios.",
-    manifestoBody1Default:
-      "From first test to global campaign, every face on our board is placed with intention. We work closely with a small roster so no one gets lost in the crowd.",
-    manifestoBody2Default: (city) =>
-      `Editorial, commercial, runway and digital — represented in ${city} and placed worldwide through our partner network.`,
-    ourStory: "Our story →",
+    heroModels: "Models",
+    heroNewFaces: "New Faces",
+    heroAcademy: "Bemodel Academy",
     openCall: "Open call",
     thinkYouHaveIt: "Think you have it?",
     becomeModelCta: "Become a Model →",
@@ -236,11 +199,8 @@ const en: Dict = {
       "Direct clients and partner agencies worldwide, matched to each model's strengths and pace.",
   },
   academy: {
-    eyebrow: "bemodel Academy",
-    headlineDefault: "Learn the craft before the camera finds you.",
-    bodyDefault:
-      "An 8-week foundation in runway, posing, styling and the business of modeling — taught by working professionals in Tashkent.",
     applyToAcademy: "Apply to the Academy →",
+    brandsHeading: "Where our graduates work",
     aboutTitleEyebrow: "About the Academy",
     aboutHeadingDefault: "A real education, not a photoshoot.",
     aboutBody1Default: (name) =>
@@ -253,11 +213,6 @@ const en: Dict = {
     curriculumEyebrow: "The curriculum",
     insideLessons: "Inside the lessons",
     curriculumComingSoon: "Curriculum coming soon.",
-    goodToKnow: "Good to know",
-    questionsAnswered: "Questions, answered.",
-    stillUnsure: "Still unsure? Send us a note and we'll walk you through it.",
-    getInTouch: "Get in touch →",
-    faqComingSoon: "FAQs coming soon.",
   },
   contactShared: {
     getInTouchEyebrow: "Get in touch",
@@ -307,7 +262,6 @@ const en: Dict = {
   },
   modelDetail: {
     backToRoster: "← Back to roster",
-    bookModel: "Book this model →",
     portfolio: "Portfolio",
     noPhotosYet: "No photos yet.",
     polaroidsDigitals: "Polaroids · Digitals",
@@ -315,8 +269,6 @@ const en: Dict = {
   },
   modelCard: {
     noPhoto: "No photo",
-    viewPortfolio: "View portfolio →",
-    view: "View →",
   },
   lightbox: {
     close: "Close",
@@ -329,7 +281,7 @@ const ru: Dict = {
   nav: {
     models: "Модели",
     newFaces: "Новые лица",
-    academy: "Академия",
+    academy: "Академия Bemodel",
     contact: "Контакты",
     becomeModel: "Стать моделью",
   },
@@ -362,24 +314,9 @@ const ru: Dict = {
     smile: "Улыбка",
   },
   home: {
-    heroEyebrowDefault: "Ташкент — по всему миру · С 2022 года",
-    heroPreDefault: "Лица, которые",
-    heroEmDefault: "определяют",
-    heroPostDefault: "момент.",
-    heroBodyDefault:
-      "Бутик-агентство, представляющее женщин и новые лица в editorial-съёмках, на подиуме и в рекламных кампаниях. Ищем таланты осознанно, развиваем — с заботой.",
-    newestWork: "Новые работы",
-    editorialStories: "Редакционные истории",
-    recentShoots: "Последние съёмки, кампании и показы",
-    noStories: "Историй пока нет — добавьте их через панель администратора.",
-    viewAllModels: "Смотреть всех моделей →",
-    theAgency: "Агентство",
-    manifestoTitleDefault: "Мы строим карьеры, а не просто портфолио.",
-    manifestoBody1Default:
-      "От первого тестового кадра до глобальной кампании — каждое лицо в нашем агентстве продвигается осознанно. Мы работаем с небольшим ростером, чтобы никто не терялся в толпе.",
-    manifestoBody2Default: (city) =>
-      `Editorial, коммерция, подиум и digital — представляем таланты в ${city} и размещаем по всему миру через нашу партнёрскую сеть.`,
-    ourStory: "Наша история →",
+    heroModels: "Модели",
+    heroNewFaces: "Новые лица",
+    heroAcademy: "Академия Bemodel",
     openCall: "Открытый кастинг",
     thinkYouHaveIt: "Думаешь, у тебя есть то, что нужно?",
     becomeModelCta: "Стать моделью →",
@@ -402,11 +339,8 @@ const ru: Dict = {
       "Прямые клиенты и партнёрские агентства по всему миру — подбираем с учётом сильных сторон и темпа каждой модели.",
   },
   academy: {
-    eyebrow: "Академия bemodel",
-    headlineDefault: "Освойте мастерство ещё до того, как вас найдёт камера.",
-    bodyDefault:
-      "8-недельный базовый курс по подиуму, позированию, стилю и бизнесу в модельной индустрии — от практикующих профессионалов в Ташкенте.",
     applyToAcademy: "Подать заявку в академию →",
+    brandsHeading: "С кем работают наши выпускники",
     aboutTitleEyebrow: "Об академии",
     aboutHeadingDefault: "Настоящее образование, а не просто фотосессия.",
     aboutBody1Default: (name) =>
@@ -419,11 +353,6 @@ const ru: Dict = {
     curriculumEyebrow: "Программа обучения",
     insideLessons: "Что входит в программу",
     curriculumComingSoon: "Программа скоро появится.",
-    goodToKnow: "Полезно знать",
-    questionsAnswered: "Ответы на вопросы.",
-    stillUnsure: "Остались вопросы? Напишите нам, и мы всё объясним.",
-    getInTouch: "Связаться с нами →",
-    faqComingSoon: "Вопросы скоро появятся.",
   },
   contactShared: {
     getInTouchEyebrow: "Свяжитесь с нами",
@@ -473,7 +402,6 @@ const ru: Dict = {
   },
   modelDetail: {
     backToRoster: "← Назад к ростеру",
-    bookModel: "Забронировать эту модель →",
     portfolio: "Портфолио",
     noPhotosYet: "Пока нет фото.",
     polaroidsDigitals: "Полароиды · Дигиталы",
@@ -481,8 +409,6 @@ const ru: Dict = {
   },
   modelCard: {
     noPhoto: "Нет фото",
-    viewPortfolio: "Смотреть портфолио →",
-    view: "Смотреть →",
   },
   lightbox: {
     close: "Закрыть",

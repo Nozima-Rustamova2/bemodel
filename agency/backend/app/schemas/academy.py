@@ -27,28 +27,18 @@ class AcademyLessonOut(AcademyLessonBase):
     sort_order: int
 
 
-class AcademyFaqBase(BaseModel):
-    question: str
-    answer: str | None = None
-    question_ru: str | None = None
-    answer_ru: str | None = None
+class AcademyBrandUpdate(BaseModel):
+    name: str | None = None
 
 
-class AcademyFaqCreate(AcademyFaqBase):
-    pass
-
-
-class AcademyFaqUpdate(BaseModel):
-    question: str | None = None
-    answer: str | None = None
-    question_ru: str | None = None
-    answer_ru: str | None = None
-
-
-class AcademyFaqOut(AcademyFaqBase):
+class AcademyBrandOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    name: str | None = None
+    image_url: str
+    width: int | None = None
+    height: int | None = None
     sort_order: int
 
 

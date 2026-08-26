@@ -41,7 +41,6 @@ function draftFromModel(m: ModelDetail): ModelDraft {
     hair: m.hair || "",
     eyes: m.eyes || "",
     bio: m.bio || "",
-    is_featured: m.is_featured,
     is_published: m.is_published,
   };
 }

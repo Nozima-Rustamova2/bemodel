@@ -14,8 +14,8 @@ from app.services.storage import storage
 router = APIRouter(prefix="/api/admin/models/{model_id}/photos", tags=["admin-photos"])
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-MAX_FILE_SIZE_MB = 15
-MAX_DIMENSION = 2400  # resize anything larger than this, longest side
+MAX_FILE_SIZE_MB = 30  # raised so full-resolution originals are not rejected
+MAX_DIMENSION = 3200  # resize anything larger than this, longest side
 
 
 def _process_and_save(upload: UploadFile) -> str:
@@ -44,10 +44,10 @@ def _process_and_save(upload: UploadFile) -> str:
         longest = max(w, h)
         if longest > MAX_DIMENSION:
             scale = MAX_DIMENSION / longest
-            img = img.resize((int(w * scale), int(h * scale)))
+            img = img.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
         buf = io.BytesIO()
         save_format = "JPEG" if ext in (".jpg", ".jpeg") else (img.format or "PNG")
-        img.save(buf, format=save_format, quality=88, optimize=True)
+        img.save(buf, format=save_format, quality=92, optimize=True, subsampling=0)
         contents = buf.getvalue()
     except Exception:
         # If Pillow can't process it for any reason, keep the original bytes as-is

@@ -1,7 +1,7 @@
 // Base URL of the FastAPI backend.
 // In the browser (client components) we call it directly.
 // Set NEXT_PUBLIC_API_URL in .env.local — see .env.local.example
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8002";
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export function assetUrl(path: string | null | undefined): string {
   if (!path) return "";
@@ -34,34 +34,14 @@ export interface PressPost {
 export interface SiteSettings {
   hero_video_url: string | null;
   hero_poster_url: string | null;
-  hero_headline: string | null;
-  hero_subheadline: string | null;
-  academy_headline: string | null;
-  academy_subheadline: string | null;
   academy_hero_video_url: string | null;
   academy_hero_poster_url: string | null;
-  manifesto_image_url: string | null;
   academy_about_image_url: string | null;
 
   brand_name: string | null;
   brand_city: string | null;
 
-  hero_pre: string | null;
-  hero_em: string | null;
-  hero_post: string | null;
-  hero_body: string | null;
-  hero_subheadline_ru: string | null;
-  hero_pre_ru: string | null;
-  hero_em_ru: string | null;
-  hero_post_ru: string | null;
-  hero_body_ru: string | null;
 
-  manifesto_title: string | null;
-  manifesto_body1: string | null;
-  manifesto_body2: string | null;
-  manifesto_title_ru: string | null;
-  manifesto_body1_ru: string | null;
-  manifesto_body2_ru: string | null;
 
   about_heading: string | null;
   about_body1: string | null;
@@ -88,8 +68,6 @@ export interface SiteSettings {
   academy_weeks: string | null;
   academy_sessions: string | null;
   academy_cohort: string | null;
-  academy_headline_ru: string | null;
-  academy_subheadline_ru: string | null;
   academy_about_title_ru: string | null;
   academy_about_body1_ru: string | null;
   academy_about_body2_ru: string | null;
@@ -104,19 +82,6 @@ export interface FeaturedShoot {
   model: ModelListItem | null;
 }
 
-export interface EditorialPhoto {
-  id: number;
-  url: string;
-  sort_order: number;
-}
-
-export interface EditorialAlbum {
-  id: number;
-  sort_order: number;
-  title: string | null;
-  photos: EditorialPhoto[];
-}
-
 export interface AcademyLesson {
   id: number;
   title: string;
@@ -127,18 +92,19 @@ export interface AcademyLesson {
   sort_order: number;
 }
 
-export interface AcademyFaq {
+
+export interface AcademyBrand {
   id: number;
-  question: string;
-  answer: string | null;
-  question_ru: string | null;
-  answer_ru: string | null;
+  name: string | null;
+  image_url: string;
+  width: number | null;
+  height: number | null;
   sort_order: number;
 }
 
 export interface Academy {
   lessons: AcademyLesson[];
-  faqs: AcademyFaq[];
+  brands: AcademyBrand[];
 }
 
 export interface ScoutingSubmission {
@@ -171,7 +137,6 @@ export interface ModelListItem {
   hair: string | null;
   eyes: string | null;
   is_published: boolean;
-  is_featured: boolean;
   cover_photo_url: string | null;
 }
 
@@ -190,7 +155,6 @@ export interface ModelDetail {
   eyes: string | null;
   hair: string | null;
   is_published: boolean;
-  is_featured: boolean;
   sort_order: number;
   photos: Photo[];
 }
@@ -202,12 +166,6 @@ export async function getModels(category?: string): Promise<ModelListItem[]> {
   if (category) url.searchParams.set("category", category);
   const res = await fetch(url.toString(), { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load models");
-  return res.json();
-}
-
-export async function getFeaturedModels(): Promise<ModelListItem[]> {
-  const res = await fetch(`${API_URL}/api/public/models/featured`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load featured models");
   return res.json();
 }
 
@@ -238,12 +196,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 export async function getAcademy(): Promise<Academy> {
   const res = await fetch(`${API_URL}/api/public/academy`, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load academy content");
-  return res.json();
-}
-
-export async function getEditorialAlbums(): Promise<EditorialAlbum[]> {
-  const res = await fetch(`${API_URL}/api/public/editorial-albums`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load editorial albums");
   return res.json();
 }
 
@@ -539,7 +491,7 @@ export async function deleteSettingsVideo(token: string, slot: SettingsVideoSlot
   return res.json();
 }
 
-export type SettingsImageSlot = "manifesto" | "academy-about";
+export type SettingsImageSlot = "academy-about";
 
 export async function uploadSettingsImage(token: string, slot: SettingsImageSlot, file: File): Promise<SiteSettings> {
   const form = new FormData();
@@ -617,45 +569,52 @@ export async function uploadLessonImage(token: string, id: number, file: File): 
   return res.json();
 }
 
-export async function getAdminFaqs(token: string): Promise<AcademyFaq[]> {
-  const res = await adminFetch(`${API_URL}/api/admin/academy/faqs`, { headers: authHeaders(token), cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load FAQs");
+// ---------- Admin: academy brand logos ----------
+
+export async function getAdminBrands(token: string): Promise<AcademyBrand[]> {
+  const res = await adminFetch(`${API_URL}/api/admin/academy/brands`, { headers: authHeaders(token), cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load brands");
   return res.json();
 }
 
-export async function createFaq(token: string, payload: { question: string; answer?: string }): Promise<AcademyFaq> {
-  const res = await adminFetch(`${API_URL}/api/admin/academy/faqs`, {
+export async function uploadBrand(token: string, file: File): Promise<AcademyBrand> {
+  const form = new FormData();
+  form.append("file", file);
+  const res = await adminFetch(`${API_URL}/api/admin/academy/brands`, {
     method: "POST",
-    headers: { ...authHeaders(token), "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    headers: authHeaders(token),
+    body: form,
   });
-  if (!res.ok) throw new Error("Failed to create FAQ");
+  if (!res.ok) throw new Error((await res.json().catch(() => null))?.detail || "Failed to upload logo");
   return res.json();
 }
 
-export async function updateFaq(
-  token: string,
-  id: number,
-  payload: Partial<Pick<AcademyFaq, "question" | "answer" | "question_ru" | "answer_ru">>
-): Promise<AcademyFaq> {
-  const res = await adminFetch(`${API_URL}/api/admin/academy/faqs/${id}`, {
+export async function updateBrand(token: string, id: number, payload: { name?: string | null }): Promise<AcademyBrand> {
+  const res = await adminFetch(`${API_URL}/api/admin/academy/brands/${id}`, {
     method: "PUT",
     headers: { ...authHeaders(token), "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error("Failed to update FAQ");
+  if (!res.ok) throw new Error("Failed to update brand");
   return res.json();
 }
 
-export async function deleteFaq(token: string, id: number): Promise<void> {
-  const res = await adminFetch(`${API_URL}/api/admin/academy/faqs/${id}`, {
+export async function deleteBrand(token: string, id: number): Promise<void> {
+  const res = await adminFetch(`${API_URL}/api/admin/academy/brands/${id}`, {
     method: "DELETE",
     headers: authHeaders(token),
   });
-  if (!res.ok) throw new Error("Failed to delete FAQ");
+  if (!res.ok) throw new Error("Failed to delete brand");
 }
 
-// ---------- Admin: featured shoots (homepage "Latest" grid) ----------
+export async function reorderBrands(token: string, ids_in_order: number[]): Promise<void> {
+  const res = await adminFetch(`${API_URL}/api/admin/academy/brands/reorder`, {
+    method: "POST",
+    headers: { ...authHeaders(token), "Content-Type": "application/json" },
+    body: JSON.stringify({ ids_in_order }),
+  });
+  if (!res.ok) throw new Error("Failed to reorder brands");
+}
 
 export async function getAdminFeaturedShoots(token: string): Promise<FeaturedShoot[]> {
   const res = await adminFetch(`${API_URL}/api/admin/featured-shoots`, { headers: authHeaders(token), cache: "no-store" });
@@ -691,45 +650,6 @@ export async function uploadFeaturedShootPhoto(token: string, id: number, file: 
 
 export async function deleteFeaturedShootPhoto(token: string, id: number): Promise<FeaturedShoot> {
   const res = await adminFetch(`${API_URL}/api/admin/featured-shoots/${id}/photo`, {
-    method: "DELETE",
-    headers: authHeaders(token),
-  });
-  if (!res.ok) throw new Error("Failed to remove photo");
-  return res.json();
-}
-
-// ---------- Admin: editorial albums (homepage "Editorial Stories" grid) ----------
-
-export async function getAdminEditorialAlbums(token: string): Promise<EditorialAlbum[]> {
-  const res = await adminFetch(`${API_URL}/api/admin/editorial-albums`, { headers: authHeaders(token), cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load editorial albums");
-  return res.json();
-}
-
-export async function updateEditorialAlbum(token: string, id: number, payload: { title?: string | null }): Promise<EditorialAlbum> {
-  const res = await adminFetch(`${API_URL}/api/admin/editorial-albums/${id}`, {
-    method: "PUT",
-    headers: { ...authHeaders(token), "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) throw new Error("Failed to update album");
-  return res.json();
-}
-
-export async function uploadEditorialPhotos(token: string, albumId: number, files: File[]): Promise<EditorialAlbum> {
-  const form = new FormData();
-  files.forEach((f) => form.append("files", f));
-  const res = await adminFetch(`${API_URL}/api/admin/editorial-albums/${albumId}/photos`, {
-    method: "POST",
-    headers: authHeaders(token),
-    body: form,
-  });
-  if (!res.ok) throw new Error("Failed to upload photos");
-  return res.json();
-}
-
-export async function deleteEditorialPhoto(token: string, albumId: number, photoId: number): Promise<EditorialAlbum> {
-  const res = await adminFetch(`${API_URL}/api/admin/editorial-albums/${albumId}/photos/${photoId}`, {
     method: "DELETE",
     headers: authHeaders(token),
   });

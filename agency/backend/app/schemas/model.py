@@ -25,7 +25,6 @@ class ModelBase(BaseModel):
     eyes: str | None = None
     hair: str | None = None
     is_published: bool = False
-    is_featured: bool = False
 
 
 class ModelCreate(ModelBase):
@@ -45,7 +44,6 @@ class ModelUpdate(BaseModel):
     eyes: str | None = None
     hair: str | None = None
     is_published: bool | None = None
-    is_featured: bool | None = None
 
 
 class ModelOut(ModelBase):
@@ -74,7 +72,6 @@ class ModelListOut(BaseModel):
     hair: str | None = None
     eyes: str | None = None
     is_published: bool
-    is_featured: bool
     cover_photo_url: str | None = None
 
 

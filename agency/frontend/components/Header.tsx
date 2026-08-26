@@ -1,37 +1,98 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Localized from "@/components/Localized";
 import LanguagePicker from "@/components/LanguagePicker";
 
-export default function Header() {
+export default function Header({
+  overlay = false,
+  academy = false,
+}: {
+  overlay?: boolean;
+  academy?: boolean;
+}) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!overlay) return;
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [overlay]);
+
+  // Transparent only while sitting over the hero video; once scrolled past it the
+  // solid bar comes back so the nav stays legible over light page content.
+  const clear = overlay && !scrolled;
+
   return (
-    <header className="sticky top-0 z-50 bg-paper/[0.82] backdrop-blur-md border-b border-hairline">
+    <header
+      className={`${overlay ? "fixed inset-x-0" : "sticky"} top-0 z-50 transition-colors duration-300 ${
+        clear
+          ? // Not a bar - a soft scrim so the nav stays legible over bright footage
+            // while the video still reads through it.
+            "bg-[linear-gradient(to_bottom,rgba(20,16,26,0.55),rgba(20,16,26,0.18)_60%,transparent)]"
+          : "bg-panel"
+      }`}
+    >
       <div className="flex items-center justify-between px-6 md:px-12 py-5">
-        <Link href="/" className="relative h-6 md:h-7 w-[110px] md:w-[130px]">
-          <Image src="/logo-wordmark.png" alt="bemodel" fill className="object-contain object-left" priority />
-        </Link>
-        <nav className="hidden md:flex items-center gap-9 eyebrow">
-          <Link href="/models?category=Model" className="hover:text-accent transition-colors">
-            <Localized en="Models" ru="Модели" />
+        {/* The wordmark always goes home, so "Academy" sits outside the link
+            rather than inside it. */}
+        <div className="flex items-center gap-2 md:gap-2.5">
+          <Link href="/" className="relative h-6 md:h-7 w-[110px] md:w-[130px] shrink-0">
+            <Image
+              src={clear ? "/logo-wordmark-light.png" : "/logo-wordmark.png"}
+              alt="bemodel"
+              fill
+              className="object-contain object-left"
+              priority
+            />
           </Link>
-          <Link href="/models?category=New+Faces" className="hover:text-accent transition-colors">
-            <Localized en="New Faces" ru="Новые лица" />
-          </Link>
-          <Link href="/academy" className="hover:text-accent transition-colors">
-            <Localized en="Academy" ru="Академия" />
-          </Link>
-          <Link href="/contact" className="hover:text-accent transition-colors">
-            <Localized en="Contact" ru="Контакты" />
-          </Link>
-        </nav>
-        <div className="flex items-center gap-5">
-          <LanguagePicker />
-          <Link
-            href="/apply"
-            className="border border-ink px-5 py-2.5 text-[10px] eyebrow hover:bg-ink hover:text-paper transition-colors"
-          >
-            <Localized en="Become a Model" ru="Стать моделью" />
-          </Link>
+          {academy && (
+            <span
+              className={`uppercase leading-none ${clear ? "text-paperText" : "text-ink"}`}
+              // Sized and tracked by eye against the wordmark artwork, which is a
+              // PNG and so can't simply share a class with it.
+              style={{
+                fontWeight: 200,
+                fontSize: "clamp(13px, 1.05vw, 16px)",
+                letterSpacing: "0.26em",
+                ...(clear ? { textShadow: "0 1px 14px rgba(0,0,0,0.85)" } : {}),
+              }}
+            >
+              <Localized en="Academy" ru="Академия" />
+            </span>
+          )}
+        </div>
+        <div
+          className={`flex items-center gap-6 md:gap-9 ${clear ? "text-paperText" : ""}`}
+          style={clear ? { textShadow: "0 1px 14px rgba(0,0,0,0.85)" } : undefined}
+        >
+          {/* Models / New Faces / Bemodel Academy live in the homepage hero stack,
+              so the top nav does not repeat them. */}
+          <nav className="hidden md:flex items-center gap-9 eyebrow">
+            <Link
+              href="/contact"
+              className={`transition-colors ${clear ? "hover:text-accentDeep" : "hover:text-accent"}`}
+            >
+              <Localized en="Contact" ru="Контакты" />
+            </Link>
+          </nav>
+          <div className="flex items-center gap-5">
+            <LanguagePicker overlay={clear} />
+            <Link
+              href="/apply"
+              className={`border px-5 py-2.5 text-[10px] eyebrow transition-colors ${
+                clear
+                  ? "border-paperText text-paperText hover:bg-paperText hover:text-ink"
+                  : "border-ink hover:bg-ink hover:text-paper"
+              }`}
+            >
+              <Localized en="Become a Model" ru="Стать моделью" />
+            </Link>
+          </div>
         </div>
       </div>
     </header>

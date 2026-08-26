@@ -11,9 +11,13 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   if (isAdmin) return <>{children}</>;
 
+  // Only the pages that open on a full-bleed hero video can carry a transparent
+  // header; every other route has a light background the nav would vanish into.
+  const overlay = pathname === "/" || pathname === "/academy";
+
   return (
     <LanguageProvider>
-      <Header />
+      <Header overlay={overlay} academy={pathname === "/academy"} />
       <main>{children}</main>
       <Footer />
     </LanguageProvider>

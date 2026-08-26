@@ -21,7 +21,6 @@ MAX_IMAGE_SIZE_MB = 15
 
 # Named settings image slots -> the SQLAlchemy column storing their storage key.
 IMAGE_SLOTS = {
-    "manifesto": "manifesto_image_key",
     "academy-about": "academy_about_image_key",
 }
 

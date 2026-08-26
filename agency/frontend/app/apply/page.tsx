@@ -60,26 +60,26 @@ export default function ApplyPage() {
 
   return (
     <div className="grid md:grid-cols-[0.85fr_1.15fr] min-h-[80vh]">
-      <div className="bg-ink text-mutedLight p-[clamp(48px,6vw,90px)]">
-        <p className="text-[11px] tracking-[0.28em] uppercase text-accentDeep mb-6">{t.contactShared.getInTouchEyebrow}</p>
-        <h2 className="font-display font-medium text-[clamp(36px,4vw,58px)] leading-[1.02] text-paper mb-10">
+      <div className="bg-panel text-inkSoft p-[clamp(48px,6vw,90px)]">
+        <p className="text-[11px] tracking-[0.28em] uppercase text-accent mb-6">{t.contactShared.getInTouchEyebrow}</p>
+        <h2 className="font-display font-medium text-[clamp(36px,4vw,58px)] leading-[1.02] text-ink mb-10">
           {t.apply.heading}
         </h2>
         <p className="font-light text-base leading-[1.8] max-w-[38ch] mb-11">{t.apply.intro}</p>
-        <div className="border-t border-paperText/[0.16] pt-6 space-y-6">
+        <div className="border-t border-ink/[0.16] pt-6 space-y-6">
           <div>
             <p className="eyebrow text-taupe mb-2">{t.contactShared.studio}</p>
-            <p className="font-display text-xl text-paper">{t.contactShared.studioLocation}</p>
+            <p className="font-display text-xl text-ink">{t.contactShared.studioLocation}</p>
           </div>
           <div>
             <p className="eyebrow text-taupe mb-2">{t.contactShared.email}</p>
-            <a href="mailto:bemodelagencyuz@gmail.com" className="text-base text-paper hover:text-accentDeep transition-colors">
+            <a href="mailto:bemodelagencyuz@gmail.com" className="text-base text-ink hover:text-accent transition-colors">
               bemodelagencyuz@gmail.com
             </a>
           </div>
           <div>
             <p className="eyebrow text-taupe mb-2">{t.contactShared.phone}</p>
-            <a href="tel:+998998748653" className="text-base text-paper hover:text-accentDeep transition-colors">
+            <a href="tel:+998998748653" className="text-base text-ink hover:text-accent transition-colors">
               +998 99 874 86 53
             </a>
           </div>
@@ -89,7 +89,7 @@ export default function ApplyPage() {
               href="https://www.instagram.com/bemodelagency/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-base text-paper hover:text-accentDeep transition-colors"
+              className="text-base text-ink hover:text-accent transition-colors"
             >
               @bemodelagency
             </a>
@@ -100,7 +100,7 @@ export default function ApplyPage() {
               href="https://t.me/bemodelagencyuz"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-base text-paper hover:text-accentDeep transition-colors"
+              className="text-base text-ink hover:text-accent transition-colors"
             >
               @bemodelagencyuz
             </a>

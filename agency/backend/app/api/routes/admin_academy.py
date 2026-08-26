@@ -1,27 +1,38 @@
+import io
 import os
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from PIL import Image, ImageOps
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_admin
 from app.db.database import get_db
-from app.models.model import AcademyLesson, AcademyFaq, AdminUser
+from app.models.model import AcademyLesson, AcademyBrand, AdminUser
 from app.schemas.academy import (
     AcademyLessonOut,
     AcademyLessonCreate,
     AcademyLessonUpdate,
-    AcademyFaqOut,
-    AcademyFaqCreate,
-    AcademyFaqUpdate,
+    AcademyBrandOut,
+    AcademyBrandUpdate,
     ReorderItems,
 )
-from app.services.serializers import academy_lesson_to_out, academy_faq_to_out
+from app.services.serializers import (
+    academy_lesson_to_out,
+    academy_brand_to_out,
+)
 from app.services.storage import storage
 
 router = APIRouter(prefix="/api/admin/academy", tags=["admin-academy"])
 
 ALLOWED_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 MAX_IMAGE_SIZE_MB = 15
+
+# Logos are normalised to a common height and keep their own width, the way a
+# printed logo sheet sets them. No padding canvas: a square badge and a wide
+# wordmark each keep their proportions and simply take up different widths.
+BRAND_TARGET_HEIGHT = 400
+# A logo far wider than it is tall would otherwise dominate the whole strip.
+BRAND_MAX_ASPECT = 5.0
 
 
 # ---------- Lessons ----------
@@ -121,69 +132,123 @@ def reorder_lessons(
     return {"detail": "Order updated"}
 
 
-# ---------- FAQs ----------
+# ---------- Brands ("where our graduates work" strip) ----------
 
 
-@router.get("/faqs", response_model=list[AcademyFaqOut])
-def list_faqs(db: Session = Depends(get_db), current_admin: AdminUser = Depends(get_current_admin)):
-    faqs = db.query(AcademyFaq).order_by(AcademyFaq.sort_order).all()
-    return [academy_faq_to_out(f) for f in faqs]
+def _normalise_brand_logo(contents: bytes, ext: str) -> tuple[bytes, int, int]:
+    """Trim a logo to its ink and scale it to a common height.
+
+    Returns the PNG bytes plus its dimensions, which get stored so the front end
+    can reserve the right width per logo without measuring images at runtime.
+    """
+    img = Image.open(io.BytesIO(contents))
+    img = ImageOps.exif_transpose(img)
+    img = img.convert("RGBA")
+
+    # Brand assets often ship with generous transparent padding baked in. Trim it
+    # first, or that padding becomes part of the logo's apparent size and it reads
+    # as too small next to a tightly-cropped neighbour.
+    bbox = img.getbbox()
+    if bbox:
+        img = img.crop(bbox)
+
+    height = BRAND_TARGET_HEIGHT
+    width = max(1, round(img.width * height / img.height))
+    max_width = round(height * BRAND_MAX_ASPECT)
+    if width > max_width:
+        # Extremely wide art: fit by width instead so it cannot swamp the strip.
+        width = max_width
+        height = max(1, round(img.height * width / img.width))
+
+    img = img.resize((width, height), Image.LANCZOS)
+
+    buf = io.BytesIO()
+    img.save(buf, format="PNG", optimize=True)
+    return buf.getvalue(), width, height
 
 
-@router.post("/faqs", response_model=AcademyFaqOut)
-def create_faq(
-    payload: AcademyFaqCreate,
+@router.get("/brands", response_model=list[AcademyBrandOut])
+def list_brands(db: Session = Depends(get_db), current_admin: AdminUser = Depends(get_current_admin)):
+    brands = db.query(AcademyBrand).order_by(AcademyBrand.sort_order).all()
+    return [academy_brand_to_out(b) for b in brands]
+
+
+@router.post("/brands", response_model=AcademyBrandOut)
+def create_brand(
+    file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(get_current_admin),
 ):
-    max_order = db.query(AcademyFaq).count()
-    faq = AcademyFaq(**payload.model_dump(), sort_order=max_order)
-    db.add(faq)
+    ext = os.path.splitext(file.filename or "")[1].lower()
+    if ext not in ALLOWED_IMAGE_EXTENSIONS:
+        raise HTTPException(status_code=400, detail=f"Unsupported file type '{ext}'.")
+    contents = file.file.read()
+    size_mb = len(contents) / (1024 * 1024)
+    if size_mb > MAX_IMAGE_SIZE_MB:
+        raise HTTPException(status_code=400, detail=f"File too large ({size_mb:.1f}MB). Max is {MAX_IMAGE_SIZE_MB}MB.")
+
+    try:
+        contents, width, height = _normalise_brand_logo(contents, ext)
+        ext = ".png"
+    except Exception:
+        raise HTTPException(status_code=400, detail="Could not read that image file.")
+
+    max_order = db.query(AcademyBrand).count()
+    brand = AcademyBrand(
+        name=os.path.splitext(file.filename or "")[0][:80] or None,
+        image_key=storage.save(contents, ext, prefix="brands/"),
+        width=width,
+        height=height,
+        sort_order=max_order,
+    )
+    db.add(brand)
     db.commit()
-    db.refresh(faq)
-    return academy_faq_to_out(faq)
+    db.refresh(brand)
+    return academy_brand_to_out(brand)
 
 
-@router.put("/faqs/{faq_id}", response_model=AcademyFaqOut)
-def update_faq(
-    faq_id: int,
-    payload: AcademyFaqUpdate,
+@router.put("/brands/{brand_id}", response_model=AcademyBrandOut)
+def update_brand(
+    brand_id: int,
+    payload: AcademyBrandUpdate,
     db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(get_current_admin),
 ):
-    faq = db.query(AcademyFaq).filter(AcademyFaq.id == faq_id).first()
-    if not faq:
-        raise HTTPException(status_code=404, detail="FAQ not found")
+    brand = db.query(AcademyBrand).filter(AcademyBrand.id == brand_id).first()
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand not found")
     for field, value in payload.model_dump(exclude_unset=True).items():
-        setattr(faq, field, value)
+        setattr(brand, field, value)
     db.commit()
-    db.refresh(faq)
-    return academy_faq_to_out(faq)
+    db.refresh(brand)
+    return academy_brand_to_out(brand)
 
 
-@router.delete("/faqs/{faq_id}")
-def delete_faq(
-    faq_id: int,
+@router.delete("/brands/{brand_id}")
+def delete_brand(
+    brand_id: int,
     db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(get_current_admin),
 ):
-    faq = db.query(AcademyFaq).filter(AcademyFaq.id == faq_id).first()
-    if not faq:
-        raise HTTPException(status_code=404, detail="FAQ not found")
-    db.delete(faq)
+    brand = db.query(AcademyBrand).filter(AcademyBrand.id == brand_id).first()
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand not found")
+    if brand.image_key:
+        storage.delete(brand.image_key)
+    db.delete(brand)
     db.commit()
-    return {"detail": "FAQ deleted"}
+    return {"detail": "Brand deleted"}
 
 
-@router.post("/faqs/reorder")
-def reorder_faqs(
+@router.post("/brands/reorder")
+def reorder_brands(
     payload: ReorderItems,
     db: Session = Depends(get_db),
     current_admin: AdminUser = Depends(get_current_admin),
 ):
-    faqs = {f.id: f for f in db.query(AcademyFaq).all()}
-    for index, faq_id in enumerate(payload.ids_in_order):
-        if faq_id in faqs:
-            faqs[faq_id].sort_order = index
+    brands = {b.id: b for b in db.query(AcademyBrand).all()}
+    for index, brand_id in enumerate(payload.ids_in_order):
+        if brand_id in brands:
+            brands[brand_id].sort_order = index
     db.commit()
     return {"detail": "Order updated"}

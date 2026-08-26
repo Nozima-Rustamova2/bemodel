@@ -6,21 +6,19 @@ from sqlalchemy.orm import Session
 from app.core.config import settings as app_settings
 from app.core.limiter import limiter
 from app.db.database import get_db
-from app.models.model import Model, PressPost, ScoutingSubmission, SiteSettings, AcademyLesson, AcademyFaq, FeaturedShoot, EditorialAlbum
+from app.models.model import Model, PressPost, ScoutingSubmission, SiteSettings, AcademyLesson, AcademyBrand, FeaturedShoot
 from app.schemas.model import ModelOut, ModelListOut
 from app.schemas.press import PressPostOut
 from app.schemas.settings import SiteSettingsOut
 from app.schemas.featured_shoot import FeaturedShootOut
-from app.schemas.editorial import EditorialAlbumOut
 from app.services.serializers import (
     model_to_out,
     model_to_list_out as _model_to_list_out,
     press_post_to_out,
     settings_to_out,
     academy_lesson_to_out,
-    academy_faq_to_out,
+    academy_brand_to_out,
     featured_shoot_to_out,
-    editorial_album_to_out,
 )
 from app.services.storage import storage
 from app.services.telegram import notify_new_scouting_submission
@@ -39,17 +37,6 @@ def list_models(category: str | None = None, db: Session = Depends(get_db)):
     if category:
         query = query.filter(Model.category == category)
     models = query.order_by(Model.sort_order, Model.name).all()
-    return [_model_to_list_out(m) for m in models]
-
-
-@router.get("/models/featured", response_model=list[ModelListOut])
-def featured_models(db: Session = Depends(get_db)):
-    models = (
-        db.query(Model)
-        .filter(Model.is_published == True, Model.is_featured == True)  # noqa: E712
-        .order_by(Model.sort_order)
-        .all()
-    )
     return [_model_to_list_out(m) for m in models]
 
 
@@ -100,21 +87,13 @@ def list_featured_shoots(db: Session = Depends(get_db)):
     ]
 
 
-@router.get("/editorial-albums", response_model=list[EditorialAlbumOut])
-def list_editorial_albums(db: Session = Depends(get_db)):
-    """The 5-slot 'Editorial Stories' homepage grid. Only returns albums that
-    have at least one photo, in slot order."""
-    albums = db.query(EditorialAlbum).order_by(EditorialAlbum.sort_order).all()
-    return [editorial_album_to_out(a) for a in albums if a.photos]
-
-
 @router.get("/academy")
 def get_academy(db: Session = Depends(get_db)):
     lessons = db.query(AcademyLesson).order_by(AcademyLesson.sort_order).all()
-    faqs = db.query(AcademyFaq).order_by(AcademyFaq.sort_order).all()
+    brands = db.query(AcademyBrand).order_by(AcademyBrand.sort_order).all()
     return {
         "lessons": [academy_lesson_to_out(l) for l in lessons],
-        "faqs": [academy_faq_to_out(f) for f in faqs],
+        "brands": [academy_brand_to_out(b) for b in brands],
     }
 
 
