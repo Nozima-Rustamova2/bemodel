@@ -106,6 +106,13 @@ class SiteSettings(Base):
     academy_sessions = Column(String, nullable=True)
     academy_cohort = Column(String, nullable=True)
     academy_about_image_key = Column(String, nullable=True)
+    # Backdrop for the homepage open-call band.
+    cta_image_key = Column(String, nullable=True)
+
+    # Company registration details, shown in the footer's Реквизиты panel.
+    # Free text rather than named columns: the fields differ by jurisdiction.
+    legal_details = Column(Text, nullable=True)
+    legal_details_ru = Column(Text, nullable=True)
     academy_about_title_ru = Column(String, nullable=True)
     academy_about_body1_ru = Column(Text, nullable=True)
     academy_about_body2_ru = Column(Text, nullable=True)

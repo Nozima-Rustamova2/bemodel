@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { getSiteSettings, getAcademy } from "@/lib/api";
+import Image from "next/image";
+import { getSiteSettings, getAcademy, assetUrl } from "@/lib/api";
+import { aboutCopy } from "@/lib/aboutCopy";
 import HeroVideo from "@/components/HeroVideo";
 import BrandMarquee from "@/components/BrandMarquee";
 import Localized from "@/components/Localized";
@@ -11,6 +13,8 @@ export default async function HomePage() {
     getSiteSettings().catch(() => null),
     getAcademy().catch(() => ({ lessons: [], brands: [] })),
   ]);
+
+  const about = aboutCopy(settings);
 
   return (
     <div>
@@ -56,17 +60,70 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="bg-panel text-ink text-center px-10 py-[clamp(72px,9vw,130px)]">
-        <p className="text-[11px] tracking-[0.28em] uppercase text-accent mb-6">
+      {/* About, in short. Same copy as the About page — edited once in the admin
+          panel — trimmed to the heading and opening paragraph, with the rest a
+          click away. */}
+      <section className="px-6 md:px-24 py-[clamp(64px,8vw,120px)] border-b border-hairline">
+        <div className="max-w-[820px] mx-auto text-center">
+          <p className="text-[15px] font-medium tracking-[0.24em] uppercase text-accent mb-6">
+            <Localized en={`About ${about.name}`} ru={dict.ru.about.aboutOf(about.name)} />
+          </p>
+          <h2 className="font-display font-light text-[clamp(24px,2.7vw,38px)] leading-[1.12] mb-7">
+            <Localized en={about.headingEn} ru={about.headingRu} />
+          </h2>
+          <p className="font-light text-lg leading-[1.85] text-inkSofter mb-5">
+            <Localized en={about.body1En} ru={about.body1Ru} />
+          </p>
+          <p className="font-light text-lg leading-[1.85] text-inkSofter mb-9">
+            <Localized en={about.body2En} ru={about.body2Ru} />
+          </p>
+          <Link
+            href="/about"
+            className="text-[11px] tracking-[0.18em] uppercase text-ink border-b border-ink/30 pb-1 hover:text-accent hover:border-accent transition-colors"
+          >
+            <Localized en={dict.en.home.moreAboutUs} ru={dict.ru.home.moreAboutUs} />
+          </Link>
+        </div>
+      </section>
+
+      {/* Open call. The photo is the whole band; without one it falls back to the
+          lavender panel so the section never turns up empty. */}
+      <section className="relative overflow-hidden bg-panel flex flex-col items-center justify-between text-center px-10 min-h-[clamp(430px,50vw,680px)] py-[clamp(38px,4.5vw,66px)]">
+        {settings?.cta_image_url && (
+          <>
+            <Image
+              src={assetUrl(settings.cta_image_url)}
+              alt=""
+              fill
+              sizes="100vw"
+              quality={90}
+              className="object-cover"
+            />
+            {/* Inline scrim: a band that silently lost its overlay would leave the
+                eyebrow and button unreadable over a bright photo. */}
+            <div
+              className="absolute inset-0"
+              style={{ backgroundColor: "rgba(20, 16, 26, 0.42)" }}
+            />
+          </>
+        )}
+
+        <p
+          className={`relative z-[1] text-[11px] tracking-[0.28em] uppercase ${
+            settings?.cta_image_url ? "text-paperText" : "text-accent"
+          }`}
+          style={settings?.cta_image_url ? { textShadow: "0 1px 18px rgba(0,0,0,0.5)" } : undefined}
+        >
           <Localized en={dict.en.home.openCall} ru={dict.ru.home.openCall} />
         </p>
-        <h2 className="font-display font-light text-[clamp(40px,6vw,84px)] leading-none max-w-[14ch] mx-auto mb-8">
-          <Localized en={dict.en.home.thinkYouHaveIt} ru={dict.ru.home.thinkYouHaveIt} />
-        </h2>
+
         <Link
           href="/apply"
-          className="inline-flex items-center gap-2.5 px-[34px] py-4 bg-ink text-paper text-[11px] eyebrow hover:bg-accent hover:text-paper transition-colors"
+          className={`relative z-[1] inline-flex items-center gap-2.5 px-[34px] py-4 text-[11px] eyebrow transition-colors ${
+            settings?.cta_image_url
+              ? "bg-paperText text-ink hover:bg-accent hover:text-paperText"
+              : "bg-ink text-paper hover:bg-accent hover:text-paper"
+          }`}
         >
           <Localized en={dict.en.home.becomeModelCta} ru={dict.ru.home.becomeModelCta} />
         </Link>

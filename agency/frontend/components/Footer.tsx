@@ -1,8 +1,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import Localized from "@/components/Localized";
+import FooterLegal from "@/components/FooterLegal";
 
-export default function Footer() {
+// Registration date of the agency, shown verbatim in the copyright line.
+const FOUNDED = "02.02.2022";
+
+export default function Footer({
+  legalEn = null,
+  legalRu = null,
+}: {
+  legalEn?: string | null;
+  legalRu?: string | null;
+}) {
   return (
     <footer className="bg-panel text-inkSoft">
       <div className="grid md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 px-6 md:px-12 pt-14 md:pt-20 pb-14 border-b border-ink/[0.14]">
@@ -82,20 +92,15 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="flex justify-between flex-wrap gap-3 px-6 md:px-12 py-6 text-[11px] text-taupe">
+      <div className="flex justify-between flex-wrap gap-3 px-6 md:px-12 py-7 text-[14px] text-taupe">
         <span>
           <Localized
-            en={`© ${new Date().getFullYear()} bemodel — All rights reserved`}
-            ru={`© ${new Date().getFullYear()} bemodel — Все права защищены`}
+            en={`${FOUNDED} © bemodel — All rights reserved`}
+            ru={`${FOUNDED} © bemodel — Все права защищены`}
           />
         </span>
         <div className="flex gap-4">
-          <span>
-            <Localized en="Terms · Privacy · Model Rights" ru="Условия · Конфиденциальность · Права моделей" />
-          </span>
-          <a href="/admin/login" className="hover:text-ink transition-colors">
-            <Localized en="Staff Login" ru="Вход для персонала" />
-          </a>
+          <FooterLegal en={legalEn} ru={legalRu} />
         </div>
       </div>
     </footer>

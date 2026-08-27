@@ -5,7 +5,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/lib/language";
 
-export default function SiteChrome({ children }: { children: React.ReactNode }) {
+export default function SiteChrome({
+  children,
+  legalEn = null,
+  legalRu = null,
+}: {
+  children: React.ReactNode;
+  legalEn?: string | null;
+  legalRu?: string | null;
+}) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
 
@@ -19,7 +27,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     <LanguageProvider>
       <Header overlay={overlay} academy={pathname === "/academy"} />
       <main>{children}</main>
-      <Footer />
+      <Footer legalEn={legalEn} legalRu={legalRu} />
     </LanguageProvider>
   );
 }

@@ -22,6 +22,7 @@ MAX_IMAGE_SIZE_MB = 15
 # Named settings image slots -> the SQLAlchemy column storing their storage key.
 IMAGE_SLOTS = {
     "academy-about": "academy_about_image_key",
+    "cta": "cta_image_key",
 }
 
 # Named settings video slots -> (video key column, poster key column).

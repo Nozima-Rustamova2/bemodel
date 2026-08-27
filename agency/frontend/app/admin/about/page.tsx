@@ -67,6 +67,26 @@ export default function AdminAboutPage() {
           />
         </div>
       </div>
+
+      <div className={`${card} p-[22px] mt-5`} style={cardStyle}>
+        <div className={sectionLabel} style={sectionLabelStyle}>
+          Реквизиты
+        </div>
+        <p className="text-[11px] mb-3.5 max-w-[520px]" style={{ color: colors.text }}>
+          Юридические данные компании — название, ИНН, адрес и всё остальное, что нужно указать.
+          Открываются по ссылке «Реквизиты» внизу сайта. Пока поле пустое, ссылка не показывается.
+          Переносы строк сохраняются.
+        </p>
+        <AdminBilingualField
+          labelText="Текст реквизитов"
+          enValue={settings.legal_details ?? ""}
+          ruValue={settings.legal_details_ru ?? ""}
+          onSaveEn={(v) => saveField({ legal_details: v })}
+          onSaveRu={(v) => saveField({ legal_details_ru: v })}
+          multiline
+          rows={7}
+        />
+      </div>
     </div>
   );
 }

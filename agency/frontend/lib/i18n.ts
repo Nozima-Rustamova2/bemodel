@@ -23,8 +23,6 @@ export interface Dict {
     contactHeader: string;
     social: string;
     location: string;
-    terms: string;
-    staffLogin: string;
     copyright: (year: number) => string;
   };
   stats: {
@@ -47,8 +45,8 @@ export interface Dict {
     heroAcademy: string;
     heroAbout: string;
     brandsHeading: string;
+    moreAboutUs: string;
     openCall: string;
-    thinkYouHaveIt: string;
     becomeModelCta: string;
   };
   about: {
@@ -129,6 +127,10 @@ export interface Dict {
     previousPhoto: string;
     nextPhoto: string;
   };
+  legal: {
+    heading: string;
+    detailsDefault: string;
+  };
 }
 
 const en: Dict = {
@@ -147,8 +149,6 @@ const en: Dict = {
     contactHeader: "Contact",
     social: "Social",
     location: "Tashkent, Uzbekistan",
-    terms: "Terms · Privacy · Model Rights",
-    staffLogin: "Staff Login",
     copyright: (year) => `© ${year} bemodel — All rights reserved`,
   },
   stats: {
@@ -171,8 +171,8 @@ const en: Dict = {
     heroAcademy: "Bemodel Academy",
     heroAbout: "About us",
     brandsHeading: "Our clients and partners",
+    moreAboutUs: "More about us",
     openCall: "Open call",
-    thinkYouHaveIt: "Think you have it?",
     becomeModelCta: "Become a Model →",
   },
   about: {
@@ -260,6 +260,19 @@ const en: Dict = {
     previousPhoto: "Previous photo",
     nextPhoto: "Next photo",
   },
+  legal: {
+    heading: "Legal details",
+    detailsDefault: [
+      "BEMODEL-AGENCY LLC",
+      "Registered: 02.02.2022",
+      "Address: Tashkent, Uzbekistan",
+      "Account: 20208000605487573001",
+      "Bank: ANOR BANK JSC",
+      "MFO: 01183",
+      "TIN: 309256347",
+      "Phone: +998 99 874 86 53",
+    ].join("\n"),
+  },
 };
 
 const ru: Dict = {
@@ -278,8 +291,6 @@ const ru: Dict = {
     contactHeader: "Контакты",
     social: "Соцсети",
     location: "Ташкент, Узбекистан",
-    terms: "Условия · Конфиденциальность · Права моделей",
-    staffLogin: "Вход для персонала",
     copyright: (year) => `© ${year} bemodel — Все права защищены`,
   },
   stats: {
@@ -302,12 +313,12 @@ const ru: Dict = {
     heroAcademy: "Академия Bemodel",
     heroAbout: "О нас",
     brandsHeading: "Наши клиенты и партнёры",
+    moreAboutUs: "Подробнее о нас",
     openCall: "Открытый кастинг",
-    thinkYouHaveIt: "Думаешь, у тебя есть то, что нужно?",
     becomeModelCta: "Стать моделью →",
   },
   about: {
-    aboutOf: (name) => `О ${name}`,
+    aboutOf: (name) => `Об ${name}`,
     headingDefault: "Небольшая команда, глобальный охват и много заботы.",
     body1Default: (name, city) =>
       `Мы основали ${name} в ${city}, руководствуясь простым убеждением: талант заслуживает внимания, а не строчки в таблице. Мы намеренно держим небольшой ростер, чтобы развивать каждую модель лично — от первых дигиталов до международных контрактов.`,
@@ -390,6 +401,19 @@ const ru: Dict = {
     close: "Закрыть",
     previousPhoto: "Предыдущее фото",
     nextPhoto: "Следующее фото",
+  },
+  legal: {
+    heading: "Реквизиты",
+    detailsDefault: [
+      "ООО «BEMODEL-AGENCY»",
+      "Дата регистрации: 02.02.2022",
+      "Адрес: г. Ташкент",
+      "р/с: 20208000605487573001",
+      "Банк: ЧАКБ АО «ANOR BANK»",
+      "МФО: 01183",
+      "ИНН: 309256347",
+      "Телефон: +998 99 874 86 53",
+    ].join("\n"),
   },
 };
 

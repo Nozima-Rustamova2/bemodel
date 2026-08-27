@@ -133,6 +133,7 @@ def settings_to_out(settings_row: SiteSettings) -> SiteSettingsOut:
         academy_hero_video_url=storage.get_url(settings_row.academy_hero_video_key) if settings_row.academy_hero_video_key else None,
         academy_hero_poster_url=storage.get_url(settings_row.academy_hero_poster_key) if settings_row.academy_hero_poster_key else None,
         academy_about_image_url=storage.get_url(settings_row.academy_about_image_key) if settings_row.academy_about_image_key else None,
+        cta_image_url=storage.get_url(settings_row.cta_image_key) if settings_row.cta_image_key else None,
         brand_name=settings_row.brand_name,
         brand_city=settings_row.brand_city,
         about_heading=settings_row.about_heading,
@@ -150,6 +151,8 @@ def settings_to_out(settings_row: SiteSettings) -> SiteSettingsOut:
         academy_about_title_ru=settings_row.academy_about_title_ru,
         academy_about_body1_ru=settings_row.academy_about_body1_ru,
         academy_about_body2_ru=settings_row.academy_about_body2_ru,
+        legal_details=settings_row.legal_details,
+        legal_details_ru=settings_row.legal_details_ru,
     )
 
 

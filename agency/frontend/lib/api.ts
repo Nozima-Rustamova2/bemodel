@@ -41,6 +41,7 @@ export interface SiteSettings {
   academy_hero_video_url: string | null;
   academy_hero_poster_url: string | null;
   academy_about_image_url: string | null;
+  cta_image_url: string | null;
 
   brand_name: string | null;
   brand_city: string | null;
@@ -63,6 +64,9 @@ export interface SiteSettings {
   academy_about_title_ru: string | null;
   academy_about_body1_ru: string | null;
   academy_about_body2_ru: string | null;
+
+  legal_details: string | null;
+  legal_details_ru: string | null;
 }
 
 export interface FeaturedShoot {
@@ -483,7 +487,7 @@ export async function deleteSettingsVideo(token: string, slot: SettingsVideoSlot
   return res.json();
 }
 
-export type SettingsImageSlot = "academy-about";
+export type SettingsImageSlot = "academy-about" | "cta";
 
 export async function uploadSettingsImage(token: string, slot: SettingsImageSlot, file: File): Promise<SiteSettings> {
   const form = new FormData();

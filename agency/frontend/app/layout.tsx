@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
+import { getSiteSettings } from "@/lib/api";
 
 // One family across the whole site — headings and body alike.
 // Cyrillic is named explicitly: most of the site's copy is Russian, and leaving
@@ -19,11 +20,17 @@ export const metadata: Metadata = {
   description: "A boutique modeling agency representing women and new faces.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Fetched here rather than in the footer so the Реквизиты link is present in
+  // the first render instead of appearing after a client fetch settles.
+  const settings = await getSiteSettings().catch(() => null);
+
   return (
     <html lang="en" className={montserrat.variable}>
       <body className="font-body antialiased bg-paper text-ink">
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome legalEn={settings?.legal_details ?? null} legalRu={settings?.legal_details_ru ?? null}>
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );

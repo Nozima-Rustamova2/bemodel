@@ -7,9 +7,12 @@ import {
   updateAdminSettings,
   uploadHeroVideo,
   deleteHeroVideo,
+  uploadSettingsImage,
+  deleteSettingsImage,
   assetUrl,
   SiteSettings,
 } from "@/lib/api";
+import AdminPhotoSlot from "@/components/AdminPhotoSlot";
 import {
   card,
   cardStyle,
@@ -34,6 +37,16 @@ export default function AdminHomepagePage() {
       .then(setSettings)
       .finally(() => setLoading(false));
   }, [token]);
+
+  async function handleCtaImageUpload(file: File) {
+    if (!token) return;
+    setSettings(await uploadSettingsImage(token, "cta", file));
+  }
+
+  async function handleCtaImageRemove() {
+    if (!token) return;
+    setSettings(await deleteSettingsImage(token, "cta"));
+  }
 
   async function saveField(patch: Partial<SiteSettings>) {
     if (!token) return;
@@ -73,7 +86,7 @@ export default function AdminHomepagePage() {
     <div>
       <div className="text-2xl font-semibold mb-1">Главная страница</div>
       <div className="text-sm mb-7" style={{ color: colors.text }}>
-        Видео на главной странице.
+        Видео на главной странице и фон блока «Открытый кастинг».
       </div>
 
       <div className={`${card} p-[22px] mb-5`} style={cardStyle}>
@@ -114,6 +127,26 @@ export default function AdminHomepagePage() {
               </p>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className={`${card} p-[22px]`} style={cardStyle}>
+        <div className={sectionLabel} style={sectionLabelStyle}>
+          Фон блока «Открытый кастинг»
+        </div>
+        <p className="text-[11px] mb-3 max-w-[320px]" style={{ color: colors.text }}>
+          Широкое фото на всю ширину экрана. Поверх него ложатся надпись «Открытый кастинг»
+          и кнопка, поэтому лучше подойдёт снимок без важных деталей по центру.
+          Без фото блок остаётся сиреневым.
+        </p>
+        <div className="w-[260px]">
+          <AdminPhotoSlot
+            url={settings.cta_image_url}
+            label="Перетащите фото для фона"
+            aspectClass="aspect-[16/9]"
+            onUpload={handleCtaImageUpload}
+            onRemove={settings.cta_image_url ? handleCtaImageRemove : undefined}
+          />
         </div>
       </div>
     </div>
