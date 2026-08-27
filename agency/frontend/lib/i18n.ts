@@ -46,6 +46,7 @@ export interface Dict {
     heroNewFaces: string;
     heroAcademy: string;
     heroAbout: string;
+    brandsHeading: string;
     openCall: string;
     thinkYouHaveIt: string;
     becomeModelCta: string;
@@ -169,6 +170,7 @@ const en: Dict = {
     heroNewFaces: "New Faces",
     heroAcademy: "Bemodel Academy",
     heroAbout: "About us",
+    brandsHeading: "Our clients and partners",
     openCall: "Open call",
     thinkYouHaveIt: "Think you have it?",
     becomeModelCta: "Become a Model →",
@@ -299,6 +301,7 @@ const ru: Dict = {
     heroNewFaces: "Новые лица",
     heroAcademy: "Академия Bemodel",
     heroAbout: "О нас",
+    brandsHeading: "Наши клиенты и партнёры",
     openCall: "Открытый кастинг",
     thinkYouHaveIt: "Думаешь, у тебя есть то, что нужно?",
     becomeModelCta: "Стать моделью →",
@@ -313,11 +316,11 @@ const ru: Dict = {
   },
   academy: {
     applyToAcademy: "Подать заявку в академию →",
-    brandsHeading: "С кем работают наши выпускники",
+    brandsHeading: "С кем работают наши выпускницы",
     aboutTitleEyebrow: "Об академии",
     aboutHeadingDefault: "Настоящее образование, а не просто фотосессия.",
     aboutBody1Default: (name) =>
-      `Академия ${name} проводит небольшие группы через всё, что нужно новой модели, — от первого волнительного прохода до уверенного кастинга. В каждом потоке не более двенадцати человек, чтобы каждому ученику досталось настоящее внимание.`,
+      `Академия ${name} проводит небольшие группы через всё, что нужно новой модели, — от первого волнительного прохода до уверенного кастинга. В каждом потоке не более двенадцати человек, чтобы каждой ученице досталось настоящее внимание.`,
     aboutBody2Default:
       "Занятия ведут наши букеры вместе с приглашёнными фотографами и стилистами, а курс завершается полноценной портфолио-съёмкой, которая останется у вас.",
     weeks: "Недель",

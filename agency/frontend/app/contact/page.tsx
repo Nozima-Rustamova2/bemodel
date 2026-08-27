@@ -29,7 +29,7 @@ export default function ContactPage() {
       <p className="text-[11px] tracking-[0.28em] uppercase text-accent mb-6">
         {t.contactShared.getInTouchEyebrow}
       </p>
-      <h2 className="font-display font-medium text-[clamp(36px,5vw,72px)] leading-[1.02] text-ink mb-8">
+      <h2 className="font-display font-light text-[clamp(36px,5vw,72px)] leading-[1.02] text-ink mb-8">
         {t.contact.heading}
       </h2>
       <p className="font-light text-base leading-[1.8] max-w-[52ch] mb-14">{t.contact.intro}</p>

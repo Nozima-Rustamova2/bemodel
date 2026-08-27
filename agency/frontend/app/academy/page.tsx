@@ -56,7 +56,7 @@ export default async function AcademyPage() {
       {/* Where our graduates work */}
       {academy.brands.length > 0 && (
         <section className="bg-bgAlt border-b border-hairline py-[clamp(40px,5vw,68px)]">
-          <h2 className="text-center font-display font-medium text-[clamp(22px,2.4vw,32px)] leading-none mb-[clamp(26px,3vw,42px)] px-6">
+          <h2 className="text-center font-display font-light text-[clamp(30px,3.4vw,50px)] leading-none mb-[clamp(30px,3.4vw,48px)] px-6">
             <Localized en={dict.en.academy.brandsHeading} ru={dict.ru.academy.brandsHeading} />
           </h2>
           <BrandMarquee brands={academy.brands} />
@@ -69,7 +69,7 @@ export default async function AcademyPage() {
           <p className="eyebrow text-accent mb-5">
             <Localized en={dict.en.academy.aboutTitleEyebrow} ru={dict.ru.academy.aboutTitleEyebrow} />
           </p>
-          <h2 className="font-display font-medium text-[clamp(32px,3.8vw,52px)] leading-[1.06] mb-6">
+          <h2 className="font-display font-light text-[clamp(32px,3.8vw,52px)] leading-[1.06] mb-6">
             <Localized en={aboutTitleEn} ru={aboutTitleRu} />
           </h2>
           <p className="font-light text-base leading-[1.8] text-inkSoft max-w-lg mb-4">
@@ -102,7 +102,7 @@ export default async function AcademyPage() {
           <p className="eyebrow text-accent mb-3.5">
             <Localized en={dict.en.academy.curriculumEyebrow} ru={dict.ru.academy.curriculumEyebrow} />
           </p>
-          <h2 className="font-display font-medium text-[clamp(34px,4.2vw,58px)] leading-none">
+          <h2 className="font-display font-light text-[clamp(34px,4.2vw,58px)] leading-none">
             <Localized en={dict.en.academy.insideLessons} ru={dict.ru.academy.insideLessons} />
           </h2>
         </div>
@@ -123,7 +123,7 @@ export default async function AcademyPage() {
                   )}
                 </div>
                 <div>
-                  <h3 className="font-display font-medium text-[23px] mb-1.5">
+                  <h3 className="font-display font-light text-[23px] mb-1.5">
                     <Localized en={lesson.title} ru={lesson.title_ru || lesson.title} />
                   </h3>
                   {lesson.note && (

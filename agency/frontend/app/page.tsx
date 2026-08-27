@@ -1,11 +1,16 @@
 import Link from "next/link";
-import { getSiteSettings } from "@/lib/api";
+import { getSiteSettings, getAcademy } from "@/lib/api";
 import HeroVideo from "@/components/HeroVideo";
+import BrandMarquee from "@/components/BrandMarquee";
 import Localized from "@/components/Localized";
 import { dict } from "@/lib/i18n";
 
 export default async function HomePage() {
-  const settings = await getSiteSettings().catch(() => null);
+  // Same brand list the academy strip runs on — one place to upload them.
+  const [settings, academy] = await Promise.all([
+    getSiteSettings().catch(() => null),
+    getAcademy().catch(() => ({ lessons: [], brands: [] })),
+  ]);
 
   return (
     <div>
@@ -41,12 +46,21 @@ export default async function HomePage() {
         </div>
       </HeroVideo>
 
+      {academy.brands.length > 0 && (
+        <section className="bg-bgAlt border-b border-hairline py-[clamp(40px,5vw,68px)]">
+          <h2 className="text-center font-display font-light text-[clamp(30px,3.4vw,50px)] leading-none mb-[clamp(30px,3.4vw,48px)] px-6">
+            <Localized en={dict.en.home.brandsHeading} ru={dict.ru.home.brandsHeading} />
+          </h2>
+          <BrandMarquee brands={academy.brands} />
+        </section>
+      )}
+
       {/* CTA */}
       <section className="bg-panel text-ink text-center px-10 py-[clamp(72px,9vw,130px)]">
         <p className="text-[11px] tracking-[0.28em] uppercase text-accent mb-6">
           <Localized en={dict.en.home.openCall} ru={dict.ru.home.openCall} />
         </p>
-        <h2 className="font-display font-medium text-[clamp(40px,6vw,84px)] leading-none max-w-[14ch] mx-auto mb-8">
+        <h2 className="font-display font-light text-[clamp(40px,6vw,84px)] leading-none max-w-[14ch] mx-auto mb-8">
           <Localized en={dict.en.home.thinkYouHaveIt} ru={dict.ru.home.thinkYouHaveIt} />
         </h2>
         <Link

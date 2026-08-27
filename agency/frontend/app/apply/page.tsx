@@ -62,7 +62,7 @@ export default function ApplyPage() {
     <div className="grid md:grid-cols-[0.85fr_1.15fr] min-h-[80vh]">
       <div className="bg-panel text-inkSoft p-[clamp(48px,6vw,90px)]">
         <p className="text-[11px] tracking-[0.28em] uppercase text-accent mb-6">{t.contactShared.getInTouchEyebrow}</p>
-        <h2 className="font-display font-medium text-[clamp(36px,4vw,58px)] leading-[1.02] text-ink mb-10">
+        <h2 className="font-display font-light text-[clamp(36px,4vw,58px)] leading-[1.02] text-ink mb-10">
           {t.apply.heading}
         </h2>
         <p className="font-light text-base leading-[1.8] max-w-[38ch] mb-11">{t.apply.intro}</p>
@@ -112,7 +112,7 @@ export default function ApplyPage() {
         {submitted ? (
           <div className="min-h-[50vh] flex flex-col justify-center animate-fade-up">
             <p className="eyebrow text-accent mb-5">{t.contactShared.received}</p>
-            <h2 className="font-display font-medium text-[clamp(36px,4vw,58px)] leading-[1.05] mb-5">
+            <h2 className="font-display font-light text-[clamp(36px,4vw,58px)] leading-[1.05] mb-5">
               {t.contact.thankYouTitle}
             </h2>
             <p className="font-light text-base leading-[1.8] text-inkSoft max-w-[44ch] mb-8">

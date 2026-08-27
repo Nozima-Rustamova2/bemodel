@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  variable: "--font-cormorant",
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const jost = Jost({
-  subsets: ["latin"],
-  variable: "--font-jost",
-  // 200 is here to match the thin weight of the BEMODEL wordmark artwork.
+// One family across the whole site — headings and body alike.
+// Cyrillic is named explicitly: most of the site's copy is Russian, and leaving
+// it to chance is how the headings end up in a system fallback.
+const montserrat = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-montserrat",
+  // 200 matches the thin weight of the BEMODEL wordmark artwork; 300 carries the
+  // large display headings, which read blunt in a geometric sans at 500.
   weight: ["200", "300", "400", "500"],
 });
 
@@ -24,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${jost.variable}`}>
+    <html lang="en" className={montserrat.variable}>
       <body className="font-body antialiased bg-paper text-ink">
         <SiteChrome>{children}</SiteChrome>
       </body>

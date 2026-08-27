@@ -29,7 +29,7 @@ export default async function AboutPage() {
         <p className="text-[11px] tracking-[0.28em] uppercase text-accent mb-6">
           <Localized en={`About ${name}`} ru={dict.ru.about.aboutOf(name)} />
         </p>
-        <h1 className="font-display font-medium text-[clamp(40px,5.5vw,80px)] leading-[1.02] mb-10">
+        <h1 className="font-display font-light text-[clamp(40px,5.5vw,80px)] leading-[1.02] mb-10">
           <Localized en={headingEn} ru={headingRu} />
         </h1>
         <p className="font-light text-lg leading-[1.85] text-inkSofter mb-5">

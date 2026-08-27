@@ -27,7 +27,7 @@ export default async function RosterPage({
           <p className="eyebrow text-accent mb-3.5">
             <Localized en={dict.en.roster.eyebrow(models.length)} ru={dict.ru.roster.eyebrow(models.length)} />
           </p>
-          <h1 className="font-display font-medium text-[clamp(46px,6vw,84px)] leading-none">
+          <h1 className="font-display font-light text-[clamp(46px,6vw,84px)] leading-none">
             <Localized en={activeTab?.labelEn ?? activeCategory} ru={activeTab?.labelRu ?? activeCategory} />
           </h1>
         </div>

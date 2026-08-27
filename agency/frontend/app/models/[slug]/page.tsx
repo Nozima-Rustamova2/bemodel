@@ -71,7 +71,7 @@ export default async function ModelDetailPage({
         </div>
 
         <div className="md:order-1 flex flex-col items-center justify-center text-center px-6 py-[clamp(40px,5vw,72px)]">
-          <h1 className="font-display font-medium text-[clamp(46px,4.6vw,72px)] leading-[0.98] mb-7">
+          <h1 className="font-display font-light text-[clamp(46px,4.6vw,72px)] leading-[0.98] mb-7">
             {model.name}
           </h1>
 

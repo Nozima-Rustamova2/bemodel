@@ -21,8 +21,10 @@ const config: Config = {
         polaroid: "#FDFCFF",
       },
       fontFamily: {
-        display: ["var(--font-cormorant)", "serif"],
-        body: ["var(--font-jost)", "sans-serif"],
+        // Both roles resolve to the same family; the distinction now lives in
+        // weight and letter-spacing rather than in two different typefaces.
+        display: ["var(--font-montserrat)", "system-ui", "sans-serif"],
+        body: ["var(--font-montserrat)", "system-ui", "sans-serif"],
         mono: ["'Courier New'", "monospace"],
       },
       letterSpacing: {

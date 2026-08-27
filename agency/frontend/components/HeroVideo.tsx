@@ -32,7 +32,7 @@ export default function HeroVideo({
       <section className="bg-ink text-paperText px-6 md:px-24 pt-32 pb-20 md:pt-40 md:pb-28 border-b border-hairline">
         {eyebrow && <p className="eyebrow text-accentDeep mb-6">{eyebrow}</p>}
         {headline && (
-          <h1 className="font-display font-medium text-[clamp(40px,7vw,100px)] leading-[0.97] max-w-4xl">
+          <h1 className="font-display font-light text-[clamp(40px,7vw,100px)] leading-[0.97] max-w-4xl">
             {headline}
           </h1>
         )}
@@ -65,7 +65,7 @@ export default function HeroVideo({
         )}
         {headline && (
           <h1
-            className="font-display font-medium text-[clamp(52px,8vw,120px)] leading-[0.94] tracking-[-0.015em] text-paperText max-w-3xl"
+            className="font-display font-light text-[clamp(52px,8vw,120px)] leading-[0.94] tracking-[-0.015em] text-paperText max-w-3xl"
             style={{ textShadow: "0 2px 40px rgba(0,0,0,0.25)" }}
           >
             {headline}
