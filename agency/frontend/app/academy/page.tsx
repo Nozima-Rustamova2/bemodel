@@ -56,7 +56,8 @@ export default async function AcademyPage() {
       {/* Where our graduates work */}
       {academy.brands.length > 0 && (
         <section className="bg-bgAlt border-b border-hairline py-[clamp(40px,5vw,68px)]">
-          <h2 className="text-center font-display font-light text-[clamp(30px,3.4vw,50px)] leading-none mb-[clamp(30px,3.4vw,48px)] px-6">
+          <h2 className="text-center font-display uppercase tracking-[0.04em] text-[clamp(18px,1.9vw,28px)] leading-none mb-[clamp(26px,3vw,42px)] px-6"
+            style={{ fontWeight: 280 }}>
             <Localized en={dict.en.academy.brandsHeading} ru={dict.ru.academy.brandsHeading} />
           </h2>
           <BrandMarquee brands={academy.brands} />

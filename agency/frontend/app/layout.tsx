@@ -9,9 +9,9 @@ import SiteChrome from "@/components/SiteChrome";
 const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
   variable: "--font-montserrat",
-  // 200 matches the thin weight of the BEMODEL wordmark artwork; 300 carries the
-  // large display headings, which read blunt in a geometric sans at 500.
-  weight: ["200", "300", "400", "500"],
+  // Loaded as the variable font rather than a fixed ladder of weights: the brand
+  // strip headings sit at 280, which no static instance provides. One file
+  // covers 100-900, so this is also fewer bytes than the four statics were.
 });
 
 export const metadata: Metadata = {
