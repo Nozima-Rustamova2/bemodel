@@ -9,10 +9,12 @@ import {
   uploadPhotos,
   deletePhoto,
   setCoverPhoto,
+  reorderPhotos,
   ModelDetail,
 } from "@/lib/api";
 import AdminModelFormFields, { ModelDraft } from "@/components/AdminModelFormFields";
 import AdminPhotoSlot from "@/components/AdminPhotoSlot";
+import AdminPhotoManager from "@/components/AdminPhotoManager";
 import {
   card,
   cardStyle,
@@ -25,13 +27,9 @@ import {
   secondaryBtnStyle,
 } from "@/lib/adminTheme";
 
-const PORTFOLIO_SLOTS = 8;
-const POLAROID_SLOTS = 4;
-
 function draftFromModel(m: ModelDetail): ModelDraft {
   return {
     name: m.name,
-    city: m.city || "",
     category: m.category,
     height: m.height || "",
     bust: m.bust || "",
@@ -88,26 +86,11 @@ export default function EditModelPage() {
     );
 
   const cover = model.photos.find((p) => p.is_cover) || model.photos[0];
-  const rest = model.photos.filter((p) => p.id !== cover?.id);
-  const portfolio = rest.slice(0, PORTFOLIO_SLOTS);
-  const polaroids = rest.slice(PORTFOLIO_SLOTS, PORTFOLIO_SLOTS + POLAROID_SLOTS);
-  const portfolioLabels = [
-    "Портрет",
-    "В полный рост",
-    "Редакционное",
-    "Крупный план",
-    "Образ 5",
-    "Образ 6",
-    "Образ 7",
-    "Образ 8",
-  ];
-  const polaroidLabels = ["Анфас", "Профиль", "В полный рост", "Улыбка"];
-
-  async function uploadAndRefresh(file: File) {
-    if (!token) return;
-    await uploadPhotos(token, modelId, [file]);
-    await refresh();
-  }
+  // The cover carries the top of the model's page; everything else is portfolio,
+  // in whatever order it is arranged here.
+  const portfolio = model.photos
+    .filter((p) => p.id !== cover?.id)
+    .sort((a, b) => a.sort_order - b.sort_order);
 
   async function uploadAsCover(file: File) {
     if (!token) return;
@@ -116,16 +99,33 @@ export default function EditModelPage() {
     await refresh();
   }
 
-  async function replaceSlot(existingId: number | undefined, file: File) {
+  async function addPortfolioPhotos(files: File[]) {
     if (!token) return;
-    if (existingId) await deletePhoto(token, modelId, existingId);
-    await uploadPhotos(token, modelId, [file]);
+    await uploadPhotos(token, modelId, files);
     await refresh();
   }
 
   async function removePhoto(photoId: number) {
     if (!token) return;
     await deletePhoto(token, modelId, photoId);
+    await refresh();
+  }
+
+  async function makeCover(photoId: number) {
+    if (!token) return;
+    await setCoverPhoto(token, modelId, photoId);
+    await refresh();
+  }
+
+  async function movePhoto(photoId: number, direction: -1 | 1) {
+    if (!token || !model) return;
+    const ids = portfolio.map((p) => p.id);
+    const from = ids.indexOf(photoId);
+    const to = from + direction;
+    if (from < 0 || to < 0 || to >= ids.length) return;
+    [ids[from], ids[to]] = [ids[to], ids[from]];
+    // The cover leads the stored order so it keeps sorting ahead of the rest.
+    await reorderPhotos(token, modelId, cover ? [cover.id, ...ids] : ids);
     await refresh();
   }
 
@@ -161,12 +161,17 @@ export default function EditModelPage() {
         <div className="flex flex-col gap-[18px]">
           <div className={`${card} p-[22px]`} style={cardStyle}>
             <div className={sectionLabel} style={sectionLabelStyle}>
-              Фото карточки
+              Главное фото
             </div>
+            <p className="text-[11px] mb-3" style={{ color: colors.text }}>
+              Показывается только на странице модели, квадратом на половину экрана.
+              В ростере карточка листает первые два фото портфолио.
+            </p>
             <div className="w-40">
               <AdminPhotoSlot
                 url={cover?.url}
-                label="Перетащите фото карточки"
+                label="Перетащите главное фото"
+                aspectClass="aspect-square"
                 onUpload={uploadAsCover}
                 onRemove={cover ? () => removePhoto(cover.id) : undefined}
               />
@@ -175,36 +180,19 @@ export default function EditModelPage() {
 
           <div className={`${card} p-[22px]`} style={cardStyle}>
             <div className={sectionLabel} style={sectionLabelStyle}>
-              Портфолио ({PORTFOLIO_SLOTS} фото)
+              Портфолио ({portfolio.length} фото)
             </div>
-            <div className="grid grid-cols-4 gap-3">
-              {Array.from({ length: PORTFOLIO_SLOTS }, (_, i) => (
-                <AdminPhotoSlot
-                  key={i}
-                  url={portfolio[i]?.url}
-                  label={portfolioLabels[i]}
-                  onUpload={(file) => replaceSlot(portfolio[i]?.id, file)}
-                  onRemove={portfolio[i] ? () => removePhoto(portfolio[i].id) : undefined}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className={`${card} p-[22px]`} style={cardStyle}>
-            <div className={sectionLabel} style={sectionLabelStyle}>
-              Полароиды / дигиталы ({POLAROID_SLOTS} фото)
-            </div>
-            <div className="grid grid-cols-4 gap-2.5">
-              {Array.from({ length: POLAROID_SLOTS }, (_, i) => (
-                <AdminPhotoSlot
-                  key={i}
-                  url={polaroids[i]?.url}
-                  label={polaroidLabels[i]}
-                  onUpload={(file) => replaceSlot(polaroids[i]?.id, file)}
-                  onRemove={polaroids[i] ? () => removePhoto(polaroids[i].id) : undefined}
-                />
-              ))}
-            </div>
+            <p className="text-[11px] mb-3" style={{ color: colors.text }}>
+              Без ограничения по количеству. Порядок здесь — порядок в ленте на странице модели.
+              ★ — сделать фото карточки, ← → — переставить.
+            </p>
+            <AdminPhotoManager
+              photos={portfolio}
+              onUpload={addPortfolioPhotos}
+              onRemove={removePhoto}
+              onMove={movePhoto}
+              onSetCover={makeCover}
+            />
           </div>
         </div>
       </div>

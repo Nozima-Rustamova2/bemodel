@@ -31,6 +31,8 @@ def model_to_out(model: Model) -> ModelOut:
             url=storage.get_url(p.filename),
             is_cover=p.is_cover,
             sort_order=p.sort_order,
+            width=p.width,
+            height=p.height,
         )
         for p in sorted(model.photos, key=lambda p: p.sort_order)
     ]
@@ -40,7 +42,6 @@ def model_to_out(model: Model) -> ModelOut:
         slug=model.slug,
         name=model.name,
         category=model.category,
-        city=model.city,
         bio=model.bio,
         height=model.height,
         bust=model.bust,
@@ -56,6 +57,20 @@ def model_to_out(model: Model) -> ModelOut:
     )
 
 
+# The roster card swaps between the first two portfolio photos on hover, so two
+# is all it needs — no reason to ship the whole portfolio with the listing.
+ROSTER_PREVIEW_PHOTOS = 2
+
+
+def model_portfolio_photos(model: Model):
+    """Everything but the cover, in sort order.
+
+    The cover is the model page's main photo and does not appear on the roster,
+    so the card previews start at the first portfolio shot.
+    """
+    return [p for p in sorted(model.photos, key=lambda p: p.sort_order) if not p.is_cover]
+
+
 def model_cover_url(model: Model) -> str | None:
     cover = next((p for p in model.photos if p.is_cover), None)
     if not cover and model.photos:
@@ -69,7 +84,6 @@ def model_to_list_out(model: Model) -> ModelListOut:
         slug=model.slug,
         name=model.name,
         category=model.category,
-        city=model.city,
         height=model.height,
         bust=model.bust,
         waist=model.waist,
@@ -79,6 +93,9 @@ def model_to_list_out(model: Model) -> ModelListOut:
         eyes=model.eyes,
         is_published=model.is_published,
         cover_photo_url=model_cover_url(model),
+        preview_photo_urls=[
+            storage.get_url(p.filename) for p in model_portfolio_photos(model)[:ROSTER_PREVIEW_PHOTOS]
+        ],
     )
 
 
@@ -121,21 +138,9 @@ def settings_to_out(settings_row: SiteSettings) -> SiteSettingsOut:
         about_heading=settings_row.about_heading,
         about_body1=settings_row.about_body1,
         about_body2=settings_row.about_body2,
-        about_step1_title=settings_row.about_step1_title,
-        about_step1_body=settings_row.about_step1_body,
-        about_step2_title=settings_row.about_step2_title,
-        about_step2_body=settings_row.about_step2_body,
-        about_step3_title=settings_row.about_step3_title,
-        about_step3_body=settings_row.about_step3_body,
         about_heading_ru=settings_row.about_heading_ru,
         about_body1_ru=settings_row.about_body1_ru,
         about_body2_ru=settings_row.about_body2_ru,
-        about_step1_title_ru=settings_row.about_step1_title_ru,
-        about_step1_body_ru=settings_row.about_step1_body_ru,
-        about_step2_title_ru=settings_row.about_step2_title_ru,
-        about_step2_body_ru=settings_row.about_step2_body_ru,
-        about_step3_title_ru=settings_row.about_step3_title_ru,
-        about_step3_body_ru=settings_row.about_step3_body_ru,
         academy_about_title=settings_row.academy_about_title,
         academy_about_body1=settings_row.academy_about_body1,
         academy_about_body2=settings_row.academy_about_body2,

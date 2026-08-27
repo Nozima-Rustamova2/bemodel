@@ -10,12 +10,13 @@ class PhotoOut(BaseModel):
     url: str
     is_cover: bool
     sort_order: int
+    width: int | None = None
+    height: int | None = None
 
 
 class ModelBase(BaseModel):
     name: str
     category: str
-    city: str | None = None
     bio: str | None = None
     height: str | None = None
     bust: str | None = None
@@ -34,7 +35,6 @@ class ModelCreate(ModelBase):
 class ModelUpdate(BaseModel):
     name: str | None = None
     category: str | None = None
-    city: str | None = None
     bio: str | None = None
     height: str | None = None
     bust: str | None = None
@@ -63,7 +63,6 @@ class ModelListOut(BaseModel):
     slug: str
     name: str
     category: str
-    city: str | None = None
     height: str | None = None
     bust: str | None = None
     waist: str | None = None
@@ -73,6 +72,9 @@ class ModelListOut(BaseModel):
     eyes: str | None = None
     is_published: bool
     cover_photo_url: str | None = None
+    # First few photos, cover first — the roster card cycles through these on
+    # hover, so it needs more than the cover alone.
+    preview_photo_urls: list[str] = []
 
 
 class ReorderPhotos(BaseModel):

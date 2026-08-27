@@ -13,12 +13,6 @@ COLUMNS_TO_ADD = [
     ("site_settings", "about_heading", "VARCHAR"),
     ("site_settings", "about_body1", "TEXT"),
     ("site_settings", "about_body2", "TEXT"),
-    ("site_settings", "about_step1_title", "VARCHAR"),
-    ("site_settings", "about_step1_body", "TEXT"),
-    ("site_settings", "about_step2_title", "VARCHAR"),
-    ("site_settings", "about_step2_body", "TEXT"),
-    ("site_settings", "about_step3_title", "VARCHAR"),
-    ("site_settings", "about_step3_body", "TEXT"),
     ("site_settings", "academy_about_title", "VARCHAR"),
     ("site_settings", "academy_about_body1", "TEXT"),
     ("site_settings", "academy_about_body2", "TEXT"),
@@ -32,12 +26,6 @@ COLUMNS_TO_ADD = [
     ("site_settings", "about_heading_ru", "VARCHAR"),
     ("site_settings", "about_body1_ru", "TEXT"),
     ("site_settings", "about_body2_ru", "TEXT"),
-    ("site_settings", "about_step1_title_ru", "VARCHAR"),
-    ("site_settings", "about_step1_body_ru", "TEXT"),
-    ("site_settings", "about_step2_title_ru", "VARCHAR"),
-    ("site_settings", "about_step2_body_ru", "TEXT"),
-    ("site_settings", "about_step3_title_ru", "VARCHAR"),
-    ("site_settings", "about_step3_body_ru", "TEXT"),
     ("site_settings", "academy_about_title_ru", "VARCHAR"),
     ("site_settings", "academy_about_body1_ru", "TEXT"),
     ("site_settings", "academy_about_body2_ru", "TEXT"),
@@ -46,6 +34,8 @@ COLUMNS_TO_ADD = [
     ("scouting_submissions", "source", "VARCHAR"),
     ("academy_brands", "width", "INTEGER"),
     ("academy_brands", "height", "INTEGER"),
+    ("photos", "width", "INTEGER"),
+    ("photos", "height", "INTEGER"),
 ]
 
 
@@ -61,3 +51,44 @@ def run_additive_migrations():
             print(f"Migrated: added {table}.{column}")
         except OperationalError:
             pass  # column already exists
+
+    _backfill_photo_dimensions()
+
+
+def _backfill_photo_dimensions():
+    """Fill in width/height for photos uploaded before those columns existed.
+
+    The portfolio strip lays each photo out at a shared height and its own
+    natural width; without dimensions it has to guess a ratio. Runs once —
+    after the first pass there are no rows left to select. Reads each file back
+    out of storage, so a photo whose file has gone missing is simply skipped.
+    """
+    from PIL import Image
+    import io
+
+    from app.db.database import SessionLocal
+    from app.models.model import Photo
+    from app.services.storage import storage
+
+    db = SessionLocal()
+    try:
+        pending = db.query(Photo).filter(Photo.width.is_(None)).all()
+        if not pending:
+            return
+        filled = 0
+        for photo in pending:
+            contents = storage.read(photo.filename)
+            if not contents:
+                continue
+            try:
+                photo.width, photo.height = Image.open(io.BytesIO(contents)).size
+                filled += 1
+            except Exception:
+                continue
+        db.commit()
+        print(f"Migrated: backfilled dimensions for {filled}/{len(pending)} photos")
+    except Exception as exc:  # never let a backfill stop the app from booting
+        db.rollback()
+        print(f"Photo dimension backfill skipped: {exc}")
+    finally:
+        db.close()

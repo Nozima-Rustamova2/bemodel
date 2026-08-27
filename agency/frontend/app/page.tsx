@@ -26,6 +26,7 @@ export default async function HomePage() {
                 ru: dict.ru.home.heroNewFaces,
               },
               { href: "/academy", en: dict.en.home.heroAcademy, ru: dict.ru.home.heroAcademy },
+              { href: "/about", en: dict.en.home.heroAbout, ru: dict.ru.home.heroAbout },
             ].map((item) => (
               <Link
                 key={item.href}

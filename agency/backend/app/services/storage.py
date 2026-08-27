@@ -14,6 +14,11 @@ class StorageBackend:
     def get_url(self, key: str) -> str:
         raise NotImplementedError
 
+    def read(self, key: str) -> bytes | None:
+        """Fetch a stored object back. Returns None if it is gone — callers are
+        backfills and repair jobs, for which a missing file is not fatal."""
+        raise NotImplementedError
+
 
 class LocalStorage(StorageBackend):
     """Disk-backed storage for local dev. Files live under settings.UPLOAD_DIR
@@ -33,6 +38,13 @@ class LocalStorage(StorageBackend):
 
     def get_url(self, key: str) -> str:
         return f"/static/uploads/{key}"
+
+    def read(self, key: str) -> bytes | None:
+        path = os.path.join(settings.UPLOAD_DIR, key)
+        if not os.path.exists(path):
+            return None
+        with open(path, "rb") as f:
+            return f.read()
 
 
 class R2Storage(StorageBackend):
@@ -77,6 +89,12 @@ class R2Storage(StorageBackend):
 
     def get_url(self, key: str) -> str:
         return f"{self.public_base_url}/{key}"
+
+    def read(self, key: str) -> bytes | None:
+        try:
+            return self.client.get_object(Bucket=self.bucket, Key=key)["Body"].read()
+        except Exception:
+            return None
 
 
 def _build_storage() -> StorageBackend:

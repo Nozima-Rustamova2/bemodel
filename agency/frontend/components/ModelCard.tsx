@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ModelListItem, assetUrl } from "@/lib/api";
@@ -8,29 +9,59 @@ import { useLanguage } from "@/lib/language";
 export default function ModelCard({ model }: { model: ModelListItem }) {
   const { t } = useLanguage();
 
+  // Fall back to the cover alone for anything the API returned without a
+  // preview list, so a card always has at least one frame to draw.
+  const photos =
+    model.preview_photo_urls?.length > 0
+      ? model.preview_photo_urls
+      : model.cover_photo_url
+        ? [model.cover_photo_url]
+        : [];
+
+  const [first, second] = photos;
+  const [hovered, setHovered] = useState(false);
+
   return (
     <div className="flex flex-col gap-3">
-      <Link href={`/models/${model.slug}`} className="group block relative aspect-[3/4] overflow-hidden bg-placeholder">
-        {model.cover_photo_url ? (
-          <Image
-            src={assetUrl(model.cover_photo_url)}
-            alt={model.name}
-            fill
-            sizes="(max-width: 768px) 50vw, 25vw"
-            quality={90}
-            className="object-cover"
-          />
+      <Link
+        href={`/models/${model.slug}`}
+        className="group block relative aspect-[3/4] overflow-hidden bg-placeholder"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {first ? (
+          <>
+            <Image
+              src={assetUrl(first)}
+              alt={model.name}
+              fill
+              sizes="(max-width: 768px) 50vw, 25vw"
+              quality={90}
+              priority
+              className="object-cover"
+            />
+            {/* The second photo sits on top and fades in on hover. Both are in
+                the DOM from the start so the swap has nothing to wait for. */}
+            {second && (
+              <Image
+                src={assetUrl(second)}
+                alt=""
+                aria-hidden
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                quality={90}
+                className="object-cover transition-opacity duration-500"
+                style={{ opacity: hovered ? 1 : 0 }}
+              />
+            )}
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-taupe text-sm">
             {t.modelCard.noPhoto}
           </div>
         )}
 
-        {/* Dim on hover. Sits above the photo but below the name so the name
-            stays at full strength rather than dimming with the image. */}
-        <div className="absolute inset-0 bg-ink/0 transition-colors duration-500 group-hover:bg-ink/25" />
-
-        {model.cover_photo_url && (
+        {first && (
           <>
             {/* A gradient only along the bottom edge: enough to hold the name
                 against a light photo without greying out the whole frame. */}
@@ -46,8 +77,6 @@ export default function ModelCard({ model }: { model: ModelListItem }) {
           </>
         )}
       </Link>
-
-      {model.city && <p className="mono-caption">{model.city}</p>}
     </div>
   );
 }

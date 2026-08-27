@@ -40,13 +40,12 @@ export interface Dict {
     portrait: string;
     fullLength: string;
     profile: string;
-    front: string;
-    smile: string;
   };
   home: {
     heroModels: string;
     heroNewFaces: string;
     heroAcademy: string;
+    heroAbout: string;
     openCall: string;
     thinkYouHaveIt: string;
     becomeModelCta: string;
@@ -56,12 +55,6 @@ export interface Dict {
     headingDefault: string;
     body1Default: (name: string, city: string) => string;
     body2Default: string;
-    step1TitleDefault: string;
-    step1BodyDefault: string;
-    step2TitleDefault: string;
-    step2BodyDefault: string;
-    step3TitleDefault: string;
-    step3BodyDefault: string;
   };
   academy: {
     applyToAcademy: string;
@@ -124,8 +117,8 @@ export interface Dict {
     backToRoster: string;
     portfolio: string;
     noPhotosYet: string;
-    polaroidsDigitals: string;
-    polaroidNote: string;
+    prev: string;
+    next: string;
   };
   modelCard: {
     noPhoto: string;
@@ -170,13 +163,12 @@ const en: Dict = {
     portrait: "Portrait",
     fullLength: "Full length",
     profile: "Profile",
-    front: "Front",
-    smile: "Smile",
   },
   home: {
     heroModels: "Models",
     heroNewFaces: "New Faces",
     heroAcademy: "Bemodel Academy",
+    heroAbout: "About us",
     openCall: "Open call",
     thinkYouHaveIt: "Think you have it?",
     becomeModelCta: "Become a Model →",
@@ -188,15 +180,6 @@ const en: Dict = {
       `We founded ${name} in ${city} with a simple conviction: talent deserves attention, not a spreadsheet. We keep our roster intentionally small so every model is developed personally — from the first digitals to international placement.`,
     body2Default:
       "Today we represent women and new faces working in editorial, campaign, runway and digital, placed across Europe, Asia and the Middle East through a trusted partner network.",
-    step1TitleDefault: "Scouting",
-    step1BodyDefault:
-      "We find faces with something the camera can't invent — and we develop them slowly, properly.",
-    step2TitleDefault: "Development",
-    step2BodyDefault:
-      "Tests, coaching, portfolio and digitals — everything a career needs before the first booking.",
-    step3TitleDefault: "Placement",
-    step3BodyDefault:
-      "Direct clients and partner agencies worldwide, matched to each model's strengths and pace.",
   },
   academy: {
     applyToAcademy: "Apply to the Academy →",
@@ -264,8 +247,8 @@ const en: Dict = {
     backToRoster: "← Back to roster",
     portfolio: "Portfolio",
     noPhotosYet: "No photos yet.",
-    polaroidsDigitals: "Polaroids · Digitals",
-    polaroidNote: "Unretouched, natural light — measurements confirmed on the day.",
+    prev: "Prev",
+    next: "Next",
   },
   modelCard: {
     noPhoto: "No photo",
@@ -310,13 +293,12 @@ const ru: Dict = {
     portrait: "Портрет",
     fullLength: "В полный рост",
     profile: "Профиль",
-    front: "Анфас",
-    smile: "Улыбка",
   },
   home: {
     heroModels: "Модели",
     heroNewFaces: "Новые лица",
     heroAcademy: "Академия Bemodel",
+    heroAbout: "О нас",
     openCall: "Открытый кастинг",
     thinkYouHaveIt: "Думаешь, у тебя есть то, что нужно?",
     becomeModelCta: "Стать моделью →",
@@ -328,15 +310,6 @@ const ru: Dict = {
       `Мы основали ${name} в ${city}, руководствуясь простым убеждением: талант заслуживает внимания, а не строчки в таблице. Мы намеренно держим небольшой ростер, чтобы развивать каждую модель лично — от первых дигиталов до международных контрактов.`,
     body2Default:
       "Сегодня мы представляем женщин и новые лица, работающие в editorial, рекламе, на подиуме и в digital — размещая таланты по Европе, Азии и Ближнему Востоку через проверенную партнёрскую сеть.",
-    step1TitleDefault: "Скаутинг",
-    step1BodyDefault:
-      "Мы находим лица с тем, что невозможно придумать перед камерой, — и развиваем их постепенно и правильно.",
-    step2TitleDefault: "Развитие",
-    step2BodyDefault:
-      "Тестовые съёмки, коучинг, портфолио и дигиталы — всё, что нужно карьере перед первым букингом.",
-    step3TitleDefault: "Размещение",
-    step3BodyDefault:
-      "Прямые клиенты и партнёрские агентства по всему миру — подбираем с учётом сильных сторон и темпа каждой модели.",
   },
   academy: {
     applyToAcademy: "Подать заявку в академию →",
@@ -404,8 +377,8 @@ const ru: Dict = {
     backToRoster: "← Назад к ростеру",
     portfolio: "Портфолио",
     noPhotosYet: "Пока нет фото.",
-    polaroidsDigitals: "Полароиды · Дигиталы",
-    polaroidNote: "Без ретуши, при естественном свете — параметры подтверждены в день съёмки.",
+    prev: "Назад",
+    next: "Вперёд",
   },
   modelCard: {
     noPhoto: "Нет фото",

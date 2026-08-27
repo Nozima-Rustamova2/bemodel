@@ -10,21 +10,9 @@ class SiteSettingsUpdate(BaseModel):
     about_heading: str | None = None
     about_body1: str | None = None
     about_body2: str | None = None
-    about_step1_title: str | None = None
-    about_step1_body: str | None = None
-    about_step2_title: str | None = None
-    about_step2_body: str | None = None
-    about_step3_title: str | None = None
-    about_step3_body: str | None = None
     about_heading_ru: str | None = None
     about_body1_ru: str | None = None
     about_body2_ru: str | None = None
-    about_step1_title_ru: str | None = None
-    about_step1_body_ru: str | None = None
-    about_step2_title_ru: str | None = None
-    about_step2_body_ru: str | None = None
-    about_step3_title_ru: str | None = None
-    about_step3_body_ru: str | None = None
 
     academy_about_title: str | None = None
     academy_about_body1: str | None = None
@@ -53,21 +41,9 @@ class SiteSettingsOut(BaseModel):
     about_heading: str | None = None
     about_body1: str | None = None
     about_body2: str | None = None
-    about_step1_title: str | None = None
-    about_step1_body: str | None = None
-    about_step2_title: str | None = None
-    about_step2_body: str | None = None
-    about_step3_title: str | None = None
-    about_step3_body: str | None = None
     about_heading_ru: str | None = None
     about_body1_ru: str | None = None
     about_body2_ru: str | None = None
-    about_step1_title_ru: str | None = None
-    about_step1_body_ru: str | None = None
-    about_step2_title_ru: str | None = None
-    about_step2_body_ru: str | None = None
-    about_step3_title_ru: str | None = None
-    about_step3_body_ru: str | None = None
 
     academy_about_title: str | None = None
     academy_about_body1: str | None = None

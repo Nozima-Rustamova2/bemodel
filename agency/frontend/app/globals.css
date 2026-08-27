@@ -78,3 +78,14 @@ body {
     animation: none;
   }
 }
+
+/* Horizontal strips carry their own Prev/Next controls, so the native bar is
+   just a grey line under the photos. Scrolling by wheel/trackpad still works. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

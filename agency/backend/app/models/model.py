@@ -48,6 +48,10 @@ class Photo(Base):
     filename = Column(String, nullable=False)
     is_cover = Column(Boolean, default=False)
     sort_order = Column(Integer, default=0)
+    # Dimensions of the processed file, so the portfolio strip can reserve each
+    # photo's true width at a shared height without measuring it at runtime.
+    width = Column(Integer, nullable=True)
+    height = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     model = relationship("Model", back_populates="photos")
@@ -91,21 +95,9 @@ class SiteSettings(Base):
     about_heading = Column(String, nullable=True)
     about_body1 = Column(Text, nullable=True)
     about_body2 = Column(Text, nullable=True)
-    about_step1_title = Column(String, nullable=True)
-    about_step1_body = Column(Text, nullable=True)
-    about_step2_title = Column(String, nullable=True)
-    about_step2_body = Column(Text, nullable=True)
-    about_step3_title = Column(String, nullable=True)
-    about_step3_body = Column(Text, nullable=True)
     about_heading_ru = Column(String, nullable=True)
     about_body1_ru = Column(Text, nullable=True)
     about_body2_ru = Column(Text, nullable=True)
-    about_step1_title_ru = Column(String, nullable=True)
-    about_step1_body_ru = Column(Text, nullable=True)
-    about_step2_title_ru = Column(String, nullable=True)
-    about_step2_body_ru = Column(Text, nullable=True)
-    about_step3_title_ru = Column(String, nullable=True)
-    about_step3_body_ru = Column(Text, nullable=True)
 
     academy_about_title = Column(String, nullable=True)
     academy_about_body1 = Column(Text, nullable=True)

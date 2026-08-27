@@ -105,7 +105,7 @@ export default function AdminModelsListPage() {
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium">{model.name}</div>
                   <div className="text-xs" style={{ color: colors.text }}>
-                    {model.city || "—"} · {model.category === "Model" ? "Модель" : "Новое лицо"}
+                    {model.category === "Model" ? "Модель" : "Новое лицо"}
                   </div>
                 </div>
                 <button

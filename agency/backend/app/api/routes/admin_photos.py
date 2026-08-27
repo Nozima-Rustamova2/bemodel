@@ -18,7 +18,9 @@ MAX_FILE_SIZE_MB = 30  # raised so full-resolution originals are not rejected
 MAX_DIMENSION = 3200  # resize anything larger than this, longest side
 
 
-def _process_and_save(upload: UploadFile) -> str:
+def _process_and_save(upload: UploadFile) -> tuple[str, int | None, int | None]:
+    """Returns (storage key, width, height). Dimensions come back None only when
+    Pillow could not open the file and the original bytes were stored as-is."""
     ext = os.path.splitext(upload.filename or "")[1].lower()
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(
@@ -35,6 +37,8 @@ def _process_and_save(upload: UploadFile) -> str:
 
     # Re-orient (EXIF) and downscale in memory, then hand the bytes to the
     # storage backend (local disk or R2) — never touches the filesystem directly.
+    width: int | None = None
+    height: int | None = None
     try:
         img = Image.open(io.BytesIO(contents))
         img = ImageOps.exif_transpose(img)
@@ -45,6 +49,7 @@ def _process_and_save(upload: UploadFile) -> str:
         if longest > MAX_DIMENSION:
             scale = MAX_DIMENSION / longest
             img = img.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+        width, height = img.size
         buf = io.BytesIO()
         save_format = "JPEG" if ext in (".jpg", ".jpeg") else (img.format or "PNG")
         img.save(buf, format=save_format, quality=92, optimize=True, subsampling=0)
@@ -53,7 +58,7 @@ def _process_and_save(upload: UploadFile) -> str:
         # If Pillow can't process it for any reason, keep the original bytes as-is
         pass
 
-    return storage.save(contents, ext, prefix="photos/")
+    return storage.save(contents, ext, prefix="photos/"), width, height
 
 
 @router.post("", response_model=list[PhotoOut])
@@ -71,13 +76,15 @@ def upload_photos(
     max_order = max([p.sort_order for p in model.photos], default=-1)
     created = []
     for i, upload in enumerate(files):
-        filename = _process_and_save(upload)
+        filename, width, height = _process_and_save(upload)
         is_first_ever = not model.photos and i == 0
         photo = Photo(
             model_id=model.id,
             filename=filename,
             sort_order=max_order + 1 + i,
             is_cover=is_first_ever,
+            width=width,
+            height=height,
         )
         db.add(photo)
         model.photos.append(photo)
@@ -88,7 +95,15 @@ def upload_photos(
         db.refresh(p)
 
     return [
-        PhotoOut(id=p.id, filename=p.filename, url=storage.get_url(p.filename), is_cover=p.is_cover, sort_order=p.sort_order)
+        PhotoOut(
+            id=p.id,
+            filename=p.filename,
+            url=storage.get_url(p.filename),
+            is_cover=p.is_cover,
+            sort_order=p.sort_order,
+            width=p.width,
+            height=p.height,
+        )
         for p in created
     ]
 

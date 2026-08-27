@@ -15,6 +15,10 @@ export interface Photo {
   url: string;
   is_cover: boolean;
   sort_order: number;
+  // Dimensions of the stored file. Null on photos uploaded before the backend
+  // started recording them and whose file could not be re-read.
+  width: number | null;
+  height: number | null;
 }
 
 export interface PressPost {
@@ -46,21 +50,9 @@ export interface SiteSettings {
   about_heading: string | null;
   about_body1: string | null;
   about_body2: string | null;
-  about_step1_title: string | null;
-  about_step1_body: string | null;
-  about_step2_title: string | null;
-  about_step2_body: string | null;
-  about_step3_title: string | null;
-  about_step3_body: string | null;
   about_heading_ru: string | null;
   about_body1_ru: string | null;
   about_body2_ru: string | null;
-  about_step1_title_ru: string | null;
-  about_step1_body_ru: string | null;
-  about_step2_title_ru: string | null;
-  about_step2_body_ru: string | null;
-  about_step3_title_ru: string | null;
-  about_step3_body_ru: string | null;
 
   academy_about_title: string | null;
   academy_about_body1: string | null;
@@ -128,7 +120,6 @@ export interface ModelListItem {
   slug: string;
   name: string;
   category: string;
-  city: string | null;
   height: string | null;
   bust: string | null;
   waist: string | null;
@@ -138,6 +129,8 @@ export interface ModelListItem {
   eyes: string | null;
   is_published: boolean;
   cover_photo_url: string | null;
+  // Cover first, then the next few photos — the roster card cycles these on hover.
+  preview_photo_urls: string[];
 }
 
 export interface ModelDetail {
@@ -145,7 +138,6 @@ export interface ModelDetail {
   slug: string;
   name: string;
   category: string;
-  city: string | null;
   bio: string | null;
   height: string | null;
   bust: string | null;

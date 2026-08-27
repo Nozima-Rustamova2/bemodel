@@ -4,7 +4,6 @@ import { card, cardStyle, sectionLabel, sectionLabelStyle, label, labelStyle, in
 
 export interface ModelDraft {
   name: string;
-  city: string;
   category: string;
   height: string;
   bust: string;
@@ -20,7 +19,6 @@ export interface ModelDraft {
 export function emptyDraft(): ModelDraft {
   return {
     name: "",
-    city: "",
     category: "Model",
     height: "",
     bust: "",
@@ -73,8 +71,7 @@ export default function AdminModelFormFields({
           <div className="col-span-2">
             <Field labelText="Имя" value={draft.name} onChange={(v) => set("name", v)} />
           </div>
-          <Field labelText="Город" value={draft.city} onChange={(v) => set("city", v)} />
-          <div className="flex flex-col gap-1.5">
+          <div className="col-span-2 flex flex-col gap-1.5">
             <label className={label} style={labelStyle}>
               Категория
             </label>
