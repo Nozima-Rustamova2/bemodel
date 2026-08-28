@@ -24,9 +24,6 @@ export default async function RosterPage({
     <div className="px-6 md:px-24 py-[clamp(48px,6vw,84px)]">
       <div className="flex items-end justify-between flex-wrap gap-6 mb-11 border-b border-hairline pb-[30px]">
         <div>
-          <p className="eyebrow text-accent mb-3.5">
-            <Localized en={dict.en.roster.eyebrow(models.length)} ru={dict.ru.roster.eyebrow(models.length)} />
-          </p>
           <h1 className="font-display font-light text-[clamp(46px,6vw,84px)] leading-none">
             <Localized en={activeTab?.labelEn ?? activeCategory} ru={activeTab?.labelRu ?? activeCategory} />
           </h1>

@@ -43,7 +43,7 @@ export default async function ModelDetailPage({
     <div className="pt-[clamp(24px,3vw,40px)]">
       <div className="px-6 md:px-24 mb-[clamp(16px,2vw,28px)]">
         <Link href="/models" className="text-[11px] tracking-[0.18em] uppercase text-inkSoft">
-          <Localized en={dict.en.modelDetail.backToRoster} ru={dict.ru.modelDetail.backToRoster} />
+          <Localized en={dict.en.modelDetail.back} ru={dict.ru.modelDetail.back} />
         </Link>
       </div>
 

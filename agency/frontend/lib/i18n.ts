@@ -1,13 +1,5 @@
 export type Lang = "en" | "ru";
 
-function ruPlural(n: number, one: string, few: string, many: string): string {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return one;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
-  return many;
-}
-
 export interface Dict {
   nav: {
     models: string;
@@ -110,11 +102,10 @@ export interface Dict {
     submitApplication: string;
   };
   roster: {
-    eyebrow: (count: number) => string;
     noModelsInCategory: string;
   };
   modelDetail: {
-    backToRoster: string;
+    back: string;
     portfolio: string;
     noPhotosYet: string;
     prev: string;
@@ -180,7 +171,7 @@ const en: Dict = {
     aboutOf: (name) => `About ${name}`,
     headingDefault: "A small board, a global reach, and a lot of care.",
     body1Default: (name, city) =>
-      `We founded ${name} in ${city} with a simple conviction: talent deserves attention, not a spreadsheet. We keep our roster intentionally small so every model is developed personally — from the first digitals to international placement.`,
+      `We founded ${name} in ${city} with a simple conviction: every model deserves attention, not a line in a spreadsheet. We work with a deliberately small group so each one is developed personally — from the first digitals to international placement.`,
     body2Default:
       "Today we represent women and new faces working in editorial, campaign, runway and digital, placed across Europe, Asia and the Middle East through a trusted partner network.",
   },
@@ -217,7 +208,7 @@ const en: Dict = {
     heading: "Contact",
     intro:
       "Questions, bookings, press or partnership enquiries — send us a note and we'll get back to you shortly.",
-    joinInstead: "Looking to join the roster instead?",
+    joinInstead: "Looking to join us instead?",
     applyLink: "Apply to become a model →",
     thankYouTitle: "Thank you. We'll be in touch.",
     thankYouBody: "Your message is with our team. We'll reply as soon as we can.",
@@ -244,11 +235,10 @@ const en: Dict = {
     submitApplication: "Submit application →",
   },
   roster: {
-    eyebrow: (count) => `Roster · ${count} talents`,
     noModelsInCategory: "No models in this category yet.",
   },
   modelDetail: {
-    backToRoster: "← Back to roster",
+    back: "← Back",
     portfolio: "Portfolio",
     noPhotosYet: "No photos yet.",
     prev: "Prev",
@@ -323,9 +313,9 @@ const ru: Dict = {
     aboutOf: (name) => `Об ${name}`,
     headingDefault: "Небольшая команда, глобальный охват и много заботы.",
     body1Default: (name, city) =>
-      `Мы основали ${name} в ${city}, руководствуясь простым убеждением: талант заслуживает внимания, а не строчки в таблице. Мы намеренно держим небольшой ростер, чтобы развивать каждую модель лично — от первых дигиталов до международных контрактов.`,
+      `Мы основали ${name} в ${city}, руководствуясь простым убеждением: каждая модель заслуживает внимания, а не строчки в таблице. Мы намеренно работаем с небольшой группой, чтобы развивать каждую лично — от первых дигиталов до международных контрактов.`,
     body2Default:
-      "Сегодня мы представляем женщин и новые лица, работающие в editorial, рекламе, на подиуме и в digital — размещая таланты по Европе, Азии и Ближнему Востоку через проверенную партнёрскую сеть.",
+      "Сегодня мы представляем женщин и новые лица, работающие в editorial, рекламе, на подиуме и в digital — размещая моделей по Европе, Азии и Ближнему Востоку через проверенную партнёрскую сеть.",
   },
   academy: {
     applyToAcademy: "Подать заявку в академию →",
@@ -360,7 +350,7 @@ const ru: Dict = {
     heading: "Контакты",
     intro:
       "Вопросы, букинг, пресса или предложения о сотрудничестве — напишите нам, и мы ответим в ближайшее время.",
-    joinInstead: "Хотите присоединиться к ростеру?",
+    joinInstead: "Хотите присоединиться к нам?",
     applyLink: "Подать заявку на роль модели →",
     thankYouTitle: "Спасибо. Мы свяжемся с вами.",
     thankYouBody: "Ваше сообщение получено нашей командой. Мы ответим как можно скорее.",
@@ -387,11 +377,10 @@ const ru: Dict = {
     submitApplication: "Отправить заявку →",
   },
   roster: {
-    eyebrow: (count) => `Ростер · ${count} ${ruPlural(count, "модель", "модели", "моделей")}`,
     noModelsInCategory: "В этой категории пока нет моделей.",
   },
   modelDetail: {
-    backToRoster: "← Назад к ростеру",
+    back: "← Назад",
     portfolio: "Портфолио",
     noPhotosYet: "Пока нет фото.",
     prev: "Назад",

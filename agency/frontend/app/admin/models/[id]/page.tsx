@@ -165,7 +165,7 @@ export default function EditModelPage() {
             </div>
             <p className="text-[11px] mb-3" style={{ color: colors.text }}>
               Показывается только на странице модели, квадратом на половину экрана.
-              В ростере карточка листает первые два фото портфолио.
+              В списке моделей карточка листает первые два фото портфолио.
             </p>
             <div className="w-40">
               <AdminPhotoSlot
