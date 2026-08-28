@@ -72,10 +72,12 @@ export default function Header({
         >
           {/* Models / New Faces / Bemodel Academy live in the homepage hero stack,
               so the top nav does not repeat them. */}
-          <nav className="hidden md:flex items-center gap-9 eyebrow">
+          {/* .eyebrow dropped here for the same reason as the button below: it
+              forced a taupe colour that washed out against the lavender header. */}
+          <nav className="hidden md:flex items-center gap-9 text-[11px] font-medium uppercase tracking-[0.2em]">
             <Link
               href="/contact"
-              className={`transition-colors ${clear ? "hover:text-accentDeep" : "hover:text-accent"}`}
+              className={`transition-colors ${clear ? "hover:text-accentDeep" : "text-ink hover:text-accent"}`}
             >
               <Localized en="Contact" ru="Контакты" />
             </Link>
