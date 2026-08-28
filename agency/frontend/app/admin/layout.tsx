@@ -18,6 +18,21 @@ const NAV_ITEMS = [
 
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { token, loading, logout } = useAuth();
+
+  // The admin panel is Russian only and sits outside the public LanguageProvider,
+  // so it would otherwise stay declared as English. translate="no" also stops
+  // browser translation outright: this is an internal tool, and a mistranslated
+  // field label ("Обувь" rendered as "Вон") is worse than no translation.
+  useEffect(() => {
+    document.documentElement.lang = "ru";
+    document.documentElement.translate = false;
+    document.documentElement.setAttribute("translate", "no");
+    return () => {
+      document.documentElement.translate = true;
+      document.documentElement.removeAttribute("translate");
+    };
+  }, []);
+
   const pathname = usePathname();
   const router = useRouter();
   const isLoginPage = pathname === "/admin/login";

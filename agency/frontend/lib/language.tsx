@@ -23,6 +23,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   }, []);
 
+  // The document is served as lang="en"; once a language is settled, tell the
+  // browser what it is actually reading. A page of Russian declared as English
+  // is what makes Chrome offer to "translate" it — and its output mangles the
+  // Cyrillic into nonsense.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   function setLang(next: Lang) {
     setLangState(next);
     try {
