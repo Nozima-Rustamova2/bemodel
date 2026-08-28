@@ -63,8 +63,13 @@ body {
   animation: marqueeSlide var(--marquee-duration, 30s) linear infinite;
 }
 
-.marquee-mask:hover .marquee-track {
-  animation-play-state: paused;
+/* Pause on hover only where hovering is a real thing. iOS Safari fakes a hover
+   state on tap and keeps it until you tap somewhere else, which left the strip
+   frozen on iPhone with no obvious way to restart it. */
+@media (hover: hover) and (pointer: fine) {
+  .marquee-mask:hover .marquee-track {
+    animation-play-state: paused;
+  }
 }
 
 /* Fade the strip out at both ends instead of cutting logos off hard. */
