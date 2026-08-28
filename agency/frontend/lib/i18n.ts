@@ -103,6 +103,7 @@ export interface Dict {
     cityCountry: string;
     dob: string;
     height: string;
+    telegramUsername: string;
     tellUsAboutYourself: string;
     messagePlaceholder: string;
     submitting: string;
@@ -236,6 +237,7 @@ const en: Dict = {
     cityCountry: "City / Country",
     dob: "Date of birth",
     height: "Height",
+    telegramUsername: "Telegram username",
     tellUsAboutYourself: "Tell us about yourself",
     messagePlaceholder: "Experience, availability, anything we should know…",
     submitting: "Submitting...",
@@ -378,6 +380,7 @@ const ru: Dict = {
     cityCountry: "Город / Страна",
     dob: "Дата рождения",
     height: "Рост",
+    telegramUsername: "Telegram (юзернейм)",
     tellUsAboutYourself: "Расскажите о себе",
     messagePlaceholder: "Опыт, доступность — всё, что нам стоит знать…",
     submitting: "Отправка...",

@@ -103,7 +103,7 @@ def submit_scouting(
     request: Request,
     background_tasks: BackgroundTasks,
     name: str = Form(...),
-    email: str = Form(...),
+    email: str | None = Form(None),  # applications no longer collect one
     phone: str | None = Form(None),
     city: str | None = Form(None),
     birthdate: str | None = Form(None),
@@ -133,7 +133,7 @@ def submit_scouting(
 
     submission = ScoutingSubmission(
         name=name,
-        email=email,
+        email=email or "",
         phone=phone,
         city=city,
         birthdate=birthdate,
@@ -150,7 +150,7 @@ def submit_scouting(
     admin_url = f"{app_settings.FRONTEND_URL}/admin/scouting"
     fields = {
         "name": name,
-        "email": email,
+        "email": email or "",
         "phone": phone,
         "city": city,
         "birthdate": birthdate,

@@ -99,7 +99,7 @@ export default function AdminScoutingPage() {
                   <div>
                     <span style={{ color: colors.text }}>Email</span>
                     <br />
-                    {s.email}
+                    {s.email || "—"}
                   </div>
                   <div>
                     <span style={{ color: colors.text }}>Телефон</span>
@@ -107,7 +107,7 @@ export default function AdminScoutingPage() {
                     {s.phone || "—"}
                   </div>
                   <div>
-                    <span style={{ color: colors.text }}>Instagram</span>
+                    <span style={{ color: colors.text }}>Telegram</span>
                     <br />
                     {s.instagram || "—"}
                   </div>

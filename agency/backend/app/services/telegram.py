@@ -14,13 +14,13 @@ def _escape(text: str) -> str:
 def _format_message(fields: dict, admin_url: str) -> str:
     title = "New contact message" if fields.get("source") == "contact" else "New model application"
     lines = [f"<b>{title}</b>", f"<b>Name:</b> {_escape(fields['name'])}"]
-    lines.append(f"<b>Email:</b> {_escape(fields['email'])}")
     for label, key in (
+        ("Email", "email"),
         ("Phone", "phone"),
         ("City", "city"),
         ("DOB", "birthdate"),
         ("Height", "height"),
-        ("Instagram", "instagram"),
+        ("Telegram", "instagram"),
         ("Message", "message"),
     ):
         if fields.get(key):

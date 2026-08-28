@@ -203,7 +203,6 @@ export async function getFeaturedShoots(): Promise<FeaturedShoot[]> {
 
 export interface ScoutingFormValues {
   name: string;
-  email: string;
   phone?: string;
   city?: string;
   birthdate?: string;

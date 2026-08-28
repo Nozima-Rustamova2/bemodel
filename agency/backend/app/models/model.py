@@ -204,6 +204,9 @@ class ScoutingSubmission(Base):
     city = Column(String, nullable=True)
     birthdate = Column(String, nullable=True)
     height = Column(String, nullable=True)
+    # Holds the applicant's Telegram username. The column keeps its original
+    # name because renaming one in SQLite means rebuilding the table, and the
+    # stored values are equally valid either way.
     instagram = Column(String, nullable=True)
     message = Column(Text, nullable=True)
     submitted_photo_keys = Column(JSON, default=list)

@@ -9,7 +9,6 @@ const PHOTO_SLOTS = ["Portrait", "Full length", "Profile"] as const;
 
 const emptyForm: ScoutingFormValues = {
   name: "",
-  email: "",
   phone: "",
   instagram: "",
   city: "",
@@ -136,17 +135,6 @@ export default function ApplyPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="eyebrow text-taupe">{t.contactShared.email}</label>
-                <input
-                  required
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => set("email", e.target.value)}
-                  placeholder="you@email.com"
-                  className={inputClass}
-                />
-              </div>
-              <div className="flex flex-col gap-2">
                 <label className="eyebrow text-taupe">{t.apply.phone}</label>
                 <input
                   value={form.phone}
@@ -156,11 +144,11 @@ export default function ApplyPage() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="eyebrow text-taupe">{t.contactShared.instagram}</label>
+                <label className="eyebrow text-taupe">{t.apply.telegramUsername}</label>
                 <input
                   value={form.instagram}
                   onChange={(e) => set("instagram", e.target.value)}
-                  placeholder="@handle"
+                  placeholder="@username"
                   className={inputClass}
                 />
               </div>
