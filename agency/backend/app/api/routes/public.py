@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, UploadFile, File, Form
 from sqlalchemy.orm import Session
@@ -26,6 +27,11 @@ from app.services.telegram import notify_new_scouting_submission
 router = APIRouter(prefix="/api/public", tags=["public"])
 
 SCOUTING_PHOTO_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+# A repeat of the same application within this window is treated as the same
+# submission, not a new one. Photo uploads over a phone connection are slow
+# enough that a dropped request can be re-sent by the browser without the
+# applicant ever pressing the button twice.
+SCOUTING_DEDUPE_MINUTES = 30
 SCOUTING_MAX_PHOTOS = 4
 SCOUTING_MAX_FILE_SIZE_MB = 15
 
@@ -98,7 +104,10 @@ def get_academy(db: Session = Depends(get_db)):
 
 
 @router.post("/scouting")
-@limiter.limit("3/hour")
+# Raised from 3/hour: retries burn the quota, and applicants on shared wifi or a
+# carrier NAT share an IP — three was low enough to turn away real people. The
+# honeypot and the dedupe check above are what actually stop repeats.
+@limiter.limit("10/hour")
 def submit_scouting(
     request: Request,
     background_tasks: BackgroundTasks,
@@ -120,6 +129,25 @@ def submit_scouting(
     if website:
         # Bot filled the honeypot field — pretend success, do nothing.
         return {"detail": "Thanks for reaching out."}
+
+    # Deduplicate before doing any work: an identical application from the same
+    # person inside the window is the same one arriving again. Answer as if it
+    # succeeded — from the applicant's side it did — but write nothing and send
+    # no second notification.
+    since = datetime.utcnow() - timedelta(minutes=SCOUTING_DEDUPE_MINUTES)
+    already = (
+        db.query(ScoutingSubmission)
+        .filter(
+            ScoutingSubmission.name == name,
+            ScoutingSubmission.phone == phone,
+            ScoutingSubmission.instagram == instagram,
+            ScoutingSubmission.source == source,
+            ScoutingSubmission.created_at >= since,
+        )
+        .first()
+    )
+    if already:
+        return {"detail": "Thanks for reaching out. Our team will be in touch if it's a fit."}
 
     photo_keys = []
     for upload in photos[:SCOUTING_MAX_PHOTOS]:

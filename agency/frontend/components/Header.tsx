@@ -84,10 +84,14 @@ export default function Header({
             <LanguagePicker overlay={clear} />
             <Link
               href="/apply"
-              className={`border px-5 py-2.5 text-[10px] eyebrow transition-colors ${
+              // Not using the .eyebrow class here: it hard-sets a taupe colour that
+              // beat the text utility and left the button barely legible on the
+              // lavender header. Spelled out instead, and filled rather than
+              // outlined once the header has a background behind it.
+              className={`border px-5 py-3 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors ${
                 clear
                   ? "border-paperText text-paperText hover:bg-paperText hover:text-ink"
-                  : "border-ink hover:bg-ink hover:text-paper"
+                  : "border-ink bg-ink text-paper hover:bg-accent hover:border-accent"
               }`}
             >
               <Localized en="Become a Model" ru="Стать моделью" />
