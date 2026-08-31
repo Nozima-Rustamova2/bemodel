@@ -6,6 +6,32 @@ import FooterLegal from "@/components/FooterLegal";
 // Registration date of the agency, shown verbatim in the copyright line.
 const FOUNDED = "02.02.2022";
 
+// What the agency offers, kept as a list because the source copy is one: five
+// items running together as a single comma-separated sentence are hard to scan
+// in a footer column this narrow.
+const OFFERINGS: { en: string; ru: string }[] = [
+  {
+    en: "professional training and career development in Uzbekistan and on the international market",
+    ru: "профессиональное обучение и развитие карьеры в Узбекистане и на международном рынке",
+  },
+  {
+    en: "castings, runway shows and shoots for leading brands",
+    ru: "кастинги, показы и съёмки для ведущих брендов",
+  },
+  {
+    en: "mentorship and promotion from the agency",
+    ru: "наставничество и продвижение от агентства",
+  },
+  {
+    en: "real opportunities for professional growth",
+    ru: "реальные возможности профессионального роста",
+  },
+  {
+    en: "the safety of our models",
+    ru: "безопасность моделей",
+  },
+];
+
 export default function Footer({
   legalEn = null,
   legalRu = null,
@@ -20,12 +46,39 @@ export default function Footer({
           <div className="relative h-8 md:h-9 w-[150px] md:w-[170px] mb-4">
             <Image src="/logo-wordmark.png" alt="bemodel" fill className="object-contain object-left" />
           </div>
-          <p className="text-sm leading-relaxed max-w-xs font-light">
-            <Localized
-              en="A boutique modeling agency representing women and new faces, based in Tashkent and placed worldwide."
-              ru="Бутик-агентство моделей, представляющее женщин и новые лица, базирующееся в Ташкенте и работающее по всему миру."
-            />
-          </p>
+          <div className="max-w-sm text-sm leading-relaxed font-normal flex flex-col gap-3.5">
+            <p>
+              <Localized
+                en={
+                  <>
+                    <span className="font-semibold text-ink">BEMODEL AGENCY</span> LLC — a parent
+                    modeling agency with a large base of professional models.
+                  </>
+                }
+                ru={
+                  <>
+                    ООО «<span className="font-semibold text-ink">BEMODEL AGENCY</span>» — материнское
+                    модельное агентство с большой базой профессиональных моделей.
+                  </>
+                }
+              />
+            </p>
+            <div>
+              <p className="mb-2">
+                <Localized
+                  en={<><span className="font-semibold text-ink">BEMODEL</span> means:</>}
+                  ru={<><span className="font-semibold text-ink">BEMODEL</span> — это:</>}
+                />
+              </p>
+              <ul className="flex flex-col gap-1.5 pl-4 list-disc marker:text-taupe/70">
+                {OFFERINGS.map((item) => (
+                  <li key={item.en}>
+                    <Localized en={item.en} ru={item.ru} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
         <div>
           <div className="eyebrow text-taupe mb-4">

@@ -135,7 +135,7 @@ const en: Dict = {
   },
   footer: {
     tagline:
-      "A boutique modeling agency representing women and new faces, based in Tashkent and placed worldwide.",
+      "BEMODEL AGENCY LLC — a parent modeling agency with a large base of professional models.",
     explore: "Explore",
     aboutLink: "About",
     contactHeader: "Contact",
@@ -277,7 +277,7 @@ const ru: Dict = {
   },
   footer: {
     tagline:
-      "Бутик-агентство моделей, представляющее женщин и новые лица, базирующееся в Ташкенте и работающее по всему миру.",
+      "ООО «BEMODEL AGENCY» — материнское модельное агентство с большой базой профессиональных моделей.",
     explore: "Навигация",
     aboutLink: "О нас",
     contactHeader: "Контакты",

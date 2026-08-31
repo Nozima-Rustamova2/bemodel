@@ -248,16 +248,36 @@ async function adminFetch(input: string, init?: RequestInit): Promise<Response> 
   return res;
 }
 
+/**
+ * Thrown when the browser could not reach the API at all -- DNS, TLS, a reset
+ * connection, an offline machine. Distinct from a rejected password, because
+ * the two need completely different fixes and telling them apart is the
+ * difference between "check your typing" and "check your network".
+ */
+export class ApiUnreachableError extends Error {
+  constructor(public cause?: unknown) {
+    super(`Could not reach the API at ${API_URL}`);
+    this.name = "ApiUnreachableError";
+  }
+}
+
 export async function login(email: string, password: string): Promise<string> {
   const body = new URLSearchParams();
   body.set("username", email);
   body.set("password", password);
 
-  const res = await fetch(`${API_URL}/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: body.toString(),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    });
+  } catch (e) {
+    // fetch only rejects when the request never completed. Reporting this as
+    // bad credentials sends the user off checking a password that was fine.
+    throw new ApiUnreachableError(e);
+  }
   if (!res.ok) throw new Error("Invalid email or password");
   const data = await res.json();
   return data.access_token;

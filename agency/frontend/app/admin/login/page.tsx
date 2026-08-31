@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { ApiUnreachableError, API_URL } from "@/lib/api";
 import { adminFont, colors, input, inputStyle, primaryBtn, primaryBtnStyle } from "@/lib/adminTheme";
 
 export default function AdminLoginPage() {
@@ -20,8 +21,14 @@ export default function AdminLoginPage() {
     try {
       await login(email, password);
       router.push("/admin");
-    } catch {
-      setError("Неверный email или пароль.");
+    } catch (e) {
+      // A password the server rejected and a server the browser never reached
+      // look identical from here unless we say so explicitly.
+      setError(
+        e instanceof ApiUnreachableError
+          ? `Нет связи с сервером (${new URL(API_URL).host}). Пароль здесь ни при чём — запрос не дошёл. Проверьте интернет, VPN или антивирус.`
+          : "Неверный email или пароль."
+      );
     } finally {
       setSubmitting(false);
     }

@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "bemodel | Modeling Agency",
-  description: "A boutique modeling agency representing women and new faces.",
+  description: "BEMODEL AGENCY LLC — a parent modeling agency with a large base of professional models.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
