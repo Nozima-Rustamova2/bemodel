@@ -18,10 +18,10 @@ export default async function AboutPage() {
           <h1 className="font-display font-light text-[clamp(24px,2.7vw,38px)] leading-[1.12] mb-7">
             <Localized en={headingEn} ru={headingRu} />
           </h1>
-          <p className="font-light text-lg leading-[1.85] text-inkSofter mb-5">
+          <p className="font-light text-lg leading-[1.85] text-inkSofter whitespace-pre-line mb-5">
             <Localized en={body1En} ru={body1Ru} />
           </p>
-          <p className="font-light text-lg leading-[1.85] text-inkSofter">
+          <p className="font-light text-lg leading-[1.85] text-inkSofter whitespace-pre-line">
             <Localized en={body2En} ru={body2Ru} />
           </p>
         </div>

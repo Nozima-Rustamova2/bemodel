@@ -71,10 +71,10 @@ export default async function HomePage() {
           <h2 className="font-display font-light text-[clamp(24px,2.7vw,38px)] leading-[1.12] mb-7">
             <Localized en={about.headingEn} ru={about.headingRu} />
           </h2>
-          <p className="font-light text-lg leading-[1.85] text-inkSofter mb-5">
+          <p className="font-light text-lg leading-[1.85] text-inkSofter whitespace-pre-line mb-5">
             <Localized en={about.body1En} ru={about.body1Ru} />
           </p>
-          <p className="font-light text-lg leading-[1.85] text-inkSofter mb-9">
+          <p className="font-light text-lg leading-[1.85] text-inkSofter whitespace-pre-line mb-9">
             <Localized en={about.body2En} ru={about.body2Ru} />
           </p>
           <Link
